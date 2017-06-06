@@ -88,3 +88,8 @@ ENV/
 # Rope project settings
 .ropeproject
 .DS_Store
+src/play_around_pymongo/.idea/misc.xml
+src/play_around_pymongo/.idea/modules.xml
+src/play_around_pymongo/.idea/play_around_pymongo.iml
+src/play_around_pymongo/.idea/dictionaries/screencaster.xml
+src/play_around_pymongo/.idea/inspectionProfiles/profiles_settings.xml
