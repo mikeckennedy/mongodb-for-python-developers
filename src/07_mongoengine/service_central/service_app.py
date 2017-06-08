@@ -1,5 +1,11 @@
+import nosql.mongo_setup as mongo_setup
+from nosql.car import Car
+from nosql.engine import Engine
+
+
 def main():
     print_header()
+    config_mongo()
     user_loop()
 
 
@@ -11,6 +17,10 @@ def print_header():
     print('|                                             |')
     print('----------------------------------------------')
     print()
+
+
+def config_mongo():
+    mongo_setup.global_init()
 
 
 def user_loop():
@@ -37,7 +47,23 @@ def user_loop():
 
 
 def add_car():
-    print("TODO: add_car")
+    model = input("What is the model? ")
+    make = 'Ferrari' # input("What is the make? ")
+    year = int(input("Year built? "))
+
+    car = Car()
+    car.year = year
+    car.make = make
+    car.model = model
+
+    engine = Engine()
+    engine.horsepower = 590
+    engine.mpg = 22
+    engine.liters = 4.0
+
+    car.engine = engine
+
+    car.save()
 
 
 def list_cars():
