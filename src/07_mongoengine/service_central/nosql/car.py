@@ -2,6 +2,7 @@ import uuid
 import mongoengine
 
 from nosql.engine import Engine
+from nosql.servicehistory import ServiceHistory
 
 
 class Car(mongoengine.Document):
@@ -12,7 +13,8 @@ class Car(mongoengine.Document):
     vi_number = mongoengine.StringField(
         default=lambda: str(uuid.uuid4()).replace('-', ''))
 
-    engine = mongoengine.EmbeddedDocumentField(Engine, required=True)
+    engine = mongoengine.EmbeddedDocumentField(Engine)
+    service_history = mongoengine.EmbeddedDocumentListField(ServiceHistory)
 
     meta = {
         'db_alias': 'core',
