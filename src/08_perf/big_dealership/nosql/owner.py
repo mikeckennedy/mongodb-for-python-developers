@@ -21,5 +21,7 @@ class Owner(mongoengine.Document):
         'db_alias': 'core',
         'collection': 'owners',
         'indexes': [
+            'name',
+            'car_ids'
         ]
     }
