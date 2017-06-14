@@ -22,14 +22,19 @@ def print_header():
     print('----------------------------------------------')
     print('|                                             |')
     print('|           SERVICE CENTRAL v.02              |')
-    print('|               demo edition                  |')
+    print('|               prod edition                  |')
     print('|                                             |')
     print('----------------------------------------------')
     print()
 
 
 def config_mongo():
-    mongo_setup.global_init()
+    mongo_setup.global_init(
+        'the_db_admin',
+        'the-password-3809b81f-ba37-403d-8013-a1ebaf13cf94',
+        10001,
+        '107.170.211.24'
+    )
 
 
 def user_loop():
