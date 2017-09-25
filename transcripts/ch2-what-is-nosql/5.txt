@@ -1,0 +1,58 @@
+00:01 Now that we've talked about what NoSQL is,
+00:03 where it came from and a little bit about document databases,
+00:05 let's move to focusing specifically on MongoDB.
+00:10 First off, I want to point out that MongoDB is open source
+00:14 so if we come down here, you can see we've got
+00:18 github.com/mongodb/mongo, there's actually all what are called drivers
+00:23 so like how do you access MongoDB from Python, or CSharp, or Java or whatever,
+00:28 and a bunch of other stuff out here on their github,
+00:31 but Mongo is the actual database server.
+00:33 So it's cool that it's open source, now there's a lot of things that are on github
+00:38 that are technically open source, but not really active,
+00:41 it's like oh that's been changed, four years ago,
+00:45 and it's got 50 pull requests that haven't been
+00:47 even addressed in the last six months.
+00:50 That's not good; that's not the case with Mongo, obviously,
+00:53 eleven thousand stars, three thousand forks,
+00:55 when was the last check in— it was three hours ago, okay?
+00:59 So that's really awesome, and they're fixing the build on 'Windos'
+01:05 so that must be a slightly different version of Windows,
+01:08 I'm just kidding, I'm sure they lost the w there
+01:10 but you know, it runs on the major platforms,
+01:12 Windows, Linux and MacOS, if we look over at the pull request
+01:17 you can see these are only a few days old,
+01:20 there's 1129 that are closed, so these are all really good signs
+01:25 for MongoDB's open source site,
+01:28 open source repository to be active and real,
+01:31 not just it's up here, but it's a really active thing
+01:35 with a huge company and hundreds of engineers working on it.
+01:39 If we look at what it's made of, it's basically a C++ app,
+01:43 there is a decent amount of Javascript
+01:45 and there as well as we'll see Javascript is fundamental
+01:48 in the raw query api and some other stuff.
+01:50 Now we can get the source code here, but that's not how we get MongoDB.
+01:54 So the way we get MongoDB is we go to mongodb.com,
+01:57 and we click download and it takes us here,
+02:00 so you can see there is the free community server version
+02:03 and if we come over here we could get the OS10 version with ssl
+02:07 we could download it just as a binary
+02:10 or we could install it with home brew, that's pretty cool.
+02:13 If we want to install it on Linux, let's pick something,
+02:16 let's say we want to install it on Ubuntu,
+02:19 okay, here is how you install it with aptitude, right
+02:22 so on Windows you just get an msi and install it directly that way.
+02:26 But notice, they all have ssl support, I believe there's a time
+02:30 when ssl support was actually an enterprise feature or like a paid feature,
+02:34 but thankfully that went away, and the community edition has this right here.
+02:39 So if you get a chance, I would recommend installing it
+02:42 especially on Linux from one of the package manager type things
+02:46 like here with apt, because then the underlying system will know
+02:50 that there's an update for your database server,
+02:54 not a feature on Windows, you just have to keep track.
+02:57 You can go and get the enterprise server which has an in memory version,
+03:00 an encrypted at rest version, and sort of
+03:04 advanced identity control features within it
+03:10 but if you just want a standard database without those things
+03:13 you don't care about say encryption at rest
+03:16 or integration with active directory or something like that,
+03:18 then the free version is totally good.

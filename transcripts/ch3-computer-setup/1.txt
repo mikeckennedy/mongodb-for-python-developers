@@ -1,0 +1,89 @@
+00:01 In order for you to get the most out of this course
+00:03 you're going to need to fallow along.
+00:05 We were talking about the Mongo shell you should open it up and play around.
+00:07 When we work with PyMongo, you should pip install it
+00:10 and write some code to talk to your local MongoDB server.
+00:13 When we're doing MongoEngine or working with indexes,
+00:15 again, you should follow along and do these things.
+00:18 In order to do that, you're going to need some software,
+00:20 you're going to need some starter code to get going
+00:22 and you're going to need basically to have MongoDB set up and configured correctly.
+00:26 So in this part of the course, let's talk about
+00:28 getting your machine set up so you can follow along.
+00:30 This is a course about MongoDB, so it shouldn't be
+00:33 terribly surprising that it's going to require MongoDB.
+00:35 Now if you look across the bottom here you can see
+00:37 there is a version for Windows, Linux and MacOS.
+00:40 So regardless of what operating system you are using
+00:43 you should be able to use MongoDB installed locally and work with it there.
+00:48 There are hosted services, places like ObjectRocket and Mlab
+00:52 and if for some reason you can't install MongoDB and configure it,
+00:55 unlikely, but possible, you could actually connect to one of those services.
+00:59 But we're going to assume that you can set it up locally
+01:01 and I will walk you through step by step
+01:03 how to do that for each and every operating system below,
+01:06 with the exclusion of Solaris of course.
+01:08 Now, this is MongoDB for Python Developers
+01:11 so it shouldn't surprise you that hey we're going to need Python,
+01:13 and we're focusing on Python 3, so most new projects are created in Python 3,
+01:17 it's the future of Python, so we're definitely focusing on Python 3,
+01:21 that said, the things we're doing are not super specific to Python 3,
+01:24 it should pretty much work across all the versions
+01:27 in case you happen to be using a legacy Python.
+01:29 So do you need to install Python 3?
+01:31 Well that depends if you're working on Ubuntu,
+01:34 you probably already have at least Python 3.5 on your system.
+01:37 If you're on MacOS, by default you have Python,
+01:40 but only legacy Python, only Python 2, not Python 3, so you'll need to install that.
+01:44 And if you are on Windows, unless you've done something special
+01:48 there is no version of Python, so make sure
+01:50 you get Python 3 from python.org, download and install it.
+01:54 Now we're going to write a lot of code in here, that's good,
+01:56 I think that's the way coding course should be,
+01:59 and we're going to use the editor from Jetbrains called PyCharm.
+02:03 In my opinion, this is the best tool for working with Python code
+02:07 and you'll even have plugins for MongoDB if you go and search
+02:10 their tool repository, so we're going to use PyCharm.
+02:13 Now, PyCharm is available in two flavors,
+02:16 there is a community free open source edition, and there's the pro edition.
+02:21 If you have the pro edition, feel free to use that,
+02:23 but if you don't, you can grab the community edition,
+02:26 it will do everything we need for this course.
+02:29 If you want to use some other editor, that's totally fine,
+02:32 you can use whatever you like, but if you want to follow along exactly,
+02:35 I recommend you give PyCharm a shot.
+02:37 There is a couple of ways we can work with MongoDB once we have it installed,
+02:40 we can use the cli the command line interface to it that comes with MongoDb itself,
+02:46 or we can use something called RoboMongo.
+02:49 So RoboMongo in my opinion is the best way to work with MongoDB
+02:54 the idea is you can see a little dark gray area, that's basically the shell
+02:58 and you can type as if that was a command line interface.
+03:01 However, it operates inside this gui so you could write a little bit of cli stuff
+03:05 and then go interact with the stuff visually, and this is a really, really nice balance
+03:09 of giving you the full power of MongoDB, but also a lot of visual support.
+03:13 I think it's super productive and is great.
+03:16 You can see there's screenshots for all the three major operating systems,
+03:19 so whatever operating system you use, RoboMongo is going to work great,
+03:23 it's also free and it's also open source, how about that.
+03:26 Finally, when we write that code with PyCharm,
+03:28 you're going to want to be able to take it with you.
+03:31 Sometimes you might want to grab the finish code
+03:33 that you saw me create in the video and run it,
+03:35 other times, we might have started not from a blank empty file
+03:38 but from some sort of starter code
+03:41 that got us further along in the demo from the beginning.
+03:43 We also have a couple of large databases
+03:46 that you want to get access to for the performance section of the course,
+03:50 all those and more are contained in this github repository here,
+03:53 so github.com/mikeyckennedy/mongodb-for-python-developers
+03:58 so be sure right now to pause this video, go over here
+04:02 and star and maybe even fork this repository so you're sure to have it with you.
+04:06 And also download or clone it to your local drive,
+04:10 because you're going to want to have this to work from, as you go through the course.
+04:13 So there you have it, that's the software source code
+04:16 and tools that were going to use. What we're going to do next,
+04:18 I'm going to walk you through each operating system, Windows, MacOS, and Linux
+04:21 and show you how to set up the tools and how to configure MongoDB
+04:25 and get everything working just right.
+04:28 If you're a Linux person, there is no reason to watch the say Windows version,
+04:32 so pick the video that matches your operating system, skip the others.

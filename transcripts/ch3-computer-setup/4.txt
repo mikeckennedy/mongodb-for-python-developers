@@ -1,0 +1,69 @@
+00:01 Here we are on a relatively new Mac, you can see that this is MacOS  seirra,
+00:06 so relatively new, and if I come over here and I type Mongo,
+00:10 no there is no MongoDB installed here.
+00:13 So what are we going to do— we're going to install and set up MongoDB,
+00:17 so those of you who use MacOS, like I do, you'll see that this is actually
+00:21 the easiest of all the various operating systems to set up. Let's do it.
+00:25 So we're actually going to start out at Homebrew,
+00:30 now you may have Homebrew installed which is awesome,
+00:32 and you can just run brew update, but if you don't
+00:34 then you're going to need to run this command;
+00:37 so we're going to run a script pass it off the ruby,
+00:40 this is going to install Homebrew and if I hit enter,
+00:43 it's going to go do this, this one time it needs my password
+00:46 to make changes to the system, but in general,
+00:51 you should not sudo run Homebrew, it even warns you if you do that I believe.
+00:56
+01:00 Okay, I get the little ding, it looks like everything is all set up.
+01:04 So now if I type brew, yeey, stuff happens.
+01:07 So the next thing that I want to do is actually install MongoDB,
+01:10 so brew install mongodb,
+01:14
+01:21 and just like that, after 15 seconds, 20 seconds something to this effect,
+01:25 it says MongoDB is all set up.
+01:28 Now before I clear this and just run it, notice there's a couple of things,
+01:31 it tells us right away, right here how we get started,
+01:34 we can either run MongoDB as a service,
+01:36 and if I do this without sudo, it's going to run this as a service any time I log in,
+01:42 if I do it with sudo, it's going to basically do this
+01:44 as part of the machine startup, shut down,
+01:47 or I can just run MongoDB like so.
+01:49 So let's go ahead and set this as a service,
+01:52 it takes a moment and now it's up and running.
+01:58 So how do we know whether it's running?
+02:01 Well first of all, if I type mongo, it has something there, it has an app there right
+02:04 you can see 3.4.4 is the one at the time of this recording,
+02:08 and now it's connected and there's a few warnings here about access control,
+02:11 this is worth considering, if this was a production machine
+02:16 I would be quite concerned about this, it's my developer machine, so I'm not.
+02:22 Let me show you why I'm not.
+02:24 Okay, so if we exit out of here, the other way that we could run MongoDB
+02:28 it's already running, so this isn't going to work again,
+02:31 but we could run it passing this config file,
+02:33 but what's interesting is, check out this config file
+02:36 so if we go look at that, it has just a few things for us,
+02:39 it tells us where the log file is going, good for system services,
+02:43 where the data is going, and most importantly,
+02:48 it's listening only one local host, 127.0.0.1.
+02:53 I don't know what my public ip address is or I have both the ipv6 and ipv4,
+02:57 MongoDB is not listening to either of them,
+03:00 moreover, I also have my firewall turned on as much as possible,
+03:04 believe it or not, it is not turned on on MacOS by default
+03:08 that is super, super suspicious to me.
+03:10 But anyway, firewall's on, and we're not even listening on the public network interface.
+03:15 So do not change that, make sure that you are listening on only local host
+03:20 or that authentication warning, that's going to have a whole different meaning.
+03:23 When we get to the actual deployment section, where we deploy to production
+03:27 we're going to set up users, we're going to set up ssl,
+03:29 we're going to set up authentication, all of those kinds of things, among others,
+03:32 but for now, for the devmachine, I think listening on local host
+03:36 is probably sufficient for what we're doing.
+03:39 So this MacOS is ready to take the class.
+03:43 The other things we would need to do, is install PyCharm, install RoboMongo,
+03:47 and do we have Python 3— we do, we have Python 3 installed,
+03:53 I believe I actually already installed that earlier on this virtual machine.
+03:58 So you're going to want to make sure you have Python 3 installed,
+04:00 RoboMongo, and PyCharm, they all have super simple installers
+04:03 that's basically either drag and drop or double click
+04:06 and follow the next button and you'll be all done.
+04:08 Then the machine will be completely ready to take this class.

@@ -1,0 +1,24 @@
+00:01 We're going to use homebrew, if you don't like homebrew
+00:04 you can actually download a tarball and unzip it and set up all the stuff
+00:07 but homebrew is much better on a couple of levels,
+00:11 so make sure you have homebrew and that you update it,
+00:14 and then to install, we're just going to install homebrew
+00:17 and then we just brew install MongoDB,
+00:19 wait about 20 seconds for it to do its magic,
+00:22 we're going to start up MongoDB, there's two ways to do that
+00:24 we could say brew services start monogodb
+00:27 and that will actually register it as a system service
+00:30 that starts every time you log in;
+00:32 if you don't want to do that, you don't want to start it this way, it's fine
+00:34 you can say mongodb--config and point at the config file.
+00:38 If you want to make any changes, well, there's the config file
+00:40 you can just edit that with whatever editor you like,
+00:43 and you can change the security, you can change the ports,
+00:46 whatever you want to change about MongoDB
+00:48 just change this file, and stop and then start the service,
+00:52 or just cancel out running this mongod command, and then run it again.
+00:56 Final thing is, if you brew service start mongodb
+00:59 and it's going to continue to autostart, if for some reason you want it to stop,
+01:02 I believe it makes a file, a plist file, and it puts it in your home directory
+01:07 for your user account in /library/launch/agents/ something involving mongodb,
+01:13 so you can just delete that file I believe and that will stop it.

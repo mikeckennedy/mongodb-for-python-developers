@@ -1,0 +1,85 @@
+00:01 So let's talk about how document databases work.
+00:04 Here's a record from my actual online training platform
+00:09 chapter 1001 from 'The Python Jumpstart by Building Ten Apps' course
+00:15 and this is more or less exactly what came out of the database,
+00:19 with a few things taken away so it actually fits on the slide here.
+00:23 Now, let's break this into two pieces here,
+00:26 this green piece and the blue piece.
+00:29 First of all, you can see we have json,
+00:32 when you work with document databases, you'll frequently run into json
+00:35 as at least the visual representation of the record.
+00:40 In fact, in MongoDB it doesn't really work in terms of json
+00:46 it works in something called bson or binary json,
+00:50 so this binary tokenised type typefull, rich typed version
+00:57 of sort of extended json but already tokenised and stored as a binary version;
+01:02 this is what's transferred on the wire and to some degree
+01:07 this is what stored actually in the database
+01:10 so how it actually get stored is it moves around
+01:13 and the database storage engines are changing
+01:16 and sort of plugable now in MongoDB,
+01:19 but more or less you can think of this becoming a binary thing
+01:22 and then stored in the database.
+01:24 When it comes over into say Python, we'll of course map this into
+01:28 something like let's say a Python dictionary
+01:31 or a type that has these fields and so on.
+01:35 So if you look at the green area, this is just the jasonified version
+01:39 of any other database record,
+01:41 it has let's think of it as columns if you will for a minute
+01:46 it would have columns here like one would be the id
+01:49 one would be the title, one might be course id and it has values;
+01:51 and that's all well and good, until we get to lectures,
+01:54 and here's where the power of document databases comes in,
+01:57 lectures is not just like seven, there are seven lectures or whatever
+02:01 no, lectures is a list, so multiple things, and each one of those things is
+02:09 a lecture, an individual one, with its individual fields
+02:13 so id, title, video url, duration in seconds,
+02:16 again there's actually more to it, but so it fits on screen right;
+02:18 with this document database, you can think of these things
+02:22 as kind of pre-computed joints, and this solves a ton of problems
+02:27 and makes the NoSQL aspect of document databases super powerful.
+02:31 So it makes this chapter more self contained, if I want to get this chapter back,
+02:35 instead of going to the chapter and then doing a join
+02:39 against the lectures and maybe some other type of join,
+02:42 and you're getting a bunch of different pieces and pulling them back together
+02:45 I just might do a query, find me the chapter with id 1001
+02:50 bam, it's back, I've got the whole thing
+02:53 and so you can think of this as like pre-joined data
+02:57 if 80, 90 percent of the time I'm working with a chapter,
+02:59 I care about the lecture data being there,
+03:01 why not store it in a way that it's already bound together,
+03:05 so I don't have to do that join,
+03:07 I don't have to do multiple queries or things like this.
+03:10 Okay, so this is really powerful and we'll talk a lot
+03:14 about when this makes sense, when it does not make sense and so on,
+03:18 but this means that if I take the single record
+03:21 and I put it on some server, even if I've got like ten servers
+03:25 and some sort of horizontal scale situation
+03:27 and I do a query by chapter id, I don't then have to go back to the cluster
+03:31 find where all the lecture data lives or anything like that.
+03:34 No, it's just bringing that one record
+03:36 brings most of the data that I need to work with
+03:39 when I'm working with a chapter, right along with it, which is excellent.
+03:43 That's the benefit, the important question the critical question to say
+03:47 like is this going to work for our database system as a general thing
+03:51 is well can I ask the questions that I would still have asked
+03:54 if lectures was its separate table, if it was a flat table just like relational databases.
+03:59 So, what if I want to find his last lecture here, 10 106,
+04:06 will I be able to go to the database and say
+04:08 hey document database, I would like to get lecture 10 106
+04:15 and I want to do that with an index
+04:17 and I want to have it basically instantaneously,
+04:19 even if there's a million records, I want to instantaneously get the record
+04:23 that embedded deep down within it could be many, many levels
+04:27 not just one, right, but in this case it's just one;
+04:30 I want to get the record that deep down within it
+04:32 somewhere matches the fact that the lecture id is 10 106.
+04:37 And the answer is for the document databases yes,
+04:41 so this makes them very, very different
+04:44 than the key value stores just doing a json blob
+04:46 because we can ask these very interesting questions,
+04:49 we can do map reduce or aggregation type things for big data,
+04:52 analysis and analytics, all sorts of stuff is possible,
+04:56 because you can actually query deeply down into these nested objects.
+05:01 So that's how document databases work,
+05:04 and we'll explore the when, whys and hows of designing these documents
+05:08 when we get to the document design chapter.

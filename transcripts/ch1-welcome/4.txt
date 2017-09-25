@@ -1,0 +1,25 @@
+00:01 So let's talk a little bit about the tools that we're going to use.
+00:03 We talked about Python, PyMongo and MongoEngine
+00:06 as the programming language;
+00:08 obviously we're going to use MongoDb as the database,
+00:10 but we also learn a few other things during this course.
+00:12 You'll learn about a management tool called Robomongo.
+00:15 Robomongo is hands down the best way to work with MongoDB
+00:20 from the client side, it gives you all the power
+00:24 of the command line interface that comes with MongoDB,
+00:26 but a great GUI kind of wrapped around it,
+00:29 that's all I am going to say about it now,
+00:31 but it's really fabulous and I think you'll enjoy.
+00:33 Well see that we can even use Robomongo
+00:35 to manage securely our production environment on a remote server.
+00:39 We're going to be using PyCharm as the ide for editing all of our Python code,
+00:45 so you'll learn a whole bunch of things about PyCharm,
+00:47 if you don't want to use PyCharm, and you want to use
+00:49 Sublime Text, or Emacs, or whatever, it's totally fine,
+00:51 but we're going to be using PyCharm
+00:54 and it's really great, I'll show you many of the tricks and techniques,
+00:56 and there are just better ways of using it.
+00:59 And finally, when we get to our deployment step
+01:01 we're going to be working with Ubuntu,
+01:03 and you'll learn how to set up MongoDB properly
+01:06 in a production environment on Ubuntu.

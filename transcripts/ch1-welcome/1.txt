@@ -1,0 +1,38 @@
+00:01 Hello and welcome to MongoDB for Python developers.
+00:04 Throughout this course, we're going to learn
+00:07 how to connect, model for and build applications with MongoDB,
+00:11 and we're going to do this with Python.
+00:14 We're going to look at the straightforward, lowest level way of doing things
+00:17 with PyMongo, and we're going to look at mapping classes
+00:20 through what's called an ODM, think orm for Mongo;
+00:24 an ODM to Mongo DB with Mongo Engine.
+00:28 And these come together to make a great combination.
+00:31 So let's begin by talking about document databases, how do they work?
+00:35 Well document databases in some ways
+00:38 are very much like standard relational databases,
+00:40 they have what you would think of as columns in that relational world,
+00:44 title, course id and duration in seconds here for example,
+00:48 but it also has nested data, so in a relational database
+00:51 we might have a lectures table that has
+00:54 some kind of foreign key constraint back to a chapter
+00:56 in this example we have on the screen here,
+00:59 but in fact in a relational database, we can embed those lectures
+01:02 inside of the chapter object, why is this good?
+01:06 Well, often, we spend so much time and energy
+01:09 building up an object hierarchy in our application
+01:12 and then tearing that apart into a bunch of little pieces
+01:15 what's called third normal form, basically normalizing our data
+01:18 in a relational database and then building a backup, taking it back apart
+01:22 and this object relational impedance mismatch
+01:25 makes it hard for us to reason about our code,
+01:28 it makes it a little bit less intuitive and so on.
+01:31 So with document databases, we can model our data
+01:34 the same way our application wants to use that data.
+01:37 We also have more flexibility in the schema,
+01:39 which means that deploying a new version of our application
+01:43 often does not require some kind of migration script and downtime,
+01:47 no, we just deploy the new version and the document database adapts to it.
+01:51 So document databases in my opinion are the best way to build applications,
+01:55 for the 80 percent case right, maybe you have some edge case
+01:58 where that doesn't make a lot of sense
+02:01 but most apps really benefit from using document databases.

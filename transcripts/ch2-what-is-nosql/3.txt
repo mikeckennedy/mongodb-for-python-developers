@@ -1,0 +1,80 @@
+00:01 So this historical description indicates that there are
+00:03 a variety of different types of NoSQL databases that we've arrived at,
+00:07 basically different levels or types of trade-offs that you might make
+00:11 to encourage this horizontal scalable, cluster friendly type of data.
+00:15 Now, if you go and look this up, what are the types of NoSQL systems
+00:18 you'll see there are four distinct types,
+00:21 but I think that would be four types under the not only SQL style systems
+00:26 which as that my contention, that's not what NoSQL is.
+00:30 So, I think there's actually three types of NoSQL databases
+00:33 and then there's another thing that is not SQL; we'll talk about the four.
+00:37 So at the most basic, basic level, the simplest ones are
+00:41 I'm going to basically create a distributed dictionary
+00:44 with id key that I can look up and some opaque blob that I can get back
+00:49 so here is some thing, it could be text, it could be binary object, graph,
+00:54 it doesn't really matter, store to this key
+00:57 and if I ask for that key back give me the thing,
+00:59 so for example, I want to store a user and all the stuff
+01:03 that is associated with user into a single blob in Redis,
+01:06 and when I ask for it back by user id, giving that thing back.
+01:11 That means frequently these databases, these key value stores
+01:14 don't let you query inside the opaque blob, even if it's text,
+01:18 the idea is you query by the id, you get the thing,
+01:21 but you can't easily ask it questions like
+01:25 what is the average price of the order
+01:28 of all the customers stored in your key value store.
+01:31 Now, there are ways to add like additional metadata
+01:34 that you can stick on to them, so you can sort of fake it a little bit on some of them
+01:38 but in general, I can ask for the thing by a key
+01:42 and I get a blob that's opaque to the database back.
+01:45 Now, these are not great as databases in terms of general purpose databases
+01:49 because you can't ask them a wide variety of interesting questions.
+01:53 However, they are great in terms of this cluster ability
+01:56 of the distributed cash type of thing there is super, super fast,
+02:01 because every single query is just finally one item
+02:04 by primary key and get it back to me
+02:08 so if you horizontally scale that out, you can find
+02:10 which key range maps to which server,
+02:12 go to that server get it by id— boom, super, super fast.
+02:15 So these are nice, they are often used for caches and things like this.
+02:19 Next, we have what I think is the real sweet spot for NoSQL databases,
+02:25 the ones that potentially could replace
+02:27 traditional relational databases in your application,
+02:30 that is they are flexible and powerful enough to be general purpose databases
+02:35 and that's the document databases.
+02:37 So this is MongoDB, CouchDB, OrientDB,
+02:40 DocumentDB from Microsoft Azure, things like that,
+02:43 so this is really where we going to focus
+02:46 almost this entire class, so we'll come back to this.
+02:49 We also have a more interesting type of database
+02:52 called a columnar database, traditional relational database systems
+02:56 like MySQL, Microsoft SQL server etc, store data in rows,
+03:01 but a column oriented database is different
+03:04 in that it stores data and its tables as columns instead of rows;
+03:07 so it's in a lot of ways really similar to relational databases,
+03:11 but you'll find that it's easier to kind of associate
+03:14 what you might think of is like a pre-joint data,
+03:16 maybe some orders, and maybe the orders have order items
+03:19 and there's a bunch of those, so you might have one order
+03:22 with multiple items, it's easier to group those together in a columnar database.
+03:26 But they're kind of more or less like relational databases in a lot of ways.
+03:30 So these I believe are the three types of NoSQL databases.
+03:32 There's a fourth that often gets grouped here,
+03:35 so let's talk about it— graph databases.
+03:37 So graph databases let you model relationships
+03:40 on many, many small interconnected things
+03:44 so think of like social graphs, friends, the pictures,
+03:48 the people who have shared that picture, you've liked that picture,
+03:52 the friends of your friends who have liked that particular picture
+03:55 you can traverse these relationships incredibly easy in graph databases
+03:59 because you can actually query directly on the relationships.
+04:03 Show all the things related in this way to this item and so on,
+04:06 but that does not lead to this cluster friendly sort of thing,
+04:09 in fact, this leads to being even more tightly connected
+04:12 the less easy to map across multiple
+04:15 horizontally scaled servers and things like that.
+04:18 So in my mind, the graph databases are super interesting
+04:21 but they're not NoSQL they're just not-SQL.
+04:25 So that leaves us with three types—
+04:27 key value stores, document databases and columnar databases.
+04:30 So let's now continue on to talk about document databases.

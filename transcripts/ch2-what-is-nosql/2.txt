@@ -1,0 +1,38 @@
+00:01 The first record of what you might consider modern day NoSQL,
+00:05 there were some older versions much, much older
+00:08 about object databases that don't really carry on through today;
+00:12 but what we think of when we talk about NoSQL today
+00:15 really started back 2009 in San Francisco.
+00:18 So this guy Johan Oskarsson, who at the time was working at last.fm
+00:23 was getting together like a big data/ scaling databases
+00:27 type of meetup in San Francisco, and the idea was
+00:31 we're going to talk about open source databases,
+00:34 distributed databases, that is databases that are easily horizontally scalable,
+00:39 and that might not be traditionally relational.
+00:42 This description here on the right actually comes from Wikipedia,
+00:46 the name itself, the actual NoSQL, the word,
+00:50 I don't believe it's here, but it was in a previous accounting, it's not in Wikipedia,
+00:55 which if I could find the reference, I should go back and edit it,
+00:59 is there's another guy named Eric Evans
+01:02 who was attending this meeting as well
+01:05 and Johan said hey what are we going to call this meeting
+01:07 like we do have a name for these types of groups,
+01:09 this type of thing that we're doing, and let's try to get something short,
+01:12 like say a hashtag that we can use on Twitter to talk about it;
+01:16 So Eric Evans said how about #NoSQL, right,
+01:19 and that is the origin of the modern day term.
+01:22 And the idea was, it was meant to describe this group of people
+01:26 mostly running web apps with lots of data,
+01:29 with high performance implications, or requirements,
+01:32 getting together to talk about how can we give up
+01:34 some of the features of relational databases to enable other types of things,
+01:39 so maybe we'll give up atomicity, the acid properties,
+01:43 maybe we'll give up joins, maybe we'll give up transactions, things like that,
+01:48 and if we do that, how do we maybe structure our data differently,
+01:51 how do we structure our databases differently,
+01:54 to be better at basically being cluster friendly.
+01:57 Alright, so to me, this is the idea of what a NoSQL database is,
+02:02 it's a database that gives up some of the relational
+02:05 database features or requirements or properties,
+02:08 so that it is more cluster friendly, it is more friendly to scaling
+02:13 and sharding and things like that.

@@ -1,0 +1,15 @@
+00:01 You might be wondering, hey who is this guy talking to me anyway?
+00:03 Here I am, hi nice to meet you, my name is Michael,
+00:05 you can find me on Twitter where I'm @mkennedy
+00:08 and just a little bit of my background;
+00:10 so I run the Talk Python To Me podcast
+00:12 as well as I am the founder and I've written many of the courses
+00:16 at Talk Python Training, for example this one.
+00:19 And I'm even in the MongoDB Masters program
+00:22 which is a group of about 30 people who are external advisers to MongoDB,
+00:28 who work pretty closely with the teams there and give them feedback
+00:33 on how MongoDB is working in the real world, in our environments.
+00:36 So I hope to bundle up all of this experience and package it into this course,
+00:41 and really give you some great take aways.
+00:44 I'm so happy you joined my course,
+00:46 I'm looking forward to teaching you a bunch of stuff— let's get started.

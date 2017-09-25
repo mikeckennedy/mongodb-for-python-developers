@@ -1,0 +1,45 @@
+00:01 Let's review installing MongoDB on Windows.
+00:03 It just took a couple of steps, we started out
+00:05 by downloading and running the msi installer,
+00:08 and then, we realized well, we don't actually have access to Mongo or Mongod
+00:13 or any of the other tools from our command line, so what are we going to do—
+00:17 well it turns out that it got installed into this location
+00:20 and notice that the number may vary based on the released version of MongoDB,
+00:24 so we went in there and we actually added that to our path;
+00:27 and then we could type mongo, mongod, mongo restore
+00:31 and all the various tools are going to have to use throughout the course.
+00:34 And then we said all right, well this is not going to run on its own,
+00:37 the way it gets installed on windows is it assumes
+00:40 that there is a c data mongo or data-db,
+00:43 something like that, it'll tell you on the error,
+00:45 but I don't like to put stuff and just see data,
+00:47 I kind of want to group stuff a little bit more
+00:49 so we made some mongodb folders,
+00:51 we made the c:\mongodb\data,  \logs and \configs;
+00:56 so those three obviously longs go in logs, data goes in data,
+00:59 and then we have those two config files that we can use to run mongodb
+01:03 with all the various settings set for us.
+01:06 We copied the configs over, and I'll include those in the source controle
+01:11 so you guys can grab the windows setup configs
+01:14 and you know, just change the path to wherever you put things;
+01:17 and then you want to test those configs, so we're going to test them
+01:20 by saying mongod--config and the full path to the config,
+01:24 this command one is meant to have no log in, so basically it spits out
+01:29 the log information to the command line to the command shell,
+01:32 that way you can see what's happening.
+01:34 Of course, in the service version, the service actually won't install
+01:37 if there's not somewhere for the logs to go to
+01:39 because it knows you're not going to see anything so it has to log it for it to work.
+01:42 All right, so this is just if you want to run it on the command line,
+01:45 then we're going to install it as a windows service,
+01:48 so this time we use the mongo-service config,
+01:51 which is basically the same, other than having a log in
+01:53 and we added the --install, okay.
+01:57 And it was really important that we run that command prompt
+02:01 as an administrator not as a regular user
+02:03 otherwise it doesn't have access to alter the service configuration in windows.
+02:08 All right, once this was all done, we went to the service config,
+02:11 we pressed start and then we're good to go.
+02:14 Final thing you might want to do, adjust the startup mode to manual,
+02:18 depending on whether you want mongodb to start every time you turn on windows
+02:22 or only when you click the button in the service panel.

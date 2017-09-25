@@ -1,0 +1,29 @@
+00:01 Which one happens to be the most popular, the most widely used?
+00:04 Well, you can guess, it's probably MongoDB, given this course, right.
+00:07 However, you probably didn't guess how much more popular MongoDB is
+00:13 relative to its other NoSQL friends.
+00:17 So we've got CouchDB, this orange one,
+00:19 which is way down there, and sort of not even trending;
+00:22 well, we've got RavenDB which is basically not used,
+00:25 Cassandra, which kind of peaked around 2016, is heading down.
+00:29 We got MongoDB just much, much more popular than these,
+00:34 if you want to experiment or play around with this data yourself,
+00:36 you can check out the link at the bottom.
+00:39 So MongoDB is really, really popular,
+00:41 it's by far the most popular, widely used document database.
+00:44 It's also really loved, so one of my favorite places
+00:47 to get insight into to the developer community is Stack Overflow's yearly survey;
+00:52 so on the 2017 yearly survey, you can see
+00:56 MongoDB appears very high up the rank for most loved technology,
+01:01 and if you look at the little description at the bottom,
+01:03 this represents the number of developers
+01:05 who are currently using the technology and really enjoy working with it.
+01:09 So MongoDB is right up there, among all at the top.
+01:12 Now, what about wanted?
+01:15 In fact, MongoDB just dominates the wanted category,
+01:17 so this is people who are not currently using MongoDB
+01:20 or currently using whatever technology is listed here,
+01:23 but they wish they were, right.
+01:26 So MongoDB is definitely highly, highly desired
+01:29 for the people who are not using it,
+01:31 and very much loved by the people who are.

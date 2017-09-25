@@ -1,0 +1,48 @@
+00:01 Let's begin our exploration of MongoDB at a high level
+00:04 with the why and history of NoSQL in general.
+00:08 So if you look around the software development landscape
+00:11 you'll see that people when they talk about
+00:13 how are we going to design our application frequently say
+00:15 well let's assume that we have a relational database,
+00:18 now we can discuss what type of ORM should we use,
+00:22 or should we use an ORM at all,
+00:24 or should we use micro services or things like this.
+00:26 Basically, the fact that we're starting from a relational database
+00:29 is considered to be an axiom of software development,
+00:33 we have data, it goes into relational database
+00:35 now let's talk about the architecture, now let's talk about scaling,
+00:38 let's talk about performance and so on.
+00:40 And just to drive home how strong of a statement that is,
+00:42 an axiom, recall the exact definition—
+00:45 a statement or proposition that is regarded as being self evidently true,
+00:49 it's just clear that you start from a relational database.
+00:52 So what are the things I hope you take away from this course is
+00:55 that the database style, the database engine is a choice,
+01:00 it's a really important choice that has actually super important
+01:04 and far reaching implication for your application.
+01:06 So I want to sort of break this mold
+01:09 that starting from a relational database is an axiom.
+01:12 Sometimes it makes sense, sometimes it's perfect,
+01:15 but a lot of times as you'll see throughout this course
+01:17 starting with a document database is actually a better choice.
+01:20 Now, what is NoSQL? Ask five people what NoSQL is,
+01:24 you'll probably get five different answers back.
+01:26 Some people will say, well the 'no' stands for 'not only'
+01:31 so NoSQL is 'not only SQL',
+01:34 well that's a great open minded view of the world,
+01:37 but I'm sorry to say that's not what NoSQL is.
+01:40 Maybe it means it doesn't have SQL,
+01:44 maybe it means the system operates without the SQL language, right,
+01:47 without select * from this etc, without that language.
+01:51 If we look at the history, I think you'll see that this is also not the case.
+01:55 Here's a toaster, this toaster operates without SQL,
+01:58 is it a NoSQL toaster— I don't think so!
+02:01 And of course not, it's not a NoSQL toaster, it's just a toaster.
+02:05 NoSQL doesn't mean it operates without the SQL query language
+02:08 in fact, I believe that document DB, Microsoft's document database
+02:13 that runs in Azure, actually more or less uses
+02:16 a flavor of the SQL query language to query it.
+02:19 So no, it's not about excluding this SQL query language,
+02:22 it's something entirely different, so let's next look at the history,
+02:26 and I think you'll have a really good idea of what NoSQL is
+02:29 and maybe it will come to a little bit closer agreement on the definition of NoSQL.

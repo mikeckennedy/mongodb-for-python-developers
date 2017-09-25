@@ -1,0 +1,106 @@
+00:01 Now let's look a little bit at who is using MongoDB and how.
+00:04 On one hand, it's not that important that it's a popularity contest—
+00:07 does it solve your problem, good, use it.
+00:09 On the other, MongoDB is different, right,
+00:12 it's not a relational database that people have been using for thirty years
+00:15 and we call that axiom conversation, I had at the beginning,
+00:18 if you are the one adopting MongoDB you have to take this idea
+00:21 and present it to the people that run the business,
+00:24 to your managers, to the tech team and say
+00:27 hey this is a safe thing for us to do, this is a good thing for us to do.
+00:30 And so, by looking at the other users of MongoDB,
+00:34 how they're using it and how much data and traffic they are passing through it
+00:37 can give you some really good support
+00:41 like hey look it's working well for these companies,
+00:43 and they're way more risk adverse than we are,
+00:45 so if they can use it, we can totally use it.
+00:47 So, with that in mind, let's go look at who uses MongoDB,
+00:51 so they have a whole page who uses MongoDB right here,
+00:54 we can flip through and there's a few major ones;
+00:56 so we've got MetLife, they're doing some pretty interesting things
+01:00 obviously they are a large insurance company
+01:02 they have a single view of a hundred million customers
+01:05 across 70 systems and they built this whole thing up on Mongo
+01:07 and it's 90 days, that's pretty cool.
+01:10 Expedia uses it for millions of customers
+01:13 while they're looking for travel, that's great.
+01:15 Now let's look at some more, you can see the scrollbar, this is actually huge,
+01:19 so let's scroll down to find some interesting ones.
+01:22 So let's say Royal Bank of Scotland,
+01:24 this supports the bank's enterprise data services
+01:26 underpinning several core trading systems,
+01:29 okay that's intense, right, like if you're debating
+01:32 whether or not this can do like you know
+01:34 some probably not super intense
+01:36 for the majority of the students part of your app,
+01:38 if Royal Bank of Scotland is going to make this part of their core trading systems
+01:42 that's really putting a lot of faith in it.
+01:46 Biotech, they use this to accelerate their drug testing,
+01:50 Facebook, they have a whole bunch of interesting things
+01:52 that they're doing with Mongo, they ran like a backend as a service of Mongo
+01:57 when they acquired Parse, but they're not doing platform stuff like they used to.
+02:00 Now let's flip around, let's have a look at say ebay
+02:03 they're doing delivering all their media metadata with five nines for liability;
+02:07 Barclays, a big bank, so they've replaced
+02:10 a whole bunch of relational systems there,
+02:13 let's keep going, come down here to our friends in Germany,
+02:15 they built a pretty amazing internet of things platform on top of MongoDB,
+02:20 come down look the New York Times,
+02:23 they basically did all their social sharing activity on top of MongoDB,
+02:27 Business Insider, you probably run across Business Insider the website,
+02:31 so they've been around since 2009,
+02:34 they launched in New York city, and their whole site
+02:37 runs on MongoDB, which is pretty awesome.
+02:39 Speaking of business, let's look at Forbes,
+02:43 they rebuilt their whole cms on top of MongoDb,
+02:45 resulting in a jump of 5 to 15 percent in mobile traffic overnight, that's really cool.
+02:50 So Carfax, they sell cars online and in person
+02:54 so a ton of traffic happening there, that's really cool.
+02:57 Cern, I love Cern, these guys at the Large Hadron Colider
+03:02 they're using MongoDB to manage the data
+03:06 while they're searching for the Higgs Boson
+03:10 which I think this probably needs updating
+03:12 because as they now have found the Higgs Boson
+03:14 and won the Nobel Prize as a part of that.
+03:16 Another interesting a long time user of MongoDB is Foursquare;
+03:21 so Foursquare is as far as I know more or less entirely powered by MongoDB
+03:26 and here you can say it powers the processing storage of all check ins
+03:30 with hundreds of thousands of IOPS on MongoDB,
+03:34 that's hundreds of thousands of operations, input/ output operations
+03:37 per second on MongoDB, which is really, really cool.
+03:40 Let's look at Sailthru, so Sailthru is like marketing email campaign company
+03:46 and they store 40 terabytes of data in MongoDB across a 120 nodes
+03:53 so remember we talked about document databases
+03:57 and NoSQL databases in general being good for horizontal scale
+04:01 and sharding and partitioning your data;
+04:04 120 nodes in your cluster that's pretty intense.
+04:07 All right, let's do one more, let's talk about Shutterfly,
+04:10 so Shutterfly is like a photo sharing site, pretty cool,
+04:15 you can like put your pictures there, sharing with people
+04:18 you can get like printed books they were doing that before
+04:20 some of the main companies like google were and so on,
+04:22 so this is interesting in that they have a bunch of projects,
+04:26 on Mongo storing over 20 terabytes of data.
+04:29 Square Space, Stripe and on and on it goes, right,
+04:33 all of these really cool companies are using MongoDB.
+04:37 I guess one more let's look at UnderArmor here.
+04:40 So Under Armour is interesting because I haven't seen
+04:43 any of the previous examples explicitly calling this out;
+04:46 so Under Armor is like an athletic clothing company in the US
+04:49 and around the world, and their online shop is powered by MongoDB
+04:54 and it does over two billion dollars in sales, so that's pretty awesome.
+04:59 All right, so why do we spend all this time talking about who uses MongoDB?
+05:02 One, to show you there are a bunch of companies
+05:05 being really, really successful with MongoDB
+05:07 and that there are different use cases,
+05:10 different companies in different areas doing different things,
+05:13 we saw like biotech, we saw pharma, here is e-commerce, all sorts of things.
+05:18 Oh, EA, I didn't pull up EA but they're using it to power, let's go up here to EA,
+05:23 so EA is using this to scale their online games to millions of players;
+05:29 so all sorts of really cool and interesting use cases
+05:33 that you can use to say hey, we should give this database a try
+05:37 because here's a bunch of other people being successful with it.
+05:40 This also means that you can rely on Mongo
+05:43 because it's taken a serious beating from quite a few different angles
+05:47 and use cases, it's not some barely used database
+05:50 but it's highly, highly used actually.

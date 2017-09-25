@@ -1,0 +1,97 @@
+00:00 So let's talk about what we're going to cover in this course.
+00:03 We're going to start by getting your machine set up and ready to go.
+00:07 It's important that you follow along in this course,
+00:09 that you do the code examples, that you play with the database,
+00:11 that's how we learn as developers.
+00:14 So the first thing we are going to do is walk through
+00:16 how to set up your operating system with MongoDB
+00:18 and the various other tools that we'll talk about later.
+00:21 Whether you're using MacOS, Windows or Linux,
+00:23 we have a video that shows you how to set this up correctly on your machine.
+00:27 Next, we'll dig into what is NoSQL, why do we want to use it,
+00:31 what are document databases, I touched a little bit on this in the beginning,
+00:35 but we'll go deep into document databases, how they work,
+00:37 and the trade-offs and benefits that we get from them.
+00:41 We'll then start work with MongoDB proper,
+00:43 we're going to fire up MongoDB
+00:45 and we're going to connect to it with its native shell
+00:47 and understand its low level native query syntax.
+00:50 If this was a relational database, this would be kind of like studying SQL,
+00:54 the TSQL language, but MongoDB doesn't use SQL,
+00:58 it uses its own query language
+01:00 which is easily understandable, but it is not the same.
+01:03 Now this is actually going to be in Javascript for the most part;
+01:06 you might be thinking this is a Python course, I don't want to learn Javascript.
+01:09 Well, for the most part we're going to write our code in Python
+01:13 and we're not going to do anything in Javascript,
+01:15 but you need to understand how the query syntax
+01:18 of the various tools and libraries in Python ultimately map down
+01:22 to what you could work with in the management tools,
+01:25 and in the management tools it's Javascript in the native query syntax.
+01:29 We'll make sure that we cover that really well here as a great foundation.
+01:32 Next up, we're going to talk about modeling data
+01:36 with documents rather than tables.
+01:40 You may have heard of third normal form
+01:41 and modeling through normalizing data in a relational database
+01:45 and to some degree, that knowledge carries forward into document databases,
+01:49 but there are certainly many other trade-offs
+01:52 and different types of modeling scenarios that you want to follow,
+01:56 you certainly don't want to just normalize your document database
+01:59 you'd be missing all of the benefits and getting some of the drawbacks potentially.
+02:03 So we'll see that in document databases in general,
+02:06 in MongoDB in particular, you model your data a little bit differently
+02:10 and have different trade-offs and considerations, and we'll talk about that here.
+02:14 At this point, it's time to start writing the code with Python.
+02:16 So we will begin at the primary lowest level
+02:19 that we can work with MongoDB, and this is PyMongo.
+02:23 So here we're going to work in a query language
+02:26 that is very, very similar to MongoDB's native Javascript language
+02:31 but we're going to do it from Python, and this works great,
+02:34 basically you're exchanging dictionaries and it's very fast and efficient.
+02:38 However, sometimes it makes a lot more sense
+02:40 to not just pass loosely typed dictionaries around
+02:44 but rather rich classes with lots of functionality and structure.
+02:48 So we're going to also talk about MongoEngine
+02:51 which is an ODM, object document mapper for MongoDB;
+02:56 think of this as an ORM, but because there is no relational bit,
+02:59 it's not a relational database, we call it document.
+03:02 So ODM for MongoDB and MongoEngine is one of the best ones,
+03:07 it works really well in Python 3 and Python 2,
+03:10 it has a whole bunch of features and different things
+03:13 you can add to your application
+03:15 on top of what MongoDB the database itself provides,
+03:18 for example like type checking, things like that,
+03:21 so really, really nice and you'll see that MongoEngine
+03:23 is a great addition to what you might be doing.
+03:26 Once we get the programming side in place
+03:28 we want to take our database and add tons of data to it,
+03:31 so we're going to take a simple example that we were playing with before
+03:34 and add something that has effectively millions or at least million records in it
+03:39 and then we're going to start interacting with it from MongoEngine,
+03:42 just as well it could have been PyMongo, right,
+03:45 we're going to start interacting with this database with lots of data
+03:47 and see that it doesn't perform quite as well as we hoped,
+03:50 maybe as well as all the hype around
+03:53 MongoDB being fast would make you expect.
+03:56 So we're going to see that we can take this server
+03:59 and it's kind of ok on its own, if we left it alone
+04:01 and we'll make it like five hundred times faster for some totally reasonable operations
+04:05 so we're going to talk about the various knobs and tools
+04:08 we have to make MongoDB really fast.
+04:10 They're not hard to do, but they are not automatic
+04:13 so you definitely want to learn about those.
+04:15 And finally, we're going to take all of what we've learned
+04:18 and deploy it into a cloud multi server environment
+04:22 so we are going to create what would be a fake web app,
+04:25 we'll just have a little Python script that stands in for the web app,
+04:28 put that on one server up in a cloud computing environment,
+04:30 on another one, we're going to set up a production hardened MongoDB server
+04:35 and we're going to make sure that MongoDB production server
+04:38 is totally locked down, running as safe as possible.
+04:42 There are a lot of non obvious things about running MongoDB in production
+04:46 and we want to make sure that it's working really well for us,
+04:50 so we're going to go through this section and do five or six different things
+04:53 to get MongoDB ready to be our production database.
+04:57 And that's it, this is what we cover the course,
+04:59 I think it's a really comprehensive introduction to MongoDB from Python,
+05:04 and I really hope you enjoy it, I really enjoyed creating it for you.

@@ -1,0 +1,23 @@
+00:01 Let's quickly review how we installed MongoDB on Linux.
+00:04 So the easiest way to do this is just go mongodb.com
+00:07 go to the download button and pick in the little drop down your distribution
+00:12 and that way you can copy along.
+00:14 Here's what we copied and ran,
+00:16 so we visited the Ubuntu setup page at mongodb.com
+00:19 that's what I just described, and then we ran add key
+00:22 so they said look we're going to trust
+00:25 this particular source that we're about to give you,
+00:28 and then we said I'd like to go to the repo at mongodb.org
+00:32 and set up this, basically pointed at this package store here.
+00:38 And then, we're going to update, don't forget this step,
+00:42 make sure you update your local listing by pulling from all of the sources,
+00:45 and then we're going to apt install mongodb-org,
+00:49 and that will take all of the tooling and servers and client stuff;
+00:52 if you only want one of them, just the sharding server
+00:55 or just the server component, you can absolutely just install that piece,
+01:01 we saw like listed on that first page I described
+01:04 that there's actually this mongodb-org,
+01:07 it's kind of a meta package of four other smaller packages.
+01:10 And then at the start we just say service mongod start,
+01:14 if you want to change a configuration it's at etc/mongod.conf.
+01:19 Change that, just restart the service and it should pick up the changes right away.

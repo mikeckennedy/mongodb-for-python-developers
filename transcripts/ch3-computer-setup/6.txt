@@ -1,0 +1,82 @@
+00:01 Are you taking this class using your Linux desktop?
+00:03 Well, let's get your machine all set up and configured with MongoDb.
+00:07 So here we are just on the homepage mongodb.com,
+00:10 I am going to go click download, and it's totally possible to click and say
+00:16 download the tarball, but we could also say I would like to see
+00:19 how to set this up on let's say Ubuntu, as you change this,
+00:23 notice different things happen, so if we go to Amazon
+00:27 it says here are instructions for installing with yum, that's the package manager there,
+00:31 if I go to Ubuntu, so here's the instructions for installing with aptitude,
+00:34 so we're going to go over here to that one,
+00:36 make sure you pick the right distribution, do we want to read this— no.
+00:40 So there's a couple of steps that we need to go through
+00:43 and they're pretty simple, most importantly they just like walk us through it
+00:47 so notice here that there is a package named mongodb.org
+00:52 let's try to just install that, sudo apt install that,
+01:00 oh it needs my password, okay, and nope, there's no mongodb,
+01:05 darn, doesn't it say right here, here's how you install all the pieces?
+01:08 It is true, but we got to go through a few steps to get there.
+01:11 So first thing that we got to do is basically add a source to aptitude,
+01:16 so we're going to go over here, and we're going to set a key,
+01:19 so you're just going to go through a few copy paste steps,
+01:21 so we're going to do our apt key here, it takes a moment,
+01:26 and all right, that's all good, next thing to do
+01:28 is we're going to create a list file, all right, great.
+01:34 Be really careful about the version numbers here,
+01:38 later is probably better, pick the one that matches yours.
+01:40 So the next thing we need to do, is run a sudo apt update
+01:44 and you can do apt.get or just apt, whatever
+01:47 but you need to tell it hey, go pull all the sources
+01:50 now the new one included and just have that list there.
+01:53 We don't need to back up anything, so go away.
+01:58 Alright, now everything is registered, we're pointing at the right package source,
+02:02 we've updated it, now we can go over here and do
+02:05 our thing that we tried to do originally.
+02:08 So we wanted a sudo apt installed mongodb.org,
+02:14 this time it knows what that means, hey look that's mongodb,
+02:18 mongos which is a sharding server, mongo server, mongo shell, mongo tools,
+02:22 I am just going to install them all.
+02:25
+02:29 Perfect, okay, so we have MongoDB all set up and ready to go,
+02:35 and now we can just type mongo, and it tries to connect,
+02:40 we have mongo now but we really need to start it.
+02:44
+02:51 So we started up mongod, great, now we can connect to it.
+02:56 Awesome so it has some warnings again about access control
+02:59 when we get to the deployment chapter,
+03:02 we're actually going to set up Ubuntu as a cloud server
+03:05 with some of these errors removed,
+03:07 we're going to set it up with access control, with authentication,
+03:10 with firewalls, all sorts of things, but for now, for the dev version,
+03:13 we're going to just use this, okay.
+03:16 So it looks like it's up and running, that's cool,
+03:19 now the last thing is maybe we want to configure our server;
+03:22 so, we can come over here to /etc/mongod/conf
+03:30 and you can see we've got our storage path,
+03:33 like here's where our data files are going to go, change that if you like,
+03:36 journaling, you generally want that on,
+03:38 it's going to be running with wired tiger,
+03:41 it is an older style of database storage engine called this mmapv1,
+03:45 that's how things used to work, they've switched the default to wired tiger
+03:49 because it's faster, I believe it's much faster for inserts a little faster for reads,
+03:53 here's where the log file goes, if it's not working and you want to see what's going on.
+03:58 So most importantly though is this bit right there, this bindIp.
+04:02 So the bindIp is set to 127.0.0.1, we should have our firewall turned on anyway,
+04:08 we shouldn't be exposing this port, but we're only listening on the local host,
+04:13 I think this machine actually right now has two ip adresses,
+04:16 one public ipv6 and one net ipv4 ip address,
+04:21 but it's not listening on either of them because of this, right.
+04:24 So it's super important that this is here,
+04:27 otherwise if someone can get to this port on your machine
+04:30 and you don't set up authentication, bad things happen.
+04:33 All right, so make sure this is here,
+04:36 and only change that on your staging servers
+04:38 and other things where you control the network, much more carefully.
+04:41 Again, we'll talk way more about this in the deployment section
+04:44 but for now, this should do for our development environment.
+04:47 The other things we'll have to do is we want to set up a RoboMongo,
+04:50 we want to set up PyCharm, and we want to make sure
+04:54 that we have Python 3 on here, I believe we do, 3.5.3 is more than late enough,
+05:00 so we don't need to install any Python,
+05:02 but be sure to get RoboMongo and PyCharm,
+05:05 whichever version you want set up so that you can follow along.

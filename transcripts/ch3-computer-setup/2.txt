@@ -1,0 +1,167 @@
+00:01 Here we are in windows 10, so I think this might be the anniversary update
+00:05 or not sure exactly which version, but it's not the fresh one,
+00:08 it's been out for quite a while now.
+00:10 So what we're going to do is we're going to install MongoDB.
+00:13 Let's go over here, check out mongodb.com, click on download,
+00:17 so we're going to go and get the msi, I want to get the one with ssl x64 bit,
+00:23 you put your name in here to get info from MongoDB if you want,
+00:26 you don't have to; okay downloaded, let's run this, all right,
+00:32 so current version of MongoDB at the time of this recording is 3.4.4
+00:36 so we're going to install this, and I'll just open up the custom
+00:39 complete would be totally fine, just so you can see what's there,
+00:43 there's the server which is mongod itself, there's the client tools,
+00:47 there is the monitoring like analysis tools,
+00:50 import, export, for data backup and restore
+00:53 the sharding server Mongo s and then like a few other utilities,
+00:58 unless you have a good reason to not have these on your machine,
+01:01 I would just go for the complete install.
+01:06 All right, it looks like MongoDB is installed let's try this—
+01:09 no Mongo, all right, the reason there's no Mongo is
+01:14 we've got to set up this thing in our path,
+01:17 so let's go over here to program files, mongodb, server, number, bin,
+01:21 so basically to do anything interesting from the command line
+01:25 and that's really where you want to be working with MongoDB
+01:28 you're going to have to come over here
+01:30 and put this into your path, so let's do that now.
+01:33 You just go to properties, advanced, properties, environment variables,
+01:37 this is way deep down, go to the path and hit edit, and then hit new,
+01:41 this is very much nicer than the way it has been in the past,
+01:44 and it will just take that path and put it here;
+01:47 close everything off, ok, so now we should be able to run Mongo,
+01:54 hey look it's not going to work, but we can see
+01:58 it's this one that we just found and set up,
+02:01 so in order for Mongo to work, we can actually try to run Mongod
+02:05 and we're going to get a sad, sad message here,
+02:09 so if you look somewhere it's going to say this directory
+02:13 basically the database directory is not set up.
+02:16 Well, there aren't default places where you can put the data
+02:18 and it will actually create that, you see here is the startup settings that it's using.
+02:23 So we don't want to do this, we want to actually make another one
+02:28 logs and one called configs, so you get to configure all of these,
+02:34 so you can configure that however you like,
+02:37 but we should set up something like this
+02:40 and so let's go in here, now I'm going to copy a config file over
+02:44 so we have two, and notice I've named one command line and one is service,
+02:49 let's just look at the command line one.
+02:52 So notice, there's not a lot going on here,
+02:54 I think this directoryPerDB we could actually drop this,
+02:57 this is not used in the new version,
+03:00 so we're basically saying drive c:\mongodb\data,
+03:02 let's just double check that that does exist, it looks good up here,
+03:06 c:\mongodb\data, okay, journaling enabled, you definitely want that on
+03:11 and this is super important, listen on a local host only, only,
+03:15 this is a dev machine there's no reason they should listen on the open internet
+03:21 in case your firewall is down or you're somewhere
+03:23 where people are scanning the local ports on their local network,
+03:26 think hotel, something like that, so we don't want any of that to happen,
+03:30 so we're going to listen on a local host only.
+03:32 All right, so what we need to do now is
+03:34 we want to try to run MongoDB again, now with this,
+03:37 so let me go up here and copy the path,
+03:43 so we should be able to run MongoDB now, let's clear that off,
+03:46 so mongod and when we tried to run it before and it gave us this error,
+03:50 now we can say --config is that, and if we've got everything set up correctly
+03:55 this should work, there might be permissions on that mongo folder I created
+03:58 we're going to find out in a second.
+04:01 It looks like things are going well, let's go over here and try to connect
+04:06 so we can type mongo and hey, we're in,
+04:09 I can do things like show dbs what's here, perfect,
+04:13 ok so it looks like this is working, it says now warning,
+04:16 you don't have access control like this is wide open to the internet
+04:20 and it's unrestricted read/ write, this is not the best,
+04:24 it's pretty much okay because we're listening it on the local host,
+04:27 still could be a problem, you might want to set up an account
+04:30 when we get to the deployment and production settings,
+04:33 this is, we're going to solve these problems,
+04:35 but for development this is probably good.
+04:37 I had that one cofig, this one that worked,
+04:41 let's check this one out and make sure everything is ok as well.
+04:43 So this service one is going to run
+04:45 when we install MongoDB as a Windows service
+04:48 so if we were running in like Windows virtual machine
+04:52 in aws, ec2 or in Azure something like that,
+04:56 this would be what we'd probably run, of course
+05:00 with credentials and things like that, we'll talk about it at the end;
+05:03 but if we're going to set this as a Windows service,
+05:06 this will only succeed if we set the logs,
+05:09 so that's why we created this logs folder
+05:12 and that's why this service one has a system log section.
+05:16 So the next thing to do, now that we're over here
+05:19 is we actually want to first let's just test that,
+05:23 so let's test this service version and we won't see anything because the log file
+05:31 but if it just sets there, I guess we could go ahead
+05:35 and test that we can connect to it— yeah, looks like that worked.
+05:38 Okay so it looks like the service is working
+05:43 we'll just control c out of there.
+05:46 Now the next thing that we need to do, this is optional,
+05:49 you don't have to do this, you could literally come and type this out every time,
+05:53 but let's go ahead and set this up as a Windows service,
+05:56 so you can tell it to auto start, delay start
+05:58 or just flip open to the services and click go
+06:01 whenever you want to use MongoDB, that's how I
+06:03 whenever I'm working on windows, how I use it.
+06:05 So we can go to the services,
+06:11 and let's hit m to see if there is anything for Mongo,
+06:13 and now there's nothing for MongoDB here, ok, so no MongoDB;
+06:16 and what we want to do is we want to register MongoDB as a Windows service,
+06:21 now there's something that's really, really important here,
+06:24 I can run MongoDB like this,
+06:28 -port equals whatever port,  --ssl and whatever,
+06:35 all of the options go here, so --db path equals, we get filled this out here,
+06:43 it turns out the way that MongoDB registers itself
+06:47 if I try to install it as a Windows service using the explicitly passing the parameters
+06:52 the only way to change those values, to change the way MongoDB works,
+06:55 is to actually go and edit the registry entry in Windows, not amazing.
+07:01 So what we're going to do instead, is we are going to do what we already did
+07:04 we want to go to basically say run that config file.
+07:07 Now, the other thing that I've seen can be really tricky
+07:10 is the Windows service path might not be the same as your path
+07:13 so you need to use like full path names everywhere,
+07:16 so we'll say where mongod, so we want to run this explicitly
+07:21 because that's what gets recorded in the Windows service,
+07:24 so we're going to say that instead of just mongod,
+07:27 we'll say --config and that was in c:\mongo\config\ this one,
+07:36 now we've got to use the service one that has the log
+07:38 and then finally, here's the trick, this is the thing,
+07:42 actually this is not going to work, so I'm going to copy it,
+07:45 I'll show you this not going to work.
+07:47 So the trick is to say I would like to install this as a service
+07:50 because it's not going to work, i'm going to copy it, so I don't have to type it again,
+07:55 ready— enter, now, no errors, but if I refresh, also no MongoDB.
+08:02 What happened? Well if you actually open up that log file
+08:06 in there it will say permission denied, could not install MongoDB,
+08:10 why— because this is not an administrator command prompt,
+08:14 not root or anything like that, this is just straight up, just whatever my account is,
+08:20 so I got to right click, you see these options, if you shift right click
+08:24 you say run as administrator, and then you run the exact same command
+08:28 and it does the exact same thing,
+08:32 except in the log file, there's now a different message
+08:34 if I refresh— ta-da, we have MongoDB.
+08:38 So let's test this, if type mongo, trying to connect, trying to connect,
+08:42 it's going to time out, right, nothing.
+08:45 Now if I go over here and I press start, do the same thing again,
+08:51 ta-da, now we have MongoDB set up as an auto start windows service.
+08:55 That's pretty awesome right.
+08:58 So if we reboot, MongoDB will run.
+09:01 It might be the case that just sometimes you want to run Mongo
+09:03 and the other times you don't want to it say sucking down the battery on your laptop,
+09:06 you can set it to automatic delayed start, so your Windows boots faster,
+09:10 and you'll still have it, or you can just set up purely to manual
+09:13 in which case it's only going to run
+09:15 after reboot if you come over here and click go.
+09:19 So that's depending on how you use Mongo
+09:23 whether you want it certainly in production
+09:25 if you're on a Windows server set that to start
+09:27 but maybe manual for development, I don't know,
+09:30 it depends how often you use MongoDB, if you use it all time
+09:32 that's all you work on is apps to talk to it,
+09:34 just set it to auto start or delayed or something.
+09:36 Okay, so now this Windows machine is all configured to run MongoDB,
+09:41 how about PyCharm, and RobMongo and so on?
+09:44 Those all have straightforward installers
+09:47 so just install Python 3, Robomongo and PyCharm whichever edition you want
+09:51 and just next, next, next your way through,
+09:54 with the Python one make sure that you check the box
+09:56 that says add Python to my path, that one is important.
+09:59 Other than that, there's really nothing else to it, you'll have a machine
+10:02 that is set up and ready to do this MongoDB course on Windows.
