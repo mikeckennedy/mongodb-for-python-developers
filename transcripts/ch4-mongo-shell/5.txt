@@ -1,0 +1,44 @@
+00:01 We've explored the shell a little bit, we've done some querying,
+00:03 let's look at the concepts behind it, so you have them nice and concise,
+00:06 in case you want to come back for a reference.
+00:09 So if we want to query say the Book collection in the bookstore database
+00:12 where the title is 'From the Corner of His Eye',
+00:17 we can type find and give it this little prototypical json object,
+00:20 hit enter, and boom everything comes back that has the same title,
+00:25 different isbns, different primary keys and so on,
+00:27 but releases, different versions,
+00:29 maybe one is paper back on is kindle, who knows;
+00:31 so the idea is we're going to come up with these prototypical json objects,
+00:35 here title: whatever the title is.
+00:39 Now, if we want to do more than just what is the title here
+00:42 we want to say give me the book with the title this and the isbn that,
+00:47 given that the isbn is probably unique,
+00:50 we could maybe just search for it instead,
+00:52 but we want to demonstrate the and clause, right.
+00:54 So here we'll give it this prototypical sub document
+00:56 with the title being the title we're looking for, and the isbn being this one.
+01:00 And notice, now we only get one record back,
+01:03 so our prototype will document is basically an and clause, every field must match.
+01:09 We also saw that one of the excellent ways to group related data,
+01:14 this would be what you might call an aggregate in domain driven design,
+01:18 is to embed items into the document,
+01:22 so here we have ratings that ratings have little sub objects,
+01:25 sub documents that have things like user ids and values
+01:28 and at the very beginning, and in the example you saw,
+01:30 the superpower of these document databases, is that they can query them,
+01:34 so I want to find all the books that have been rated by this highlighted user id—
+01:38 how do I do that? So we just pretend we're traversing the objects
+01:41 Ratings.UserId, so down here we'll say find Ratings.UserId
+01:46 and we give it the object id that we're looking for
+01:49 because ''Ratings.UserId'' is not a valid key or a field name in a Javascript object
+01:54 we have to put it in quotes, but other than that, it's basically the same idea
+01:58 and here we get back all the books that have been rated by this particular user.
+02:02 So we just use this dotted notation to traverse the hierarchy
+02:07 one other interesting point is maybe ratings just contained the number
+02:11 like it was at 7,5,... then you could actually just if I want to say
+02:17 find all the books that have a rating of seven
+02:20 I could just say find ratings:7,
+02:23 I don't have to do this dot notation or anything like that,
+02:25 but because I'm looking within that document inside ratings,
+02:27 regardless of whether it's an array or it's a single rating thing,
+02:31 you do it like this that dot notation.

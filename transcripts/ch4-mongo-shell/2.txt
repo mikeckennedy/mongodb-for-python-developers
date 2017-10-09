@@ -1,0 +1,93 @@
+00:01 So let's connect to MongoDB,
+00:03 I already have it running as a separate process hidden away,
+00:05 we'll talk about how to run MongoDB later,
+00:08 you should have seen in the setup how to get it started
+00:11 and then we'll talk about the deployment side of things later in the class.
+00:14 So MongoDB is running, it's running the local machine under default ports,
+00:18 no security, nothing like that for getting started,
+00:21 it's only listening on 127.0.0.1
+00:25 so it's not listening on the public network, on my machine,
+00:28 so for that reason, more or less plus firewalls,
+00:31 the authentication part we're going to turn off for a little bit,
+00:35 just so we can start from the beginning;
+00:37 okay, the other thing I have is I have set up MongoDB in my path,
+00:41 so I can ask which Mongo, and it comes back with something,
+00:45 so what I actually did is I went to MongoDB
+00:48 and I just downloaded the tarball, and I unzipped it,
+00:51 and I sort of changed the naming around, so it's in this path here,
+00:53 so here's the actual executable.
+00:55 Mongo is the name of the shell, mongod is the name of the server for deamon
+00:59 so in order to connect to MongoDB, there's a ton of options we could give it
+01:03 and like I said, when we get to the deployment and production stuff at the end,
+01:06 we'll have to pass all sorts of things like authentication,
+01:09 an ssl flags, and whatnot, server names here
+01:12 but in the beginning, we can just type mongo.
+01:15 And you'll see, right here, we're running 3.4.4
+01:19 and it's connected to local host 27017,
+01:24 that's the default port for standalone servers,
+01:26 there's 27 thousand, 18, 19 and 20 are reserved
+01:30 or typically the default for other types of things.
+01:32 So my system is not exactly set up right,
+01:35 but it's not a production machine it's just my dev machine, okay.
+01:37 So now we're connected, what do you do?
+01:40 Well, probably the first thing you want to do is
+01:42 focus on a particular database, so you can say show dbs
+01:45 and it will show you the various databases, how large they are things like that,
+01:50 so we're going to work with the bookstore for our examples in this chapter.
+01:55 Later, we're going to work on something that maps over to a car dealership,
+01:59 so those are the two databases that we're going to be working with,
+02:02 you can see that I have got some for my various sites here and things like this,
+02:06 I have actually broken it apart so like Talk Python the core data
+02:09 it's not really zero gigs, it's just rounding down, it's like 20 MB or something,
+02:14 but the analytics is half a gig here, and it's actually much more if you export it.
+02:20 So we may have more than one database for our app like I have on my podcast,
+02:23 or you might just have one for the trading site, like we do here.
+02:27 Great, so now I want to maybe find a book in the bookstore,
+02:31 so how do I do that— the first thing you have to do is
+02:34 you have to activate the database, so you're going to say
+02:37 db.command, whatever that is, and give it some command here,
+02:40 where db refers to one of these databases, so the way we do that
+02:43 is we say use say bookstore, like this,
+02:47 now it says great, we switched to bookstore,
+02:49 and then we could say db. first of all what are the equivalent of tables
+02:53 in MongoDB these are called collections, because they're not tabular,
+02:56 so we can say show collections, and this is what is contained inside of bookstore,
+03:01 there's a Book, case sensitive, Publisher, Test and User, ok.
+03:06 So if I wanted to find the books let's say db.Book.find
+03:09 let's say just limit one, so it doesn't go crazy on our shell here,
+03:13 so basically, the way it works is we connect,
+03:16 we figure out what the database we want to work with is,
+03:19 we say use that database and then we say db.collection name
+03:22 and then we typically fire these commands at the collection.
+03:25 Now, what's interesting that is missing here
+03:28 is there's not like a create database or inside of
+03:32 here there's not a create table or create collection command,
+03:36 so like Python in some ways, MongoDB is very, very dynamic,
+03:41 so if we wanted to create a table, let's go and just create a collection
+03:45 and we won't create a whole new database,
+03:47 so what database we have, we have a bookstore
+03:49 and we have those for collections bookl publisher, test and user,
+03:52 so if I want to create one called logins—
+03:56 let's say just log for history
+04:00 I could even issue a find command against that
+04:03 and there's just nothing, it's just empty.
+04:06 If we go up here and we say what's here, there's no log,
+04:09 but if I actually try to interact with this, we'll talk about inserts in a little bit,
+04:12 but let's just really quickly see how this works,
+04:17 I would just say let's say name or action is view, something like that,
+04:22 if I insert this, no just crazily this works and something was inserted,
+04:26 if we look there's now a log, so db.Log, case sensitive .find, there
+04:32 and it inserted this thing, action with a view and I gave it the id whatever it is,
+04:36 this is called an object id, we'll talk about that later.
+04:39 Okay, so this shell is how we work with MongoDB,
+04:41 if I want to get rid of it, I could go here and say drop collection,
+04:47
+04:50 just drop, right,
+04:54 and now log is gone again.
+04:56 So this is your base level admin tool
+04:59 and it works everywhere, so we could ssh into our Linux server
+05:02 Digital Ocean, or on aws or whatever,
+05:06 and we could do this, we could even sort of tunnel this through there,
+05:10 but we're going to see that there is actually some better options
+05:13 any time we're running somewhere
+05:15 where we can even just tunnel over to the server.

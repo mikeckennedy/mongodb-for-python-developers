@@ -1,0 +1,60 @@
+00:01 So in our example we saw that we pass a connection string
+00:03 to the Mongo client and it was super simple,
+00:05 it was just the MongoDB scheme and local host and the default port,
+00:09 like I said, we could even omit the the connection string,
+00:12 I believe it would still be totally picking all the defaults.
+00:15 So let's look at some non default options.
+00:18 So here, if I want to connect to a remote server
+00:21 and I've either put some kind of dns records somewhere
+00:25 or I've just hacked my local hosts file to say
+00:27 there's a thing called mongo_server which is maybe within
+00:31 a virtual private network or at least in the same data center zone,
+00:35 if I'm doing cloud hosting like a Digital Ocean or something like this,
+00:39 and if I want to connect it on the default port, which is still 27017,
+00:44 I could just say mongodb://mongo_server, and then we could connect that way.
+00:48 Well, maybe you want to connect on an alternate port,
+00:52 so port 2000, instead of 27017, this is probably a good idea,
+00:56 there's a lot of people scanning the internet for open MongoDB ports,
+01:01 27017, 27018, up to 20020 I believe,
+01:06 it's probably the range that they're looking at,
+01:08 because different services run on different ports,
+01:11 like replication versus sharding versus whatever.
+01:13 So you probably don't want to run on that port,
+01:16 and when we get the deployment section,
+01:18 we'll look at all the steps we need to take in order to make our server safe,
+01:21 so be sure you do not put MongoDB in production
+01:25 until you watch that chapter at the end of the course,
+01:27 but let's just assume that one of the things we might want to do is
+01:30 run on a non default port, we just obviously like any web address type thing,
+01:34 we just say mongodb://mongo_server:2000
+01:38 okay great, so now we have a separate server on a non default port
+01:42 we probably want to have authentication
+01:44 so if we had a user name and password
+01:47 again we'll talk about this in the deployment section at the end
+01:49 we would have jeff:supersecure, so user name jeff
+01:53 ultra secure password is supersecure, and then we can have everything else.
+01:57 And if we wanted to talk to a replica set, so this is a set of cooperating
+02:02 duplicated fail over MongoDB servers that can be working together
+02:07 so in case one of them goes down,
+02:10 or you have to take one offline for some reason,
+02:12 it will just switch over and a different server will become the primary
+02:16 and start to store the data.
+02:18 This doesn't lead to eventual consistency and things like that,
+02:20 there still is one primary place things go to,
+02:22 but depending on how the state of the cluster is,
+02:25 it could be any one of these replicas, and the replica sets.
+02:28 So here we would say server one port one, server two port two,
+02:31 server three port three— well, the first two are actually
+02:34 both running on the same machine, so in case the process dies
+02:37 but we also have a separate server, Mongo server two
+02:39 that is running on a different port as well,
+02:41 in fact, this might not be all of the replica sets,
+02:44 all the servers in the replica set, this might just be sufficiently many,
+02:48 so that once it connects it finds all the others,
+02:50 and then it will start participating in all of them.
+02:52 And we also need to say replicaSet=prod
+02:55 or whatever we're calling a replica set.
+02:57 So we have all these options in terms of connection strings
+02:59 and then once you have this, well you pretty much use it the same way,
+03:02 you create a client by passing the connection string off to it
+03:05 and it figures out all the details for you.

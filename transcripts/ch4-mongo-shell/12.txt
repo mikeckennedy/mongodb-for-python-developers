@@ -1,0 +1,21 @@
+00:01 Let's review sorting as a concept.
+00:03 So there's a sort function right on the result set
+00:05 on the cursor that comes back from find,
+00:07 and the way it works is we pass it some prototypical json document;
+00:11 but now instead of equality meaning matching,
+00:14 it means tell me the thing and the direction that you want to sort.
+00:17 So here we want to say sort all the books descending
+00:21 show me the most recently published to the oldest, right,
+00:25 show me the most recent books basically.
+00:27 Now this works pretty well, we could put anything that has a direction
+00:29 like a minus one, or one, I think you could even put higher multiples
+00:33 like ten and 20, 50, -10, but use one and minus one, keep your sanity.
+00:37 So this works well for one field, if we want to sort just by published,
+00:40 but if I want to sort by one thing, and then another,
+00:43 well we just put more into this document that we passed to sort,
+00:46 so we're going to say sort by title ascending
+00:49 and then sort by published descending,
+00:51 we run this, we saw that we get the results in our demo,
+00:54 first we sorted ascending by the title and any time they matched
+00:59 we sorted descending by the publish date.
+01:02 So first the 1994, A Nutshell Handbook, and then the 1993 one.

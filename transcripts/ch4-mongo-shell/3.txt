@@ -1,0 +1,31 @@
+00:01 So let's review the main concepts around using the shell.
+00:03 Remember you just typed mongo enter
+00:05 and it will connect your local default, everything default port,
+00:08 default local host, no account etc,
+00:11 and once we're connected, we'll be in here,
+00:15 and it'll say connected to the server,
+00:17 what version of the shell, what version of the server,
+00:19 3.4.4 is the latest at the time of this recording,
+00:22 but maybe not at the time you are watching it,
+00:24 like all things that are server's, newer is better.
+00:26 Ok, so first thing that we might want to do is say what databases are here,
+00:29 and we do that with the show dbs command, we hit enter,
+00:32 and it shows you the various databases that are listed.
+00:35 Then next we want to activate one,
+00:37 so that we can issue commands to it through the db.collection
+00:40 or other high level operations,
+00:42 so we'd say in this case let's work with talk_python, so we'd use talk_python.
+00:46 And it'll say great, we switch to database talk_python,
+00:50 and in you're wondering you can always trying as you saw me do
+00:53 db enter and it will say talk_python, cool, and then,
+00:55 we could say well what collections exist in talk_python?
+00:57 This is actually pretty straightforward,
+00:59 the document design I think is pretty interesting
+01:01 but there's not many collections,
+01:04 so we have episodes, guest, reviews and then while developing it,
+01:08 I turned on profiling to see where it was slow and where it was fast,
+01:11 where I need indexes, we'll talk more about that near the end of the course.
+01:14 So we have these four collections, and now if we want to find an episode
+01:18 we'd say db.episodes.find and give it some search,
+01:23 or sort, or something to that effect.
+01:25 So this is how we get started and connect with the shell.

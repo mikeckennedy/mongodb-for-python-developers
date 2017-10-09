@@ -1,0 +1,128 @@
+00:01 So finally we're here in our github repository for our demos,
+00:04 we have something to share, so I have the source folder here
+00:07 and let's start with this play around PyMongo.
+00:09 Now, throughout this course, we are going to build what I think
+00:12 the pretty comprehensive demo that we're going to work on it for a few hours,
+00:15 it's going to have tons of data, and we're going to consider
+00:18 both the design and the performance of the database.
+00:20 But for PyMongo, let's just sort of fool around a little bit here
+00:23 and then when we get to MongoEngine, we will take on our proper demo there.
+00:27 So we'll begin by opening this in PyCharm,
+00:30 do that little drag and drop trick in MacOS,
+00:34 but on Windows and Linux you've got to say open folder.
+00:39 All right, everything is loaded up,
+00:42 and I have created a virtual environment in here
+00:45 a Python 3.6 virtual environment, you can run wherever,
+00:48 but that's the one I'm using;
+00:50 now, let's start by adding a file here, so we'll just call this program,
+00:53 we won't do too much structuring and refactoring
+00:56 and organizing for this particular demo, we will of course for our proper demo.
+01:02 So, before we can do anything, we just want to type import PyMongo,
+01:06 this is not going to turn out well for us, we'll go over here and try to run this,
+01:10 nope, there's no module named PyMongo, so let's go fix that.
+01:14 If we all open up the terminal in PyCharm,
+01:17 it's going to automatically find that virtual environment and activate it for us,
+01:20 okay, you can see the prompt says .env,
+01:23 that means that we have our virtual environment active,
+01:27 so let's see what is here— not so much, just to be safe
+01:32 let's go ahead and upgrade setuptools
+01:39 why are we doing that— because PyMongo actually use a C extensions
+01:43 and depending on your system, sometimes setuptools
+01:46 has a little better chance of compiling those, if you have the latest version.
+01:49 It doesn't always work that way, and it has a way to fall back to just pure Python
+01:54 but the C extensions do make it faster, so that's worth checking out.
+01:58 Alright, so we can pip install PyMongo, now things are looking good,
+02:05 let's try a program again, code zero, that means happy, zero is happy.
+02:10 Alright, so we are able to create, or basically import the library,
+02:14 now the thing we've got to do is we could just go and create what's called a client
+02:17 and use all the default settings, but in a real app
+02:20 you're probably not going to talk to an unauthenticated local database server,
+02:25 you're probably talking to one on another machine,
+02:27 maybe there's security, maybe there's ssl, whatever.
+02:30 So let's go ahead and set up the connection string
+02:32 even if you have like sharting, a replication,
+02:34 all these things require a connection string.
+02:35 So let's go over here and create a connection string
+02:37 and we'll just put the default values,
+02:39 so they always start with the scheme mongodb:// like so,
+02:43 and then local host, and then 270017,
+02:47 so this is sort of the default local host sets the default port,
+02:52 it's running locally and the scheme is always here.
+02:55 We'll talk about how you can add things like authentication and ssl and what not there.
+03:00 So the next thing we need to do is create what's called a mongo client.
+03:03 You can work with connections directly from PyMongo, but you shouldn't—
+03:08 why, because PyMongo manages connection pulling for you and reconnect
+03:13 and all these different things, so if you work with a client
+03:16 it goes through the connection pulling and that kind of stuff,
+03:19 if you work with the connection directly, you're kind of locking yourself
+03:21 into that single connection which is not the best.
+03:24 So we're going to create a pymongo.MongoClient, like this
+03:28 I want to give it the connection string like so;
+03:32 now, the way this works, this is basically the equivalent of opening up the shell
+03:36 the way it worked in Javascript was, we said use a database,
+03:40 in Python it's a little bit different, in Python we say
+03:44 the database is client. make up a database name,
+03:49 literally I could put TheFunBookStore here
+03:53 and now this would actually start working with the database called exactly that,
+03:57 we do case sensitivity in MongoDB.
+04:00 so let's just call this the_small_bookstore,
+04:04 okay because we're just going to poke around at it
+04:06 we're not going to work with that big set of data that we had before yet
+04:08 and we're also not going to work with our main demo.
+04:10 So let's call it the_small_bookstore.
+04:13 Now let's go over here and say insert some data
+04:17 it's not fun to have a database with no data, right,
+04:22 in fact, let's just really quickly have a glance over here
+04:27 if I connect, notice there is no the_small_bookstore,
+04:30 refresh, no, no small bookstore, okay, so this act here almost creates it,
+04:36 when you do a modifying statement against this thing you'll see that it does.
+04:40 So let's go over here to books, let's make it a little more explicit,
+04:43 I'll say db. so it looks like the Javascript api.
+04:46 So db.books is what we are going to call it,
+04:50 we'll say insert and what you want to insert, let's say title,
+04:54 now this is not Javascript, this is not json,
+04:56 this is Python dictionaries so you've got to make sure you have the quotes
+04:59 but otherwise it's really really simple.
+05:02 The first book, and let's say it has a isbn,
+05:06 let's just put some numbers in there like that
+05:10 and let's do another one, we'll say the second book
+05:14 it's going to have an entirely different isbn
+05:18 and while we're at it, let's say go over here and print out the results
+05:22 and let's do it again, we'll grab the value and let's print out
+05:32 r.inserted_id, so here let's take a look at the whole thing
+05:36 and we'll even print out the type of r,
+05:38 and then the thing that we are usually interested with here is
+05:42 when you're doing an insert, remember the _id thing was generated
+05:47 well what was it, what if you want to actually say I inserted it
+05:50 and here's the idea of the thing I created for you, somewhere in your app
+05:54 alright, so if we capture the response we can check out the inserted_id
+05:59 ok so let's go and run this real quick.
+06:02 Oh whoops, no this is actually just the id, sorry,
+06:06 if you do a bulk answer, I believe you get this
+06:09 or you could do, we can come over here and say insert one
+06:14 be a little more focused, now if we insert one we'll have our inserted id,
+06:19 let's make this third and the fourth book and make a little change here,
+06:25 there we go, one more time, perfect okay,
+06:29 so if you do an insert one we get an inserted one result
+06:32 which is in results insert one result, and here you can see the inserted id
+06:37 so we've inserted some stuff, let's go look back at our data base here
+06:40 we should have now, if we refresh it we now have the_small_bookstore,
+06:45 if we go to the collections we have our books
+06:47 and we look in the books, that should not be super surprising right,
+06:50 those are the things we just inserted,
+06:53 okay so now, let's go over here and do a little test
+06:57 we'll say if db.books.count is zero, we'll print inserting data
+07:06 and like this, we'll say else print books already inserted skipping
+07:15 and maybe even spell that right huh?
+07:19 Now we run it, nope, there's already books in here
+07:23 we're not going to insert duplicate books, so that's all well and good,
+07:27 so we've gone over here and we've connected to the database,
+07:31 we've created a client using the connection string
+07:34 and trust me this can get way more complicated
+07:37 to handle all the various complications and features of MongoDB,
+07:42 and once we have a client we say the database name
+07:43 here I've aliased it to db so it looks like the Javascript api
+07:47 or the shell api you're used to working with, and then we work with the collection
+07:51 and we issue commands like find and count and insert, insert one and so on.
+07:56 So now we have some data, let's go maybe do a query against it,
+07:59 maybe make some in place updates things like that.

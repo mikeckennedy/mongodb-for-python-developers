@@ -1,0 +1,59 @@
+00:01 Despite the fact that MongoDB is a NoSQL database
+00:03 it does adhere to the acid properties under certain circumstances.
+00:07 Primarily that means updates to individual documents are guaranteed to be atomic,
+00:12 and along with those, we can get great performance
+00:15 as well as safety if we don't pull the document back for the database,
+00:19 make changes and push it back hoping no one else has changed it
+00:22 during that intervening time there,
+00:24 but in fact we can go to the database and go make this change here
+00:27 I don't care if it's a 100k document, don't pull anything back
+00:30 just make this little change and that happens atomically and safely.
+00:34 So the operators that we have to work with are increment, multiply,
+00:37 rename a field, set on insert set unset, like basically delete a field,
+00:42 min and max so I would like to set the value
+00:45 but only if this value is lower than the one I'm passing,
+00:48 or the one that's in the document or set it to the max,
+00:51 like only set the value to this if this new value is bigger than the existing one.
+00:55 You can also use current date to basically grab the server date and save it there as well.
+01:00 So these are the in place individual updates and we can see how that works
+01:03 so we'll come over here and let's insert just a book
+01:06 and this time our book has a view count, right, the view count is zero,
+01:09 maybe every time somebody pulls up the book we want to increment that,
+01:13 so we can say test.update and give it the object id
+01:16 right here is a real simple one so it was fits onto the screen basically
+01:20 you can say $inc increment view count by one,
+01:23 and we do this a few times, so we've done it three times
+01:26 it should go from zero to— well you guessed it, three
+01:29 and it all happened atomically in the database,
+01:32 without us ever pulling it back or worrying about any sort of concurrency whatsoever.
+01:36 So this is great for working with individual fields
+01:39 sometimes we need to work with arrays,
+01:42 so we saw like for example our ratings object
+01:44 maybe we want to work with that atomically.
+01:47 So MongoDB has operators for that as well,
+01:50 so we have things like add to set, so suppose it's got like a votes list,
+01:55 people who have voted on this book,
+01:57 not the values just keep it simple, just the users who have voted
+02:00 and that contains user id, so you could say add to set user id when they vote
+02:04 and that would actually only add them there, if they're not already in that list;
+02:08 what's cool about that is
+02:11 if they push the little vote button twice, it doesn't count twice,
+02:14 just either you add it there and the person has now voted for or they haven't.
+02:17 Another good example is tags, like think stack overflow, I want to tag a post
+02:21 so you could say add the tag python, add the tag mongo,
+02:24 and if it's already there, it's just going to leave it alone
+02:26 if it's new, if it's not there it will actually add the tag.
+02:29 So these are really cool to add to set for kind of uniqueness on these subarrays.
+02:33 We also have pop and pull for pulling things out,
+02:35 pull all say I want to remove all the votes by a particular user, things like that.
+02:40 Also push, so push is like add the set
+02:42 without the unique desk constraint, and that's it,
+02:45 I definitely recommend you think about these atomic updates,
+02:47 they are not simple, but they are better performing
+02:51 and they are definitely safer as well.
+02:54 Like I said before, it's great that the odm, the object document mapper
+02:59 that we're going to look at, MongoEngine automatically does this behind the scenes,
+03:02 we don't ever have to even know how they work,
+03:05 but it's important that you know that they exist and why they're good for you
+03:08 when you look at the logs, and you look the performance
+03:11 and think about things in that way.

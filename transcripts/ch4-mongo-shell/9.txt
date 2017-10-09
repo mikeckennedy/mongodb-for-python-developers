@@ -1,0 +1,25 @@
+00:01 Now sometimes you don't want all the data back,
+00:03 usually it doesn't really matter to you if it comes back or it doesn't come back,
+00:05 in the shell you're printing it out, it probably matters,
+00:08 but in practice, in your app, you rarely care
+00:10 from a display perspective or an interaction perspective,
+00:14 whether some field or list that you are not using has data or not
+00:19 but from a performance perspective, you very much may care.
+00:22 Suppose that you have a document that's 50k in size
+00:25 and all you want back is the isbn and the title and those are 1k,
+00:30 and you're getting a bunch of them back,
+00:32 it turns out that that can make a really big difference in terms of performance.
+00:35 So whether it's for display purposes or it's for performance network purposes
+00:39 using this second argument here we can say
+00:44 only return the isbn and the title, and don't give me all of the ratings,
+00:48 don't give me the images, everything else that might be in this book.
+00:51 So we run this, and we get back these objects here, these documents,
+00:56 and notice, we have the isbn and the title, like we asked for
+00:59 but we also have the _id,
+01:01 so unless you explicitly forbid the id from coming back
+01:04 the id always comes, and everything else defaults to not appearing,
+01:07 unless you indicate it if you pass some document here
+01:10 for the projection or the restriction of things that come back.
+01:14 If for some reason you don't want the id to come back,
+01:16 just say_id:0 or false or something like this,
+01:19 and then it will just have isbn and title exactly.

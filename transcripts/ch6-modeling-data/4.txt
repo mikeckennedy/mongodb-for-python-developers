@@ -1,0 +1,152 @@
+00:01 So let's look inside the application that you're using right now
+00:03 to take this course as an example.
+00:06 So at the time of this recording, here's what the Talk Python training
+00:10 website database looks like for courses and users.
+00:14 So, first let's focus on the course side of things,
+00:17 there's a couple of interesting ideas here,
+00:19 one, we have an id which is not an object id, why is it not an object id,
+00:24 well, it was actually migrated from a relational database initially,
+00:27 this was using SQLAlchemy, and it was easier to keep this id here as a number
+00:33 rather than switch to MongoDB's object id,
+00:36 it's also easier to refer to it in other areas,
+00:39 like say in the commerce system I can put the id in without using,
+00:42 I don't have very much space in terms of the message,
+00:46 that can go into the e commerce system based on their api,
+00:49 so one is much easier than like 32 characters,
+00:51 so we're using the non standard id which is generated in the app
+00:55 but for these types of things, that is really no big deal,
+00:58 for the users, I think we might be using object ids.
+01:01 We have somewhat sort of flat things here, we have the url and the title
+01:04 and when it was published, things like that,
+01:07 so this is the Learn Python by Building Ten Apps Jumpstart Course
+01:10 and you can see a lot of the initial ideas here,
+01:13 and the initial pieces of data are totally straightforward
+01:16 and they would look exactly the same in a relational database.
+01:19 However, there's two things that are very different
+01:21 than I want to pull your attention to;
+01:24 first is not actually the embedded stuff, but is this duration in seconds,
+01:27 when I created the MongoDB version of this web app,
+01:31 I realized one of the things I do all the time on the home page,
+01:36 on the course listing page, and many many places,
+01:39 is I say how long is the course, this course is 6.5 hours,
+01:42 I think this one is 7.1 hours or something to that effect.
+01:46 Using quick math you can figure out duration in second.
+01:48 So there was actually a pretty serious bottleneck
+01:51 where I'd have to go and in this case pull back 12 chapters
+01:55 and then from the chapters I could get the lectures
+01:58 and from the lectures I could get how long each individual one was,
+02:01 I had that all up and then I could print out that number.
+02:05 And then I would do that for say like on the course catalog page,
+02:08 there was like ten courses, I would have to go through so many of these chapters
+02:13 and then their subsequent lectures, and that was a huge huge bottleneck.
+02:15 So what I decided to do was in the application,
+02:18 any time I save or update the course, I'm going to compute this on save
+02:22 which is extremely rare, and then I'm going to stash this here,
+02:26 so this is actually computed from the chapters
+02:29 which are computed from the lectures themselves,
+02:31 and this is data duplication, but you'll find that a little bit of data duplication,
+02:36 I find usually most apps is like one or two little pieces like this that
+02:40 just unlock a lot of performance
+02:42 because actually computing this turns out to be really really computationally expensive,
+02:47 but storing it here on this object made it super fast.
+02:50 So this is one thing, this data duplication
+02:53 which I try to stay away from as much as I can
+02:55 but the trade-off here was so worth it.
+02:57 Now, the other part we want to focus on is down here,
+02:59 we said I'd like to associate these chapter ids with a particular course,
+03:03 now if this was a relational database,
+03:05 I might have a course to chapter normalization table, right,
+03:09 it'd have the course id and the chapter id
+03:11 and I do some query some kind of join on that;
+03:14 you almost never ever, ever see that in MongoDB and document databases.
+03:19 Usually, at least the ids are embedded on one side of that, one to many relationships
+03:23 so here we have the course, the course has some chapters,
+03:27 so we're just storing the ids here.
+03:29 Now, we also have the chapters, you can see chapter 1001 goes right here
+03:35 and this one is a little bit more interesting,
+03:37 we've got again our duration in seconds
+03:40 which is another thing computed from if you look at the individual lectures
+03:44 they've got duration in seconds, and that's the real raw number.
+03:48 So this is another duplication, because at many, many levels
+03:51 I need to show the time of a chapter,
+03:53 and that was turning out to be computationally expensive at many levels,
+03:56 so again, these two places, this is the one bit of duplicated data
+04:00 and you will see that this is more common
+04:03 in a document database than in a relational one.
+04:05 So here we've got our chapter which has this soft relationship
+04:08 from the course over to the id,
+04:10 we also have the course id down there and below it,
+04:12 so it's kind of this bidirectional relationship;
+04:15 then we have lectures, and lectures is interested in that
+04:18 almost every time that we get a hold of a chapter
+04:22 we care about its lectures, we usually want to display them in a list
+04:27 any time that I get a lecture, this is the thing like you're watching right now,
+04:30 this is the lecture, right, an individual video let's say,
+04:32 any time you have one of those, you almost always need the other ones,
+04:36 at least the ones before and after it, so like if you look in this particular player
+04:40 you'll see there is a forward and a backward within the course button
+04:45 that you can skip ahead or skip back, that is the other lectures
+04:48 so what I find is grouping the chapter along with the lectures into one blob
+04:51 that makes it super fast and I almost always want the other lectures
+04:57 when I have one lecture, and if I have the lecture,
+04:59 I usually need to display the chapter title, and things like that.
+05:02 Anyway, so these are really well suited to be put together in this embedded style,
+05:06 so I don't have a lectures table, I have course, courses
+05:09 and I have chapters, and then in the chapters those are embedding the lectures,
+05:12 and we also saw that little bit of data duplication.
+05:15 So you can see down here is an individual embedded lecture,
+05:18 here's one that talks about doing the exercises
+05:20 in this course and it's apparently 202 seconds,
+05:24 so I hope this look behind the scenes has helped you understand
+05:28 how you might model this stuff, you can look at the course page
+05:30 and the player and think about some of the trade-offs,
+05:33 I don't know that this is perfect, but it is absolutely working well for the web app.
+05:37 Let's look at one more thing.
+05:39 Down here we have the users, and we have a couple of items
+05:41 that we're going to focus on when we get to the users,
+05:44 I have blurred some out, we're using object id now for the user id
+05:46 I covered the password and things like that,
+05:49 but we've got some flat stuff like whether or not you're opting out of email,
+05:52 what your user name is, what your email address is, things like that.
+05:55 And then, I have this concept of an origin,
+05:58 so if you come from like some particular marketing source
+06:01 it might record like hey this person created their account
+06:04 and they originally came from Facebook,
+06:06 this person originally came from the podcast or something like that,
+06:08 so that's pretty interesting, we also have the courses that you are taking,
+06:11 so right here, this particular person, this is me,
+06:14 so I gave myself basically all the courses,
+06:17 these are the ids of the courses that I am a student in,
+06:20 so again, there's not a users, there's not a courses in a user courses
+06:23 sort of normalization thing is very common that when I as a user
+06:29 am loaded into the database, I very often need to know about the courses.
+06:32 Now I can't easily embed the course into the user, right,
+06:36 that'd be like insane levels of duplication,
+06:38 but closest thing I can do is I can get this list
+06:40 and then I can go back and do another queer
+06:42 say give me all the courses where the course id is in this list of owned courses,
+06:46 so basically two queries I have everything I need.
+06:49 We also have the bundle id and some other things going on here.
+06:52 So that embedded course id, that's actually a list
+06:55 one more thing to look at down here is this preferences,
+06:58 so this is short name, somewhat short name,
+07:02 this is the preferences for your player
+07:05 so when you're in the video player, you can choose different qualities,
+07:08 you can turn on captions or you can turn off captions,
+07:12 subtitles, transcripts basically and you can choose a playback speed,
+07:15 it could be like .75 up to two or three or something crazy like this.
+07:19 One of the primary actions a user does on this site is to go through the course,
+07:25 each course might have 150 lectures
+07:28 so as a user, you come in you look round a little bit
+07:31 and then you go through 150 lectures,
+07:33 so this preferences thing needs to be pulled back frequently.
+07:36 And so we got to get the user anyway and embedding them together means
+07:39 it's basically instant access any time I'm in the player
+07:42 to figure out how to preconfigure the player
+07:46 to render your video the way that you like it.
+07:48 So this is an embedded item, but not an embedded list
+07:51 just an embedded preference object.
+07:53 So there you have it, a look inside Talk Python Training
+07:57 at least as it was when we recorded this,
+07:59 so hopefully this helps you think through some of the challenges
+08:03 of building a more realistic app.

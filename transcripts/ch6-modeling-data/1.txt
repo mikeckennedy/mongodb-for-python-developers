@@ -1,0 +1,72 @@
+00:01 We've come to a pretty exciting part in the course,
+00:03 we're going to talk about document design
+00:05 and modeling with document databases.
+00:08 So let's take a step back and think about relational databases.
+00:11 There is in fact a couple of really systematic, well known,
+00:15 widely taught ways of modeling with relational databases;
+00:20 there's still a bit of an art to it, but basically it comes down to
+00:24 third normal form, first normal form, some of these well known ways
+00:29 to take your data, break them apart, generate the relationships between them,
+00:33 so if we're going to model like a bookstore with publishers
+00:36 and users who buy books at the bookstore,
+00:38 and they rate books at the bookstore, it might look like this—
+00:41 we have a book, the book would have a publisher,
+00:44 so there is a one to many relationship from publisher to books,
+00:47 you can see the one on the star and the little relationship there,
+00:50 and we have some flat properties like title and published
+00:52 and publisher id for that relationship, and similarly,
+00:55 we have a navigational relationship over to the ratings,
+00:58 so a book is rated, so the ratings would have almost normalization table
+01:03 or many to many table there has the book id and the user id
+01:06 and then the value and we just happen to have a auto increment id there,
+01:10 it's not necessarily the way we have to do it,
+01:13 we could have a composite key, we've got our user
+01:15 and the user can go navigate to the ratings, and things like that.
+01:17 Now, of course, this is a very simplified model
+01:20 in a real bookstore with real ecommerce happening and all that
+01:23 and categories and pictures and all those things,
+01:26 this would be way more complicated,
+01:28 but the whole idea going forward is going to be pretty similar
+01:30 and I think keeping it simple enough that you quickly understand the model
+01:34 and don't get lost in the details, is the most important thing here.
+01:37 So this more or less follows third normal form here.
+01:40 in terms of how we're modeling this in the relational database.
+01:44 Could we move this to MongoDB, could we move this to a document database—
+01:47 sure, we could have exactly the structure.
+01:50 Now those relationships, those are not full on foreign key constraints,
+01:52 those would be loosely enforced, not enforced in the database
+01:56 but enforced in the app relationships between the what would be collections;
+02:00 but certainly, we could do this, is it the best way though?
+02:03 The answer is usually not, maybe, but probably not.
+02:07 So what we're going to focus on now is how do we take our traditional knowledge
+02:12 of modeling databases and relational databases
+02:14 and how does that change, what are the trade-offs we have to deal with
+02:18 when we get to a document database.
+02:20 So the good news is, usually things get simpler in document databases
+02:24 in terms of the relationships, you might have
+02:27 what would have been four or five separate tables with relationships,
+02:31 it might get consumed into a single item,
+02:34 a single collection or single document really,
+02:36 so here this is how we're going to model our bookstore
+02:40 that we just looked at in third normal form, but now in a document database.
+02:43 And really, the right choice here comes down to
+02:46 how is your app using this data, what type of questions do you usually ask,
+02:50 what's the performance implications, things like this.
+02:53 So now we have a books, we have a publisher and a user
+02:56 and these have similar top level items,
+02:58 and we do have some traditional relationships.
+03:01 So there's a one to many relationship between publisher and books
+03:05 theoretically we can embed the book into the publisher
+03:08 but there's many, many books for some publishers
+03:10 and that would be really a bad idea;
+03:12 so we have this traditional relationship, like you might have in a relational database.
+03:15 Now again, not enforced by Mongo, but enforced by your app, so same basic idea.
+03:19 Next up, we have the ratings, remember we have that
+03:22 like many to many table from users to book ratings,
+03:26 now that has actually moved and now we're storing these items
+03:30 in an embedded array of objects inside the book table, or the book collection.
+03:35 So now each book has a ratings array, it has the number of ratings,
+03:39 those are just put right in there, so is this the right design— maybe,
+03:43 it's certainly a possible design, and it's the design that we're going to go with
+03:47 for our examples, but we'll talk about when it's actually the right design.
+03:51 And I'll help you make those trade-offs next.

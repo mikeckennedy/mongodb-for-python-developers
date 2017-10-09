@@ -1,0 +1,11 @@
+00:00 After you've inserted some documents and maybe updated a few,
+00:03 it might be time to get rid of the old ones, so let's talk about deleting them .
+00:06 So again, it's db.collection name. and we're going to apply delete operation.
+00:11 And here we can say I'd like to delete one of them,
+00:13 delete one, or maybe I want to delete a whole set of them, right,
+00:18 the delete one we're passing in something that should be unique,
+00:20 like the primary key, and delete many, maybe a bunch of them have the title,
+00:23 maybe there is a couple of additions
+00:25 like a kindle and a paperback version or something like that.
+00:27 So just get rid of all of them with the title being some title.
+00:30 So, delete one, delete many— pretty straightforward.

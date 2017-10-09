@@ -1,0 +1,88 @@
+00:00 So back to our example, we've inserted some data
+00:03 and we have this little guard here to say
+00:05 don't insert duplicate data, things like that,
+00:07 so let's make some changes to our book here.
+00:10 Let's first of all change the title of the third and fourth book,
+00:14 let's just change this mess with this book for example,
+00:16 let's change this to like this, third book like so, all right;
+00:20 so we have two ways to do this, one way would be to
+00:23 pull back the entire document, work on it and push it back,
+00:27 and this is what I think of as the orm style of working.
+00:30 So we'll say book = db.books.find_one, let's do find_one here
+00:36 and we're just going to give it the isbn that we have there.
+00:39
+00:44 Let's just do a quick little print out of the book
+00:46 and just so you understand what we're working with
+00:48 we'll also print out the type, so if we run this,
+00:50 we obviously get the book back, super, and you can see it is a dictionary, cool;
+00:55 so, I said I want to change the name here,
+00:57 let's actually change something slightly different,
+01:00 so we can work with some more advanced features.
+01:02 What I want to do is I want to add the ability to have a user like favorite this book
+01:06 and this might not be a good way to do it,
+01:08 I haven't really thought it through because it's just a toy example,
+01:11 but let's suppose we want to have the book store the ids
+01:15 of the people who have favorited it, in practice maybe it's better
+01:17 to have the user accounts store the ids of the books
+01:20 that they individually favorited, but the mechanics would be identical.
+01:23 So how we're going to do that? Well, to this book, I'm going to add
+01:27 something called favorited_by, and this is just going to be an empty list here.
+01:36 Then any time we want to work with it, we can come over here and say
+01:41 .append the user 42 did this, and then we can say
+01:47 db.books.update and give it a little query here so we would say the id
+01:52 and that's got to be, once we're in Python that's got to be in quotes,
+01:56 say book.get_id,  it's going to be the value there
+02:02 and then what we're going to put back is just this book,
+02:05 and let's just one more time after this get it back and print out book,
+02:08 this should make sure that everything went sort of round trip just fine.
+02:12 Ready? All right, look, oh yeah look at that, we got a favorited_by right there, 42.
+02:17 If we run it again, now we won't need to do this,
+02:23 we can run it again with 100, now we have two people,
+02:28 two user ids who have favorited this and so on.
+02:31 Okay, so this is all pretty well and good, but let's do something better,
+02:35 sometimes it makes sense to go and pull a whole document back,
+02:38 look at it, make changes to it and save it.
+02:40 In fact, that's something you'll do quite often,
+02:42 but in this case, we just kind of want to say add this little id here
+02:47 to this list called favorited_by and maybe it doesn't even exist.
+02:53 So let's do this, let's a copy this again and change this,
+02:57 so now we're not going to use that, we'll use our isbn
+03:00 and let's modify book four here, so this does not even have a favorited_by yet.
+03:06 Let's put this in here, so we're going to modify that
+03:09 and then let's actually also get it back and print it out at the end;
+03:13
+03:25 there we go, so we're going to get the book back
+03:27 but we're not going to pass the whole book
+03:30 we're going to use one of these in place operators;
+03:32 remember add to set, so what we're going to do is we're going to use add to set.
+03:36 So in Javascript we could type this really in the shell we can type this $addToSet
+03:41 but obviously, PyCharm is telling us not super good Python
+03:44 so what we got to do is put that in quotes,
+03:48 and then the value, we can have actually multiple stuff here,
+03:51 so we're going to say favorited_by, and then the thing let's add user id 101,
+03:58 now, this seems to be telling me I've got something a little bit off here,
+04:02 yes, so we need that to be the entire update document;
+04:06 ok, what we're going to do is we're going to say go find this document,
+04:10 this book with this id, which is notice, it ends in 73,
+04:14 this is going to be book four, actually let me comment this out really quick
+04:18 and we'll just print out, 73 rather, print out notice there's not even a favorited by yet.
+04:23 So what we're going to do is we want to go add this id here
+04:28 so it should actually create this list
+04:31 and then put 101 in it let's see if that's going to work.
+04:34 Boom, favorited_by 101, and this time we did not pull it back
+04:38 we used one of our cool operators.
+04:41 Now, if this was just push, dollar push is another sort of equivalent,
+04:45 this would have more and more and more 101s,
+04:49 but add to set, I should be able to run this code over and over and over
+04:55 and 101 is already there so it's not going in,
+04:57 it's better if I say 120, now I run it, now we have those two right,
+05:02 so this add to set is super nice, I don't even need to go to the database and go
+05:05 well are they there, no they're not there, ok then I'm going to add them.
+05:08 All right, so I don't even need to do that check,
+05:10 I can just use this cool little add to set operator, very very nice.
+05:14 So here's how we use the in place operators,
+05:16 there's really not much difference other than we have to put more stuff in strings
+05:21 because it's not the shell, it doesn't have like the special understanding
+05:26 of what those mean and even over here,
+05:28 it's not Javascript, it's Python dictionaries,
+05:30 which those keys there need to be strings in this case.

@@ -1,0 +1,121 @@
+00:01 When it comes down to modeling with document databases
+00:04 you apply a lot of the same thinking as you do with relational databases
+00:07 about what the entity should be, and so on.
+00:10 However, there's one fundamental question that you often ask
+00:13 that really does take some thinking about maybe working through
+00:18 some of the guidelines, and that is to embed or not to embed related items.
+00:23 So in our previous example, you saw that we had a book
+00:26 and the book had ratings embedded within it,
+00:28 but we could just as well have the ratings be a separate table
+00:30 or the ratings could have even gone into the user object
+00:33 about reference back to the book, instead of the reverse.
+00:36 So should we embed that ratings, and if we do,
+00:40 does it go in books, does it go in users, or does it not go there at all.
+00:43 So what I'm going to do, is I'm going to give you some guidelines,
+00:46 these are soft rules, we don't have like a really prescriptive way of doing things
+00:51 like third normal form here, but some of the thinking there does help;
+00:54 so let's get into the rules.
+00:56 First of all, the question you want to ask is is that embedded data
+00:59 wanted eighty percent of the time that you get the original object;
+01:02 do I usually want the rating information when I have the book?
+01:08 If it would have resulted in me doing a join in a traditional database
+01:11 or going back and doing a second query to Mongo to pull that data out,
+01:14 it's very beneficial to have that rating data embedded in the book.
+01:19 We designed it that way, so let's suppose like most of our query patterns
+01:22 and most the way our application works is
+01:25 we want to list the number of ratings, the average number of ratings,
+01:29 things like this we want to surface that in almost all the time,
+01:32 we want that embedded data when we get a book.
+01:35 So that would guide us to embed the data, if this is not true,
+01:40 if you only very rarely want that data,
+01:42 then you most likely will not want to embed it,
+01:45 there's a serious performance cost for what you might think of as dead weight,
+01:48 other embedded stuff that comes along with the object
+01:51 that you generally don't care about most of the time,
+01:54 you can do things like suppress those items coming back,
+01:57 so you can basically suppress the ratings object,
+02:00 but if you are doing that, it's probably a sign like
+02:02 hey maybe I shouldn't really be designing it this way.
+02:04 A lot of considerations, but here's the first rule—
+02:07 do you want the embedded data most of the time?
+02:11 Next, how often do you want the embedded data without the containing document?
+02:15 The way our things are structured now is I cannot get the ratings
+02:19 without getting the books, I cannot get individual
+02:22 ratings without getting all of the ratings.
+02:24 So if what I wanted to do was on the user profile page
+02:27 show here are all of my individual ratings as a user
+02:31 listed on my like favorites page, or things I've rated or something like this,
+02:36 that's actually a little bit challenging the way things are written.
+02:39 We can definitely do it, and if there's just one
+02:41 query we do it that way it's totally fine,
+02:43 but this is one of the tensions, you can't get the ratings without getting the books
+02:47 you can't get individual ratings, without getting all the other ratings
+02:50 from that particular book, there's no way MongoDB
+02:53 to actually suppress that, I don't think, like you can suppress the other fields
+02:56 we're using a projection right, you get all the ratings, or none of the ratings.
+03:00 So how often is it necessary to get a rating without getting a book itself?
+03:04 Right, if that's something you want to do often
+03:07 or it's a very very hot spot in your application
+03:09 maybe again you do not want to embed it,
+03:11 if you want the object without the containing document.
+03:14 Another really important question to answer is
+03:17 is the embedded data a bounded set?
+03:19 If it is just a single nested item, fine, that's no problem,
+03:22 if it's a list or an array, like we have in the context of ratings,
+03:25 how big could the ratings get,
+03:28 how many ratings might a book have reasonably speaking;
+03:31 if there's ten ratings, it's probably totally fine
+03:34 to have the rating data embedded in the book,
+03:36 it's nice self contained, you get a little atomicity
+03:39 and some nice features of have it embedded there.
+03:41 If there's a hundred ratings, maybe it's good,
+03:45 if there's a thousand ratings, if there's an unbounded number of ratings
+03:48 you do not want to embed it, right so is it a bounded set, first of all
+03:53 and related to that, is the bounded set small,
+03:55 because every time you get the book back
+03:58 you're pulling all of that stuff off disk, possibly out of memory,
+04:01 over network for deserialization or serialization
+04:04 depending on the side that you're working with.
+04:06 So that comes with a cost, and in fact,
+04:08 MongoDB puts a limit on the size of these documents,
+04:12 you're not allowed to have a document larger than 16 MB,
+04:17 in fact, if you try to take a document that's larger than 16 MB
+04:20 and save it into MongoDB, even if you pull it back,
+04:23 add something it makes it a little bit bigger and you call save
+04:26 it's going to totally fail and say no, no, no this is over the limit.
+04:29 So this should not be thought of as like a safe upper bound
+04:33 this should be thought of as like the absolute limit
+04:36 if you've got a document that's ten megabytes,
+04:38 it doesn't mean like wow, we're only halfway there, this is amazing or great,
+04:41 no, that's a huge performance cost to pull 10 MB over
+04:46 every time you need a little bit of something out of there.
+04:48 So really, you should aim for a much, much, much smaller thing
+04:51 than the upper limit of 16 MB, but the point here is
+04:53 there is actually a limit where if this embedded data outgrows that 16 MB
+04:59 you just cannot save it back to the database,
+05:02 that's a will no longer operate problem,
+05:04 is the bound small is more of a performance trade-off type of problem, right,
+05:08 but you want to think about these very, very carefully,
+05:10 average size of a document is definitely something worth keeping in mind.
+05:14 How varied are your queries?
+05:17 Do you have like a web app and it asks like maybe ten really common questions
+05:21 and you very much know the structure,
+05:24 like these are the types of queries my app asks,
+05:26 these are the really hot pages and here's what I want to optimize for,
+05:29 or is this more of like a bi type thing where people and analysts come along
+05:34 and they can ask like almost any sort of reporting question whatsoever;
+05:38 it turns out the more focused your queries are,
+05:41 the more likely you are to embed data in other things, right,
+05:44 if you know that you typically use these things together,
+05:47 then embedding them often makes a lot of sense.
+05:49 If you're not really sure about the use case,
+05:51 it's hard to answer the above questions,
+05:53 do you want the data eighty percent of the time, I have no idea,
+05:55 there's all sorts of queries, some of the time, right,
+05:58 and so the more varied your queries, the more likely you are going to
+06:00 tend towards the normalized data, not the embedded modeling data.
+06:06 And finally, related to this how varied are your queries
+06:09 as are you working with an integration database that lives at the center
+06:14 and almost is used for inter-process, inter-application communication
+06:17 or is it very focused application database?
+06:19 We're going to dig into that idea next.

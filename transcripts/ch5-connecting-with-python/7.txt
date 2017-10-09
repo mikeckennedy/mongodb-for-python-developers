@@ -1,0 +1,40 @@
+00:01 Now, when you go to mongodb.com and you look through the documentation
+00:04 so docs.mongodb.com, you will find stuff about updates and inserts,
+00:08 and queries and aggregation and so on, and so on;
+00:11 all of these are going to be in the Javascript api,
+00:14 notice at the bottom of this web page here, db.collection.insertOne
+00:18 is new in version 3.2, so if you're trying to look up these operations
+00:22 you will most likely find them in the Javascript style, and the Javascript api,
+00:28 that's how MongoDB talks about it, you'll probably find them on Stack Overflow.
+00:31 So, because that's the way the shell works, MongoDB is kind of standardized
+00:36 on here is how we're going to do our documentation in Javscript,
+00:39 once again, yet another reason we spent so much time on the Javascript api,
+00:42 even though none of us are necessarily Javascript developers.
+00:46 So, here we have the crud operations, now we have the query
+00:48 and projection operators and things like that,
+00:52 so if you want to know how to map these over to PyMongo,
+00:56 then there's one page really that you need for most things,
+01:00 and that's the collection documentation.
+01:03 So over here at api.mongodb.com/python/current/api/pymongo/collection.html
+01:10 you can see right at the top, we've got all of the stuff you can do
+01:13 on the collection itself, so for example, we were passing one and minus one
+01:18 as the sorting operators in the shell,
+01:20 here you could say pymongo.ascending, pymongo.descending,
+01:22 a little bit more explicit, but this is a really good place to go
+01:25 because you'll find like the insert_one and the find_one and all the various ways
+01:30 in which you need to adapt the documentation you find in Javascript
+01:34 over to the PyMongo api, this is probably the biggest bang for the buck right here.
+01:38 Okay, so if you want to write an app,
+01:41 PyMongo could totally be your data access layer,
+01:44 it would completely solve the problem, it's really great,
+01:47 it's what a lot of applications use to talk to MongoDB from Python.
+01:50 We're going to talk about some additional things going forward
+01:53 but one of the bigger decisions you need to make is
+01:56 are you going to use an odm that maps classes to MongoDB,
+02:00 with additional features as we'll see in a lot of interesting ways,
+02:03 or are you going to work down at the dictionary level,
+02:06 it's very similar to say I'm going to work with say the DB api and sql strings,
+02:10 versus SQLAlchemy or Django orm or something like that, right.
+02:15 So, you kind of got the low level way to talk to MongoDB,
+02:18 now, we're going to move on to talk about document design
+02:21 and mapping higher level objects like classes with MongoEngine later In the course.

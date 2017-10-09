@@ -1,0 +1,39 @@
+00:01 If inserts are simple, updates maybe not so much.
+00:03 In fact, there are two types of updates that we're going to look at;
+00:06 first, we're going to look at what is the conceptually more simple one,
+00:09 but also slightly more problematic.
+00:11 So I'm going to call this the whole document update
+00:14 and the way you might use this is you might go to the database,
+00:17 do a query, get a document back, make a change to it
+00:19 and say here, push this whole document
+00:22 back over top the existing one in the database, kind of orm style.
+00:26 The other one that we're not talking about here would be the in place updates,
+00:31 so you might say go increment the view count of this post
+00:34 without retrieving it, without changing the other parts,
+00:38 ok, so how does the whole document update work?
+00:40 Well, first of all, we're going to do an update
+00:43 if we come back and we look at it, we'll see maybe we've changed the title here,
+00:46 the author is still the same, but we had to pass the author,
+00:48 we had to pass the published and the isbn back,
+00:52 okay, in fact also the id, so all that stuff we had to put back,
+00:55 basically the way it works is we're going to do a where clause here
+00:58 so find it by the primary key, this great long object id
+01:02 and then here is the entire whole document
+01:05 we want to replace that document with.
+01:07 Now because of the way it's working here,
+01:09 there's a couple of features or settings you might want to control here,
+01:12 so you might need to set these, you might not depending on what you're doing,
+01:16 the default is if the where clause does not match, nothing will happen,
+01:20 there will be no kind of upsert, there will not be a new document added
+01:24 because we didn't find one, just nothing happens.
+01:26 So if you say upsert is true and you run this update,
+01:29 it will say I didn't find this document, so let me create it for you,
+01:32 so you could control that here.
+01:34 Similarly with multi equal true, normally unlike sql statements
+01:37 update only updates the first item it finds
+01:40 even if the where clause would match ten things, it only updates one of them.
+01:43 So that's a little bit funky, but if you think it's entirely replacing the record
+01:48 like why would that hole record be duplicated ten times,
+01:51 I don't know, it's kind of weird, but if you do want to update multiple objects,
+01:54 multiple documents in this collection, be sure to set multi to true,
+01:57 both of those orange values, their default values are false.

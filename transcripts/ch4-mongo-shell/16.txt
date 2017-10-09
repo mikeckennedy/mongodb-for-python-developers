@@ -1,0 +1,90 @@
+00:01 It's time to look at the atomic updates.
+00:03 We already talked about the whole document updates and how they work,
+00:05 but sometimes it's not really what you want;
+00:08 in the beginning when we talked about NoSQL,
+00:10 we saw that the NoSQL databases gave up things
+00:12 that traditional relational databases embraced or considered sacred.
+00:17 One of those where the acid properties, or some part of the acid properties
+00:21 and MongoDB does say look things like joints and transactions,
+00:24 transactions mainly being part of the acid properties
+00:27 is something that MongoDB doesn't promise
+00:30 so this whole document updates really require an additional layer in the app tier
+00:35 called optimistic concurrency, and usually it's fine,
+00:38 sometimes it's not, and you can catch it and say hey look
+00:41 somebody saved this out from under you
+00:44 and you do want to keep your changes, their changes,
+00:45 there's things you can do about those types of situations,
+00:47 but not in the database in your app.
+00:50 On the other hand, MongoDB does support atomic transactional behavior
+00:54 long as it happens on a single document,
+00:57 so if we have a document and let's go ahead and create
+01:00 a whole new collection here called BookReads
+01:03 notice it doesn't exist yet, and we're going to insert just an isbn
+01:05 and then how many times it's been read,
+01:08 I think of like the Goodreads service or something like that,
+01:10 like I want to know how many of my friends read this book,
+01:13 we'll you a simple, simple version of that.
+01:15 So let's go over here and notice we inserted one and if I refresh,
+01:18 we should now have that in here in our one record, like so.
+01:22 So we could go and we could do this for this whole document style things,
+01:26 I could say book and of course we will be doing this in Python very likely
+01:33 we're just about to leave the Javascript in the dust,
+01:36 so let's just print out our book that we got here,
+01:39 notice this has actually given us the same thing back,
+01:41 and we could say the read count += 1, we could increment that,
+01:47 and then we could say go over here to the same collection,
+01:50 we could say update, I would like to update with this,
+01:55 here's the where clause, and the thing I want to update with is the book,
+01:58 so let's say _id : book._id, okay, so this should do that like so,
+02:07 and let's run one more query here at the end to get it back, to see it again.
+02:12 Oh yes, find is not going to work, find one however,
+02:19 we don't want to update a whole query,
+02:21 whatever that means it doesn't make any sense
+02:23 but let's get one of them back, we know this is really going to be unique
+02:25 and then let's make this change, ok
+02:27 so notice, now we've got a read count of one, we do this a few times, bam bam
+02:32 a read count is incrementing over and over and over down here,
+02:35 and we're updating one record,
+02:37 so this is cool but this is not part of the acid property guarantees,
+02:40 this could be problematic in lots of ways
+02:43 so what we're going to look at now, are the operators that we can use
+02:46 to basically do almost transactional stuff
+02:49 and do it in a much more high performance way.
+02:52 So let's go over here again, and let me grab this little clause here,
+02:57 all right so we got our document back again
+02:59 and now what we're going to do, is we're going to do our db
+03:03 let me just grab this collection bit,
+03:06 and we're going to do our update, in fact update is going to look almost the same,
+03:09 we are going to do this, but instead of passing the whole document
+03:16 we're going to pass just an in place atomic operator,
+03:18 all right so what are we going to do, let's suppose we want somebody
+03:23 to basically do the same thing, increment that
+03:26 alright, I guess we could just use isbn, that works as well right;
+03:32
+03:37 we're going to need something in our little where clause here, isbn will do.
+03:41 Now by default, this is going to replace whatever's in there,
+03:44 that's going to be bad, but what we really want to do is
+03:47 we want to increment that one value, so we can use another operator,
+03:50 say inc for increment, and then what do I want to increment,
+03:58 I want to increment let's see what is it called— ReadCount,
+04:04 so I want to increment ReadCount by one,
+04:07 I could increment it by negative one, I could increment it by ten.
+04:10 So let's run this, now notice we updated one record
+04:13 and let's put this in a way that looks better, nine, ten, eleven, twelve—
+04:18 there we go, check that out, isn't that cool?
+04:21 So what's happening here is it's actually going into Mongo,
+04:24 go find the document, just change that number right there,
+04:27 just add one to it for me, you don't have to pull the whole thing back,
+04:31 make changes and possibly try to put it back and someone else changed it,
+04:34 none of those things, this is entirely atomic and safe
+04:38 in a multi threaded, multi server environment,
+04:42 because MongoDB guarantees individual updates
+04:44 to individual documents are atomic
+04:47 and because we're not depending on the value,
+04:50 we're not like reading it changing in memory and putting it back
+04:53 change it in our programs memory not Mongo's and put it back,
+04:56 then we're not going to have any problems.
+04:58 There's a bunch of cool operators like this
+05:00 and we'll see that MongoEngine actually naturally behaves in this style
+05:04 not the document style, even though it's an object document mapper
+05:08 which is really really delightful.

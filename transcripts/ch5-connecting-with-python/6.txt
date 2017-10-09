@@ -1,0 +1,44 @@
+00:01 Let's review the ideas behind these in place updates.
+00:03 So here we have more or less a complete MongoDB Python program
+00:06 using PyMongo here, so we're going to import PyMongo,
+00:09 connect the local database, all the default options,
+00:11 and we're going to either create or get access to the bookstore
+00:16 by saying client.bookstore, now we're going to insert an object
+00:19 that has no favorited by element, right no list, it just has a title and isbn,
+00:24 so after the insert, we're going to end up with an _id and a title and an isbn.
+00:28 And then maybe we want to add this idea of favorited by,
+00:34 maybe you want to design this already that way
+00:36 and have an empty list there, but whichever more or less would work the same,
+00:41 so we can say I would like to go find the book,
+00:43 the first part of our update statement is the where clause,
+00:46 so find by primary key and remember, that's when we call insert_one
+00:50 that's results.inserted_id, so that's going to find the one and only the item
+00:55 and then we're going to use the add to set operator
+00:58 and we just pass that as a string in PyMongo,
+01:00 and then we'll push on favorited by such and such.
+01:03 We could also use $set to set, say $setTitle: the new book with updated title,
+01:10 or something like this right, so you can use this all over the place
+01:14 and what's really cool, now you may be thinking oh this api is kind of crazy,
+01:18 we've got these these dollar operators
+01:21 and it's a lot to learn if you're totally new to it, I realize
+01:24 but when we get to MongoEngine, you'll see that
+01:26 MongoEngine does this transparently under the cover for us,
+01:29 so you can actually not have to do this,
+01:31 you won't have to necessarily remember all of these
+01:34 but you'll get all the benefits that we're describing here.
+01:36 If you're using PyMongo, you have to know the api really intimately
+01:38 so we're going to push this 1001 user id on to favorited by
+01:42 and maybe we'll push 1002 as well
+01:46 if people signed up at the same time, they saw the same book, they loved it
+01:50 and let's go head and push this 1002 again,
+01:52 well not the push operator, but the add to set operator,
+01:54 do this again, because it's add to set
+01:56 we're going to get a new document that has new book title,
+02:00 the same isbn and two items and it's favorited by
+02:03 and it's going to be 1001 and 1002, because add to set is item potent
+02:07 calling it once or calling it a hundred thousand times,
+02:10 it has the same result, other than it might take longer
+02:13 to call it a hundred thousand times, right.
+02:15 So if it's already there it makes no difference
+02:16 but if it's not there to push it in super cool operator,
+02:19 really taking advantage of the hierarchical nature of these documents.

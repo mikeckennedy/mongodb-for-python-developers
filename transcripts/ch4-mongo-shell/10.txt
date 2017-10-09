@@ -1,0 +1,39 @@
+00:01 So here's an interesting question— what if I want to find all the books
+00:03 where user 720 has rated that book exactly a nine.
+00:09 You would think that this would do it, right,
+00:11 we're using both values in this prototypical object or this document here
+00:15 and it says that the book is going to have to have
+00:18 a rating of nine and user id 720 has rated it.
+00:21 However, when we run this, you'll see we get mixed results.
+00:24 The bottom one looks perfect, we got a book with the user id 720
+00:29 an a value of nine in the ratings, great;
+00:32 but this other one, what's up with this, the red one?
+00:34 Well, user 601 rated this as a nine,
+00:38 and user 720 actually hated the book, they gave it a one.
+00:41 However, taken as a whole, does the book have a rating by user id 720— yes,
+00:46 does it have a rating of nine— yes, so it matches this and clause.
+00:49 So, oftentimes if you're looking for this exact subdocument match
+00:54 and that thing you're looking in is an array
+00:56 so ratings is an array of documents, if ratings was one subdocument,
+01:00 this would work fine, but if it's an array and you want to say
+01:04 I need to make sure that the thing in that array is
+01:07 that subdocument itself matches value and user id as I've specified here
+01:11 you need a different query operator, and that is dollar element match;
+01:15 so you can run this and it'll look down inside and say
+01:18 I want to find all the things in ratings,
+01:21 where both, the user id is 720 and the value is nine.
+01:25 So this is a slightly more complex version
+01:27 that you have to run and you have to use
+01:29 because you run into that problem we had before
+01:31 where somebody voted a 9, user 720 voted,
+01:33 but it was not user 720 who voted nine.
+01:35 So a little bit different than if you were working in
+01:38 say a sequel traditional tabular language
+01:41 because you don't ever have this kind of duplication within the one result,
+01:45 so it would be a lot simpler, but this is something
+01:48 that you kind of got to get your head around a little bit,
+01:50 you luckily don't use it very often, and if you are using the higher level of things
+01:54 like MongoEngine, you won't run into it,
+01:56 but down here at the shell or in PyMongo,
+01:58 you have to be really careful if this is actually
+02:00 the question you're trying to ask and answer.

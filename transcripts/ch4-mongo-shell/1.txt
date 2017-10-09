@@ -1,0 +1,71 @@
+00:01 So we've talked a lot about NoSQL document databases and MongoDB.
+00:05 Now it's time to actually start using MongoDB.
+00:08 So what we're going to learn in this chapter is twofold:
+00:11 one, how do you connect to it and manage it,
+00:13 with the management tools if you will,
+00:16 that is more or less the shell, and some additional tools,
+00:19 but also how do you query it from that shell.
+00:22 So maybe in Python in a traditional relational database
+00:25 you might be using say SQLAlchemy to talk to a relational databases,
+00:29 so you wouldn't necessarily use SQL, the language, in Python
+00:32 but if you want to connect to the database directly and work with it
+00:35 then you need to use ddl and SQL and things like that,
+00:38 there is the same parallel here in that we're going to use the shell
+00:41 and we need to use MongoDB's native query syntax
+00:44 which turns out to be very similar to Python's under certain circumstances,
+00:47 so it's going to be serving dual purpose there.
+00:50 So the primary MongoDB shell is a command line tool, right,
+00:55 we just type mongo name of the server, some connection string options,
+00:58 you can see all that the title here in this terminal.
+01:02 And then we just issue commands like if I want to go and use
+01:05 the training database out of the server, I'd say use training;
+01:09 and if I want to say go the courses and find
+01:12 the one with id 5 and display it not in a minimized, minified,
+01:16 but in a readable version, I would say db.courses.find
+01:20 and I'd give it the little json thing, id is 5 and I'd say pretty,
+01:25 So this is going to be entirely done in Javascript,
+01:28 so these statements that you type here,
+01:31 although you don't see any semicolons,
+01:33 these are either shell statements like use training
+01:36 otherwise, they're entirely pure Javascript.
+01:39 So what we're going to do is we're going to learn the Javascript api
+01:43 to talk to MongoDB, to query MongoDB,
+01:45 to do all the crud operations, there's a find, there's a delete,
+01:49 there's an insert, there's an update, of course there's sorts, there's upserts,
+01:52 there's all the things you would do in a standard database,
+01:55 the query syntax uses sort of a json model to help represent
+01:59 either operators or hierarchies and things like that.
+02:03 Now, you may be thinking, Michael, I came to a Python course,
+02:06 I don't want to learn the Javascript api, I want to learn the Python api—
+02:09 you will, you will learn the Python api for sure,
+02:12 and luckily, it's really, really similar, it's not identical,
+02:15 they made the Pythonic api Pythonic
+02:18 and the Javascript one follow the idioms of Javascript,
+02:20 but nonetheless, other than the slight like variations
+02:23 in naming around those ideas, they're basically identical,
+02:26 in Python we would use {_id : 5 } as a dictionary,
+02:31 here we use it as a json object;
+02:34 so on one hand, learning the Javascript api
+02:36 it is more less learning the Python api.
+02:38 But on the other, if you work with MongoDB,
+02:41 if this drives your application and you actually work with Mongo, in a real way,
+02:45 you will have to go into the shell, you will have to talk to the database directly,
+02:49 you have to maintain it, and manage it, and back it up, and do all those things;
+02:52 in order to do that, you need to know the Javascript capabilities,
+02:56 the way to do this in Javascript, as much as you do the Python way.
+03:00 Ultimately, the end game is to use something like MongoEngine
+03:03 which is equivalent to SQLAlchemy, sort of analogous to SQLAlchemy,
+03:08 in that we won't even be speaking in this syntax,
+03:11 but still, you'll need to know how these translate down into these queries
+03:15 because you might want to say add an index
+03:17 to make your MongoEngine perform much, much faster, things like this.
+03:21 So we're going to focus on Javascript now, and then for the rest of the class,
+03:26 we're going to basically be doing Python, but like I said,
+03:29 in order to actually use, manage, run,
+03:32 work with an application that lives on MongoDB,
+03:34 you have to be able to use the shell, and to use the shell you do Javascript.
+03:38 So just like anybody who writes web apps, we're all Javascript developers,
+03:41 if we write any form of web app, similarly here,
+03:44 if you work with MongoDB, we're all Javascript developers
+03:47 and we got to do just a tiny bit, but you'll find it like I said,
+03:49 it's super, super similar to what we're going to do in Python.

@@ -1,0 +1,182 @@
+00:01 Now let's see how we do probably the main thing
+00:04 that you do in databases and that is query.
+00:06 So here we are in the Mongo shell still,
+00:09 and I'm using the bookstore database,
+00:11 so what I want to do is find some particular books;
+00:14 remember, we have book, publisher, test
+00:18 we can really remove test, not actually do anything, and then user,
+00:21 so those three actually used one.
+00:23 Let's go and remove test just so that it is gone.
+00:29 Now we have the ones we're actually using.
+00:31 Now, when we're getting started, it's probably worthwhile to just say db.Book.find
+00:36 as an empty query just like kind of select star if you will,
+00:39 you know show all of the things that are in there,
+00:42 there, that's totally obvious what that is, right,
+00:44 you see the structure, right if you can like kind of exist in the matrix
+00:47 you could entirely see the structure there, but let's do that better.
+00:50 Notice a certain number of items, I don't know it's 20 or 50 were returned
+00:54 there's actually like a quarter million books,
+00:57 so we didn't get them all which is good,
+00:59 so if we want more, we just type "it" and it will actually get more and so on.
+01:03 Okay, so this is not super helpful, let's make this more helpful;
+01:06 so here we can go over and say I want this to be like that pretty
+01:10 and in fact, if I just want one of them I could just say limit this to the first one,
+01:14 or let's just say limited to two so we see a couple of examples.
+01:17 There, now we're starting to see the structure.
+01:21
+01:23 Let's go here, ok so now we've got a book,
+01:26 right here you can see the top level document,
+01:29 it doesn't put the results in arrays,
+01:32 like it doesn't print out an array it just prints
+01:34 a whole bunch of individual results in this case two,
+01:36 so here we have our id, there's always an underscore id in the database
+01:40 like this is the name of the primary key,
+01:42 you can have it look different in Python,
+01:44 you can say this thing maps actually to the primary key
+01:47 when you are modeling this with classes and so on,
+01:50 but down at the Javascript and the MongoDB level,
+01:53 this is always the name of the primary key,
+01:55 if you don't give it one when you insert the thing, it's auto generated,
+01:58 and so if you don't have a great reason to care about what id looks like
+02:02 probably using this object id is the best bet.
+02:05 So our books have isbns, they have titles, they have authors,
+02:08 I kind of wish it was little more pythonic with lower case ts and as,
+02:12 but this database came from somewhere else and it's like this
+02:15 so we're just going to roll with it.
+02:17 Ok, so we've got dates notice, json doesn't support dates
+02:20 nor does it support object ids, but the results here do
+02:23 and so dates and object ids are sort of extensions that bson brings to json.
+02:28 Alright, and then we have a list of these image url objects
+02:32  which have both the size and url, and so on,
+02:35 and then they also have ratings, this one has one rating, so not too many,
+02:39 let's look at the next one— it has a lot of ratings, right,
+02:42 so it has a user id that is foreign key constraint
+02:45 a foreign key link soft not enforced by the database,
+02:48 but a link over to the user table and then a value here;
+02:51 so this is what this database looks like,
+02:55 we have a title, we have an isbn,  and these are like the flat things,
+03:00 and then we have most importantly we'll go play with the ratings a little bit,
+03:03 so let's start by asking this question about the books.
+03:06 So the way it works is db.Book.find put some space in here
+03:11 so the way MongoDB queries it doesn't have a where clause
+03:15 basically what you put in here is the where clause,
+03:18 and the way we do is we pass what I think of as a prototypical json object
+03:22 so the json object that we're going to put here,
+03:25 maybe would have something like this, let's say title, case sensitive remember,
+03:30
+03:34 is "From the Corner of His Eye", if I put this in, here we go,
+03:39 so "From the Corner of His Eye", now this is a book
+03:41 that should be in this database and we'll be able to do some queries for it
+03:47 what this says to MongoDB is go to the book collection
+03:49 and find every single document that has the title equal to
+03:54 "From the Corner of His Eye", and I think that there's more than one, let's see—
+03:57 yes, so we can come over here and we can do a .count,
+04:00 there's three, alright, so this is nice,
+04:03 however, what you saw come back there was even if I did a pretty,
+04:07 still because we've got the ratings and the image urls
+04:10 and this one has a crazy amount of ratings and so on, we might want to get less,
+04:14 so with his find thing, this is like— let's put it here,
+04:18 this part where is this title, that is the where clause
+04:21 but in SQL, you could say like select title, id, isbn, from this table
+04:28 so we can do that in MongoDB as well, we can do this like sub projection
+04:31 so I can come down here and say I'm interested in title
+04:34 and anything that's truthy in Javascript, so I could put high,
+04:38 I could put one, I could put true, I like to put one, I don't know why
+04:43 and let's say we want the isbn, this is case sensitive as well
+04:47 and watch what comes back now — okay, so there's our three records
+04:51 now interestingly, each one has three keys and we specified two.
+04:55 So the way it works is Mongo is like
+04:57 you're probably going to need that primary key
+04:59 so unless you explicitly say you don't want it, you're getting it right,
+05:02 so if we want to do this again, and I could come over here
+05:05 and I could explicitly suppress id and put something falsy here like zero
+05:08 and then I just get isbn and title, okay.
+05:11
+05:15 So let's go back to this. Now suppose I want to find the book with this title
+05:19 and this isbn, how do I do an and here?
+05:23 Well the way these queries work is everything,
+05:26 basically every property of that little subdocument must be
+05:29 a subset of the thing it matches for,
+05:31 so when I say title is "From the Corner of His Eye",
+05:33 that matches the title, but I could equally come up here
+05:36 and do this again and say oh also that isbn,
+05:39
+05:43 actually I don't know what it's supposed to be let me run this real quick,
+05:46 let's say we're looking for this one, the one that ends in 41,
+05:50 so now I could come over here and say that isbn,
+05:55 so json or Javascript you don't technically need to put a name there
+05:58 but this is a string, so it goes like that, right
+06:01 see it starts with zero, it wouldn't just be a number.
+06:03 So now, if I run this, I just get the one,
+06:05 so this is the and clause, select star from book where title is this and isbn is that
+06:11 so you can create these documents
+06:14 to basically and together all the pieces that you need.
+06:18 So this is all well and good, this looks a lot like a standard database,
+06:22 standard relational database type of thing
+06:25 but remember when I talked about documents,
+06:27 I said their superpower is they get this nested thing
+06:31 so let's go over here and just throw this back,
+06:34 we'll just get one of them so we can look at it again,
+06:38 their super power is that they can reach, let's get the next one
+06:43 so per page you would use skip and limit,
+06:46 so we can reach into like say the ratings and say
+06:49 I'd like to find all of the books that have a rating of let's say eight
+06:54 or all the books that have been rated let's do this,
+06:58 I don't know how many books that person has rated
+07:00 but we can find out in a second, so I want to find all the books
+07:02 that have ratings where the user id was that particular id, right there,
+07:06 so how do we do that— let's come up here again, we don't need this anymore,
+07:10 so in here we kind of want to say something like this
+07:14 like rating, and then if this was an object we would navigate it with .syntax
+07:18 but it's not going to work out so well here,
+07:20 so this would be user id like this, let me just paste this in
+07:26 so I can get my little object id out, when you're quering by object id
+07:29 and you just say object id,
+07:32 the question is is that valid Javascript, and the answer is no, it is not.
+07:37 So any time you have this sort of hierarchy thing traversal
+07:41 you have to put quotes right, if it's a single item is optional
+07:44 if you're doing something funky like an operator or something like this
+07:47 then you're going to have to do like this.
+07:50 So let's just show, let's select back here
+07:53 we're just going to say give me the title is one
+07:55 and I don't even care about the id;
+07:58 if I can write a query like this, go down into the ratings,
+08:01 and show me all the ones that have this user voted,
+08:04 that means even though I've kind of pre-joined and embedded this ratings concept,
+08:08 I can still query it as if it was a separate table, separate collection
+08:12 and that's the document databases superpower,
+08:15 let's see if I can get it to work now;
+08:17 apparently I did not get it to work what am I missing here?
+08:21 Oh, notice I think I said rating and the actual schema is ratings plural,
+08:26 I think that's good, it's representing a pluralized thing down there
+08:30 so the problem was I did this, now notice MongoDB didn't crash,
+08:35 it didn't go oh there's no such thing as a ratings field on this,
+08:39 it just said no nothing matches that,
+08:41 so it's really powerful, it means it's super easy
+08:43 to sort of evolve and work with the data
+08:46 and it doesn't break under the tiniest lightest of schema changes, pretty good,
+08:50 but you just got to be careful, so let's try it again.
+08:53 There we go, so apparently we could even ask
+08:55 because that was not all of them, there's a lot of books this person has rated
+08:58 so I think this data might be partly just generated
+09:01 okay, so here these are the books that that person rated,
+09:05 let's find another, let's try to do this again,
+09:08 come down here I will get this object id,
+09:11
+09:14 we can say I want to find the books rated by that person
+09:18 how many are there— 107.
+09:21 And if I actually wanted to see what they are, there's the titles of the first set of them,
+09:24 notice that's really, really fast, I think I have indexes set up right now
+09:28 we'll talk about indexes when we get to the performance part of this course,
+09:31 but we can do these queries down into the ratings embedded part
+09:35 the embedded documents into the books
+09:38 just as if they were their own table,
+09:41 I told you there's about a quarter million books, there's 1.25 million ratings
+09:45 so notice the response time here almost instant, in fact it's like milliseconds.
+09:51 So not only can we do this query, we can do this query extraordinarily fast.
+09:56 All right, so this is one of the things that makes document databases interesting
+10:00 and also challenging, how do you define the documents,
+10:03 should you embed them, should you not,
+10:05 we'll get to that in a whole different chapter,
+10:07 but for now, just know it does have this super power
+10:09 to reach down in here and do these queries.

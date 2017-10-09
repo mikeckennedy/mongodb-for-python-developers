@@ -1,0 +1,57 @@
+00:01 All right, the moment you've probably been waiting for is finally here,
+00:04 we're going to start moving away from Javascript
+00:06 and doing Python for the rest of this course to talk to MongoDB.
+00:09 That doesn't mean we might not use the Javascript API in the shell,
+00:12 just a little bit more, but for the most part
+00:14 we're going to focus now on writing applications
+00:17 that talk to and work with MongoDB.
+00:19 So we're going to look at in MongoDB's nomenclature
+00:23 something called a driver, so a driver is the underlying library or framework
+00:27 that you used to talk between your application and MongoDB.
+00:30 So here we've got our web app
+00:33 and it's going to be using the database MongoDB here.
+00:35 A request is going to come in, into our web app
+00:38 and it's going to use a particular package, right,
+00:40 this is not built into Python, this is something we have to go out and get.
+00:43 So the package that we're going to work with
+00:45 is built and maintained by MongoDB themselves, and is called PyMongo.
+00:50 So this is the core, lowest level access to the database server
+00:54 and it does the tone of things for us,
+00:56 in fact if you look at many of the odms the object document mappers
+01:00 the equivalent of the NoSql orm, they build upon PyMongo, right
+01:04 so PyMongo is almost always involved
+01:06 when you're talking to MongoDB from Python.
+01:09 And it does many things for us, it connects to the database
+01:12 whether it's local, remote, over ssl, with authentication, with certificates,
+01:16 all that kind of stuff, it actually manages replica sets
+01:20 so it knows how to find all the different servers participating in a replica
+01:24 and do the fail over if one fails,
+01:27 it knows how to go over to the other one, things like that;
+01:30 it also knows how to deal with sharding,
+01:32 so maybe you have a cluster of ten MongoDB servers
+01:36 that are all managing part of the data
+01:38 and then participate as a group in the queries, PyMongo does that for us,
+01:41 this is generally where you do the crud operations,
+01:44 the find, insert, update, delete, and those kinds of things;
+01:47 you do the other admin stuff as well,
+01:49 like drop tables or create indexes and so on,
+01:53 and it even does connection pulling,
+01:55 so really this does all the stuff that you need to talk to MongoDB
+01:58 and the api is very, very, very similar to what we saw with the Javascript API
+02:03 which is why I didn't skim over it, I wanted to say, okay,
+02:06 you really learned the Javascript api,
+02:08 now you basically also know the PyMongo api,
+02:11 findOne with a capital O, no spaces,
+02:13 is now find_one, with a lower case o, for example,
+02:17 there's a few variations for like say pythonic naming
+02:20 but other than that, PyMongo is going to sound
+02:22 and feel very, very familiar to you at this point.
+02:26 Like many things from MongoDB, PyMongo is open source
+02:29 so you can come over here to github.com/mongodb/mongo-python-driver,
+02:35 and that is PyMongo.
+02:37 So you'll see that you can go look around,
+02:40 you can see it's under active development and things like that,
+02:43 a lot of stars, so this is like I said, the official driver
+02:45 but you also have access to the source, right here.
+02:48 So now that we know about PyMongo,
+02:50 I hope you're ready to go write some code.

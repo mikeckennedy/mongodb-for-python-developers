@@ -1,0 +1,27 @@
+00:01 Inserts are one of the simpler operations in MongoDB actually.
+00:04 So we just go db.collection name, in this case db.book.insert
+00:08 and we give it the thing to insert.
+00:10 Now, if we don't specify an id, an _id
+00:13 which generally we want to let the database generate
+00:16 but it's not always true, like we could have people and their primary key,
+00:20 their id could be there social security number, and that you would provide,
+00:23 so in this case, we're not going to provide an id,
+00:26 we're going to type in title and isbn, and those kinds of things.
+00:29 And then if we just do a find, that would come back and get the first one
+00:32 maybe say this is our first insert, we'd get something back like this,
+00:35 let's say we specified the isbn, the title,
+00:37 the author, the published and the publisher,
+00:40 this is a relationship over to the publisher table,
+00:42 which we haven't played with yet.
+00:44 So those were all set by us, you can see "Winning With MongoDB"
+00:47 and down here we have "Winning With MongoDB:,
+00:50 but the _id, because we didn't specify it was auto generated to an object id.
+00:54 So unless you have a good reason to pick another type of id,
+00:57 this is probably the best one for Mongo, but it could have been a string,
+01:00 like I said, it could have been a social security number
+01:03 or it could be just numerical if you want to have a 1234,
+01:06 all of those kind of put the burden on you to manage the uniqueness of that id
+01:10 and there is a unique disconstraint on _id for every table or collection.
+01:15 So that's how inserts work, you just give it this document
+01:17 and it stores it more or less directly in the database
+01:20 except for that it will generate this _id as an object id if needed.

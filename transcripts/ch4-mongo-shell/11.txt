@@ -1,0 +1,56 @@
+00:01 So, we're pretty good at finding and filtering down our result sets.
+00:04 The other super important things that databases do
+00:07 is to sort them, put them in order, so I would like the best selling book
+00:12 and then the second best, and then the third best in this category,
+00:15 that's a perfect sort by category, order by best selling this, right.
+00:20 So how do we do that in Mongo?
+00:22 Let's go over here and it turns out that there's a sort that we can run,
+00:25 and the sort takes something, right, kind of like our projection does here,
+00:30 so let me just show you before if I run this that this is not in order,
+00:33 so here we have c, c, d, f,  and then t, p, w,
+00:40 and eventually we're back just, you know, something before w,
+00:43 it is not sorted by title, not sorted by published date either,
+00:47 these three seem to be descending but the next one is not, ok.
+00:50 So it's not sorted at all, it's just however it comes back,
+00:53 probably by object id or something like this.
+00:56 Anyway, let's go and sort it, so let's suppose I would like sorted by title;
+01:00 so very much like our filter thing or maybe even closer, actually,
+01:05 like our projection here is I can come say I would like to sort
+01:09 and then this part that goes here, this one is ascending, right,
+01:13 so something that is positive means ascending, if it were negative,
+01:16 it would mean go in reverse order.
+01:18 So let's run this, now you can see, actually this is the beginning of the title,
+01:22 this exclamation mark and then some other exclamation marks,
+01:25 and then let's get past the symbols, a lot of symbols, anyway,
+01:30 you can see this is sorted by this, sorted by the title, not sorted by date,
+01:36 1994, 1993, 1996, we can also sort by date, let's comment this out,
+01:41 say .sort, published, let's sort in reverse order,
+01:47 newest which was 2050, I think we might have been fooling around with that
+01:52 or no actually I don't know where those came from.
+01:55 Anyway, 2050, 2038, 2037, 2030 and so on.
+01:58 Obviously, sorted in reverse order.
+02:01 What if I want to sort by the title and then any time the title matches
+02:05 I want to see the newest one of those.
+02:08 We can do that as well, so very very similarly we can say sort
+02:14 and then we just give it one of these objects with multiple values,
+02:16 so you want to sort by title, there's your sort by title ascending
+02:22 and then after that, if any of the titles match,
+02:26 let's show the newest one first, so sort by title ascending
+02:30 and then published descending, let's try that.
+02:33 Great, ok so here notice that these titles are the same,
+02:36 you might have noticed that before, but here's 1994 and here's 1993,
+02:40 so any time the title matches, we get the newest one first,
+02:44 I don't know if any others are in here with title matches.
+02:46 This first one must prove it right, this is how it works,
+02:50 sort by that and then by and you can have as many then buys as you like
+02:54 and they can either be ascending or descending,
+02:57 so here we're sorting by title first and then by published.
+02:59 The other thing that's important to notice is
+03:02 everything in MongoDB is case sensitive, when you're working with strings
+03:05 so that's probably going to play into this somewhere along the way.
+03:09 All right, so sorting pretty straightforward, just use these field names
+03:13 and then the direction you want to sort.
+03:15 The other thing that's worth paying attention to is
+03:18 you are going to want to make sure that you have an index
+03:20 so this sorting is actually fast, and we'll talk about that
+03:22 when we get to the performance section.

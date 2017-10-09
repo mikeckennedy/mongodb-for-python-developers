@@ -1,0 +1,65 @@
+00:00 In order to answer this question about whether you have
+00:02 an integration database or an application database,
+00:04 let's do a quick compare and contrast,
+00:07 especially in large enterprises, you'll see that they use databases
+00:11 almost as a means of inter-application communication,
+00:15 so maybe you have this huge relational database that lives in the center
+00:18 with many, many constraints, many, many store procedures,
+00:21 lots and lots of structures and rules, and so on,
+00:25 why— well, because we have a bunch of different applications
+00:28 and they all need to access this data,
+00:30 maybe the one in the top left here it needs users
+00:33 but so does the one on the right, and their idea of users is slightly different
+00:36 so this user is not like a real simple thing, it's really quite complex
+00:40 it's kind of the thing that will solve the user problem for all of these apps
+00:43 and so on and so on, through the constraints and the way you use it.
+00:47 This is a decent, well, it's typically a good role for relational databases,
+00:51 you're better off with other architectural patterns anyway,
+00:55 but relational databases are a good guarding against this kind of use case,
+00:58 they have a fixed schema, they have lots of constraints and relationships
+01:03 and they are very good at enforcing and kicking it back to the app
+01:06 and go no, you got it wrong, you messed up the data.
+01:08 So they can be like this strong rock in the middle.
+01:11 The problem with rocks is they're not very adaptable,
+01:14 they can't be massaged into new and interesting things;
+01:18 a rock is a rock, and it's extremely hard to change.
+01:21 So that's partly why some of these major enterprises
+01:25 will have like weekends where they deploy a new version of an app,
+01:28 like we're going to take it down and everybody's going to come in
+01:30 and we're going to release it;
+01:32 that is not a super place to be, it's also not a great use case
+01:36 for document databases with their flexibility in schema design,
+01:40 their less enforcement at the database level
+01:43 and more enforcement inside the app,
+01:45 because how is the app on the left going to help
+01:47 enforce things for the app on the right, that's not great.
+01:49 So, this is an integration database, and it's generally not a good use case
+01:53 for document databases, if you're still using that
+01:56 this sort of style of document databases, it means your queries will be more varied
+01:59 and you probably need to model in a more relational style,
+02:03 less embedded style, just as a rule of thumb.
+02:06 So what's the opposite? Well, it might look like this,
+02:09 we have all of our little apps again,
+02:11 and instead of them all sharing a single massive database
+02:13 you can maybe think of this is more like a micro service type of architecture;
+02:17 each one of them is going to have their own database
+02:20 and they're going to talk to it, and then when they need to exchange information
+02:22 we'll do that through some sort of web api,
+02:25 so they will exchange it through some kind of service broker way
+02:29 they like negotiate and locate the other services, right,
+02:32 maybe the one in the left is about orders,
+02:34 the one on the right is about users and accounts.
+02:37 So what that means though is each one of these little apps is much simpler,
+02:41 it can have its own database with its own focused query patterns,
+02:45 which is more focused, easier to understand,
+02:48 and the application can enforce the structure and the integrity at its api level,
+02:53 so this is a much better use case when you're sharing data with a document database.
+02:58 And in fact, this sort of whole pattern here means
+03:01 we don't have to make it NoSQL versus SQL choice,
+03:03 maybe three out of these six are using MongoDB,
+03:07 one is using a graph database and two are using MySQL,
+03:10 it's up to the individual application to decide what the best way
+03:13 and model basically with the best database and its underlying model is.
+03:18 So when we have an application database like this
+03:20 you are more likely to have slightly more embedded objects
+03:24 because the query patterns are going to be simpler and more focused and more constraint.

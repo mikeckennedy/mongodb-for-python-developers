@@ -1,0 +1,69 @@
+00:01 Now, let's use Robomongo, our shiny new shell
+00:04 that I contend is better than just the cli one,
+00:07 let's use it to explore some more advanced query filtering and sorting options.
+00:12 So here's just a blank find showing me all the records,
+00:16 how many are there in the database, there's 271 thousand books,
+00:20 so this is the same database we've been playing with for a while now.
+00:23 So let's ask some questions about the ratings.
+00:27
+00:31 So we're going to go into the ratings array
+00:32 which contains a bunch of objects, which have values,
+00:35 so I want to say how many of them have the value nine,
+00:40 so what's that actually answering— what question is that answering
+00:44 that is answering how many books have been rated
+00:47 at some point by somebody with a nine,
+00:50 how about with ten— a little bit more,
+00:54 so there are some books that were really, really popular
+00:56 people loved them, this is a 1 to 10 type of scale,
+00:59 I think it might also include zero.
+01:01 So that's great, this is our prototypical json object here.
+01:04 However, what if I want to say show me all the books
+01:08 that have a moderately high rating, what does that mean,
+01:12 let's say it has an eight, a nine or a ten as a rating,
+01:15 how do I express that as a prototype? You can't do it,
+01:19 and so that's why MongoDB has something slightly more complex
+01:22 and nuanced than just straight comparison, right,
+01:27 so this is like an equality query, so instead of putting a value here
+01:29 we can put a little sub search document here
+01:33 and into this, we can say I'd like to apply an operator instead of an exact match,
+01:39 so the operator might be greater than operator >,
+01:42 so the way you know it's an operator is the dollar
+01:46 and gte greater than or equal to is going to be the thing
+01:50 and then we're going to put the value of eight,
+01:52 so show me the books that have a rating of eight or above,
+01:55 tell me how many there are because we're doing a count,
+01:57 so let's run that, look at that 98 thousand books
+02:00 have a rating of eight, a nine or a ten.
+02:03 Does it mean their average rating as eight, nine or ten,
+02:06 that means somebody somewhere has rated it eight, nine or ten.
+02:09 So we also have things like greater than,
+02:12 without the equal, just flat up greater than so that's nine or ten right there,
+02:16 so we have a number of these operators,
+02:19 greater than, greater than or equal to, and so on.
+02:22 Another one that's really interesting is in,
+02:24 this is super important for really powerful queries,
+02:27 so when we have documents that contain sub arrays of other documents
+02:33 you can think of those as basically being pre joined
+02:36 but when you normalize those, that are not contained within each other,
+02:39 then you need a way to still go back and say
+02:42 basically do the join, and this in operator is the key to making that happen,
+02:47 this is not really what's happening here, because this is a sub document,
+02:50 but it's the operator that's involved, so what we can do is
+02:53 say I would like to find me the ratings
+02:55 that have let's say prime numbers as ratings,
+02:58 it's kind of silly, but whatever,
+03:02 here we go, so those are the prime numbers between one and ten,
+03:05 and we could say I would like to find all the ratings where the value,
+03:08 one of the values right, remember they have multiple ratings
+03:11 but one of the values is actually in this set,
+03:14 so the way this usually manifests is like go to the database
+03:17 and maybe I pull back some items, and it's got like a sub array of let's say ids
+03:23 and then I can go back to the database
+03:26 and say give me all the items in this other collection
+03:28 where the idea is in one of this like sub ids,
+03:31 so an example might be in the Talk Python Training stuff
+03:34 that remember the course contains all the chapter ids
+03:36 and I can go back into one single query
+03:39 that will give me all the chapters for a course it's this in operator, so let's try that.
+03:43 So there we go, apparently 69 thousand have a prime rating at some point
+03:49 not that that means anything, but it shows you how these operators work.

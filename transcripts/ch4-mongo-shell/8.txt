@@ -1,0 +1,38 @@
+00:01 So here's the list of the quering operators, all the complex ones.
+00:04 So we saw that normally we pass these prototypical json objects,
+00:07 ratings.values is five, and that just doesn't exactly match,
+00:11 but we saw that that doesn't really solve all our problems,
+00:14 often we want ranges or properties like
+00:17 I want all of the ratings that are greater than eight, things like that;
+00:20 so instead of putting a number into that prototypical json element,
+00:23 we're going to put an operator, so we might say $eq for equality
+00:27 that's kind of the same thing, but the others are not,
+00:30 so $gt for greater than, greater than or equal to,
+00:32 lt for less than, less than or equal to,
+00:34 not equal to, so you could say I want to see all the ones where
+00:37 there's no vote, or no rating of value ten, right,
+00:42 there's no rating that has a value of ten.
+00:44 And we talked about the in operator, this is kind of your two step join process
+00:48 that we'll talk much more about when we get to the Python side of things,
+00:51 there's also the inverse of that negation, not in the set.
+00:54 So here's an example how we might use the greater than or equal to operator
+00:58 to find all the books that have a rating of nine or ten
+01:01 that are super highly rated by at least one person,
+01:04 remember this is not like every single one in there has to be this,
+01:07 but there exists of rating which is a nine or a ten.
+01:10 We also have some joining operators or some combining operators joining,
+01:14 so we can go in and say and pretty easily by just having
+01:18 all the properties we're looking for in a single document,
+01:21 but if for some reason these are coming from multiple places
+01:23 you can actually combine them with the and operator
+01:26 so that's nice, but what you really sometimes need is the or clause,
+01:30 I want this or that, and there's no way to do that those prototypical json objects
+01:35 but the or operator will let you do this.
+01:38 You also have not and nor, so neither of these in an or,
+01:41 sort of the negation of an or;
+01:43 now I recommend you check out this link at the bottom for each one of them,
+01:46 like so where the operator appears, does it appear to the right hand side
+01:50 of the property or field name or the left hand side,
+01:53 it kind of depends on the type of operator you're using,
+01:56 so you can just click on this or the and and so on
+01:58 and in the docks and it'll give you a little example.

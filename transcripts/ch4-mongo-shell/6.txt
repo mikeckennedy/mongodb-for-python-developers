@@ -1,0 +1,89 @@
+00:01 The shell is pretty nice and it's ubiquitous
+00:03 and that you can run it anywhere, you ssh to and things like that,
+00:07 so that really good, and this is more or less the tools
+00:09 that MnongoDB ships, you could work on something else that's coming along
+00:12 but there's a really great, better shell in my opinion
+00:16 much, much better, I really love it, it's called Robomongo,
+00:19 so we talked about Robomongo in the setup how we installed it and so on,
+00:24 so let's see how it works and how it compares to the shell here.
+00:28 So here it is, you can see it hanging out down there
+00:31 and we click start, maybe it's empty let's go ahead and start from scratch,
+00:35 so now if we open it up it's empty, let's create a connection,
+00:38 I'll just call this local or whatever,
+00:42 and it's going to default the local host 27017,
+00:45 all this stuff turned off, things like that, and we'll just say save and connect
+00:50 and now you can see, let's put these little more side by side,
+00:53 you can see over here we have our bookstore or charge watcher and so on.
+00:58 And now we have the benefit that we can open this up
+01:02 we can look at the book, we could say explore the indexes
+01:04 we could even go over and say edit this index and make changes,
+01:08 make it unique, do some other things about sparseness and so on.
+01:12 We'll talk more about that later.
+01:15 Over here, we could say something like use bookstore and it switches there,
+01:19 the equivalent over here would be something like right click and say open shell,
+01:23 how interesting, so I know a lot of people prefer the command line interface
+01:27 but what's really awesome about Robomongo is
+01:31 you have the entire cli right here, so I could say something like
+01:35 db.Book, notice the auto completion, book, publisher, user, auth, etc,
+01:42 .what do you want to find, find and modify, find one,
+01:44 let's find one where, what did we have before, we had something with the title
+01:48 and let me go back and find the title we were using—
+01:55 so here we can say title like this, and now if I run it, I get a result down here
+02:03 and I can explore it, I can see the ratings and so on,
+02:06 and this, you know if we run this over here,
+02:08 I get I did the little projection, I could do that as well.
+02:12 So I get this text version and I actually don't really love this too much,
+02:15 so you can actually just switch it to the text version here as well,
+02:18 and you get color coding, highlighting, all sorts of stuff.
+02:22 You also get this version which is kind of a flat version, I never use this
+02:27 but you can use it if you want.
+02:29 What is really cool is I can come over here and say
+02:31 I want to maybe edit this document,
+02:36 if I come over and do a find, I think—
+02:41 here I get three, now if I do a straight find, not a find one,
+02:44 I can actually go and edit this, so if I wanted to change
+02:46 the date that this was done on, so let's say 2011,
+02:52 save, rerun this, this is one with so many ratings,
+02:59 here, this is the one I changed, number 2, now it's 2011.
+03:05 So of course I could run an update command,
+03:08 but you can do all sorts of interesting sort of UI things
+03:10 so I really really like using Robomongo,
+03:12 because it's one hundred percent as capable as the shell
+03:15 so for example, I could come over here, this is like just typing Mongo
+03:19 you could create variables, I could say var page,
+03:25 let's do something with a paging here, so I come and say this
+03:27 now notice, this uses get collection and it doesn't use the .Book like this,
+03:32 I think it does that because it gets better intellisense or auto completion,
+03:36 not really sure, anyway, you can do it either way, they are equivalent.
+03:41 Now, let's go over here and imagine we're going to do some paging,
+03:45 so first of all, let's just select the titles
+03:47 remember the thing I did with the projection, exactly the same thing here,
+03:51 there we go, I forgot to rerun it, okay.
+03:53 So rerun it, now we get just the titles,
+03:56 there's "Classical Mythology", "Clara Callan" and "Decision in Normandy" and so on,
+04:00 so suppose we want to do paging,
+04:02 I'd basically want to show you that this is like a full Javascript shell
+04:05 plus kind of an editor, so watch this,
+04:07 so if I put some semi colons in here, I can type let's say var page size is three
+04:12 var page num, like what number are we on, let's say were on page two,
+04:17 than down here I could say ok, this is what I want to do,
+04:20 and I could do skip and page to actually do the paging,
+04:24 so I could say skip and we'll do what page num, minus one, times page size
+04:30 that's how many we want to skip,
+04:34 and then we want to limit it to page size like this
+04:38 so now I should get, let's see, go back to the beginning,
+04:41 three things per page, we're going to be on page two,
+04:45 so it should be the Flu, the Mummies and the Kitchen God's Wife, and that's it.
+04:52 Oh, by the way if you highlight something, it just runs that expression
+04:56 which apparently evaluates the two, run the whole thing—
+05:00 notice Flu, Mummies, Kitchen, so we can do this basically
+05:03 as much as we want to type up here,
+05:06 but it's also a little editor, I mean just in almost every way
+05:08 this is better than the shell and I could even use this
+05:13 to connect to my remote MongoDB server, using ssh tunneling,
+05:16 again, we'll talk about those kinds of things
+05:18 when we get to the deployment section
+05:20 but for pretty much the rest of the course, we're going to be using Robomongo
+05:24 because it's just better in every way in my opinion.
+05:28 All right, and as you saw Robomongo installs
+05:30 on Windows, Linux and MacOs, so it's all good.
