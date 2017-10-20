@@ -1,0 +1,77 @@
+00:01 Now we've got to a serious place in the course
+00:03 where we're going to write some real code
+00:05 and work with some realistic complex demos,
+00:07 and we're going to do that using what's called an odm, an object document mapper.
+00:11 So an object document mapper is like an orm, an object relational mapper
+00:16 but in NoSQL, we don't have relations we have documents
+00:19 so we're going to map documents to objects
+00:22 rather than navigate and traverse these relationships,
+00:24 and the one we're going to focus on for this course,
+00:26 my favorite one, I think is one of the best, if not the best
+00:30 is something called MongoEngine.
+00:33 So before we get to MongoEngine, let's just look at the overall goal here,
+00:37 and the features of the odm vary whether you're talking MongoEngine
+00:40 or something different, but they generally follow the same principles.
+00:44 So with PyMongo, this is the low level api
+00:47 we have our app and we have PyMongo, we'll talk to the database;
+00:50 so when we write a query that talks to PyMongo,
+00:53 we work in the Python api and we send Python dictionaries to it,
+00:58 which either have the prototypical documents in it
+01:00 or the high level operators, in place update operators
+01:03 and things like that like $addToSet,
+01:06 but in order to do that, we basically write in the raw MongoDB api,
+01:11 as we've seen the only real change that we go through
+01:14 to go from the raw shell api of Javascript over to Python is
+01:18 we're working with dictionaries and not json,
+01:20 and we're working with pythonic names,
+01:22 so insert_one has the underscore and lower case in Python, not in Javascript,
+01:27 but this means you're working at a super low level
+01:30 and for certain operations and some of the time this makes tons of sense,
+01:34 it is one of the faster ways to work with MongoDB from Python.
+01:38 However, most of the time, we much, much prefer having high level concepts
+01:43 in our application that enforce additional things
+01:47 that automatically use the best features of the PyMongo and MongoDB api
+01:52 without us having to think about how that happens.
+01:55 So that's when we can bring in an odm,
+01:57 we have the same thing, we got our app,
+01:59 now we're going to have our odm plus PyMongo,
+02:02 we're going to issue a query, but this time we're not going to write in raw api code
+02:06 we're going to actually issue the queries in terms of classes,
+02:09 think SQLAlchemy, think Django orm type of queries here.
+02:15 So we might have a book class given our previous example,
+02:18 so we'd go to the book and we'd say find based on the isbn equals this and so on,
+02:23 all right, so it's very similar to the Django orm
+02:27 and some of the other orms that you might be familiar with.
+02:29 So we work in these high level classes, and that's great
+02:32 and it translates of course down to the PyMongo api,
+02:35 what's better though, what's really great is
+02:38 it actually leverages the really advanced in place operator,
+02:41 so at least speaking of MongoEngine specifically now,
+02:44 if we say pull back a class, an instance of a class
+02:48 and we make a change to say for the book, we change the title and we call save,
+02:51 it's actually going to do a dollar set operation, in place update
+02:55 it's not just going to push the whole book back into the database
+02:58 with all the optimistic concurrency issues you might run into,
+03:01 no, it's going to make the changes in the best way possible.
+03:04 So we'll see that we'll be able to use these advanced operators
+03:08 without actually doing anything other
+03:10 than just working with classes and objects in memory,
+03:13 it's really really sweet; we'll also have additional features,
+03:15 it automatically works with indexes for us,
+03:18 it will automatically add type checking and other types of constraints
+03:22 that simply don't exist in the database, but can be managed at the class level
+03:26 in the object level and described there.
+03:28 So here's the string field, here's an integer field
+03:31 and the integer has to be greater than ten,
+03:33 all of that stuff can be done through MongoEngine, in our application
+03:36 but the concept of that doesn't even exist in MongoDb, right,
+03:39 so you get a lot more structured, a lot more safety in it
+03:42 by basically describing your schema in classes
+03:46 and long as you stick to one application or share that class definition
+03:50 across applications, you're in a much safer place
+03:53 than just randomly sending dictionaries at the database.
+03:57 So this odm style of programming, I find it to be extremely productive,
+04:01 very clear and quite safe, neat, fast for most of what we got to do,
+04:07 that's really my favorite way to work with MongoDB,
+04:09 and I hope you'll see the power of it
+04:11 and enjoy it after we go through in this chapter.

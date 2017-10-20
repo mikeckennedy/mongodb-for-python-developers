@@ -1,0 +1,29 @@
+00:00 We saw that inserting in MognoEngine
+00:02 is super super straightforward, it's really delightful,
+00:05 so here we're going to create a car, but remember
+00:07 the car requires an engine, the engine is required
+00:10 and the engine must be an instance of an engine object.
+00:13 So we're first going to create an engine,
+00:15 set things like the horsepower, the liters, is the miles per gallon,
+00:19 so notice this is a chevy bolt which is an electric car
+00:22 so we just ramp the mile for gallon like super high,
+00:25 liters is zero because how many does an electric engine have- none,
+00:28 and I'll say it's a 120 horsepower, I really have no idea.
+00:32 Then we're going to create the car, its model is a bolt, its make is a chevy
+00:35 and the year is 2017, and then we just pass the engine along,
+00:38 right engine = engine, one is a keyword value and one is just the name of the variable.
+00:43 So then we have our car, and right now the id of the car is not stored in the database,
+00:47 so we hit save and boom, now we have like a car with its id and its default values set
+00:52 all of those things stored in the database.
+00:55 So this is great for inserting one car
+00:58 but if you are going to insert a thousand or a hundred thousand or a million cars
+01:03 let me tell you, this is the slowness right here, you do not want to do this;
+01:07 there's a much better way, maybe you don't take a million inserts at once
+01:10 maybe you bulk it up and do like 50 at a time or a 100 at a time,
+01:13 but if you are going to do some kind of bulk insert how do you do that?
+01:16 Also super easy, let's suppose we have a list of cars that we want to insert
+01:20 and I'm not showing how you initialize the cars, but same as above basically,
+01:24 but skip the save step, so we're going to get car one, car two,
+01:27 we want to insert a bunch of them we just go car.objects.insert and give it that list
+01:32 and boom it does a bulk insert in MongoDB,
+01:35 which if you're inserting many items is much much faster.

@@ -1,0 +1,44 @@
+00:00 One of the very first things if not the first thing
+00:03 that we need to do is register our connections.
+00:05 So it's really straightforward, we just import MongoEngine
+00:08 and then we call register connection,
+00:11 and you want to give this connection an alias or set it as the default,
+00:14 and then we're going to set the name equal to the name of the database.
+00:18 Here we're calling this one core, I like to be very explicit and say
+00:22 everywhere that you are working with a connection or a database really
+00:26 you name that explicitly in your code
+00:29 as we'll see later when we get to the classes.
+00:31 So we register connection, and we set the alias to core,
+00:35 and the db we're going to say name = dealership.
+00:38 Now, this worked well if you're just connecting on local host
+00:41 no authentication, default port all that, right
+00:44 we just let everything else fall through the cracks.
+00:46 When we get to the production deployment,
+00:49 well that's not really going to fly anymore, we're going to need ssl,
+00:52 we're going to need to enable authentication
+00:54 and pass credentials and all that kind of stuff,
+00:56 so we can use a more complicated variation here,
+01:00 where we do basically the same thing, but we create this dictionary
+01:03 that has the additional elements, now it doesn't have to be a separate dictionary
+01:07 you could just set them explicitly, but it turns out that sometimes
+01:10 if you want to like put this into your log or things like this, it's kind of handy,
+01:14 so we're going to basically set a username, password, host, port,
+01:17 authentication source is almost always admin, not always,
+01:21 it's either the database you're working with if it's a local user
+01:24 or if it's a server wide user you're using to be on admin
+01:27 authentication mechanism is scram-shah-1,
+01:30 or you can change it that's the default and ssl is true,
+01:33 and in this case, we might be using a self signed certificate
+01:37 which is totally good for the encryption, but it's going to fail
+01:40 and say we don't trust the certificate, if we trust the server
+01:43 you can go with ssl cert requires none,
+01:47 or if you want to make sure you have one, trust its certificate, omit the last line.
+01:50 And then we just use **data basically to pass those
+01:53 as keyword arguments to register connection
+01:56 and notice, each step I'm saying get the user from config or environment
+02:00 so this could be in a web app where these values are stored in the config file,
+02:04 you don't want to put them in source specifically
+02:07 you don't want them checked in anywhere ever,
+02:09 you could say get them from, you can put them in environment variables
+02:12 on your server and then grab them at runtime
+02:14 out of the environment and set them here.

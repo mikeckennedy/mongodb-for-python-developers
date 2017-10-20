@@ -1,0 +1,114 @@
+00:01 So we've really explored a lot of MongoEngine
+00:03 and we've built upon the foundation that we laid with the Javascript api
+00:07 and transferring that over to the PyMongo api;
+00:11 so hopefully, nothing you've seen has surprised you
+00:13 in terms of the types of queries that we're doing,
+00:16 it's just learning how MongoEngine surfaces that and turns it into objects
+00:20 was really what we were looking for;
+00:22 now, there are a few other things that we need to talk about
+00:25 that really we haven't touched on yet,
+00:28 the operators, we talked about the atomic update operators
+00:32 but not things like the greater than, less than, exists, doesn't exist,
+00:36 in set and so on, so we want to look at that;
+00:39 we also want to look at querying into subdocuments
+00:44 so if we go back to our MongoEngine here, we'll run this one more time,
+00:48 see, maybe we want to ask questions like
+00:51 show me the cars that have had some either really good service or really bad service,
+00:57 so we want to query all the way down into service history,
+00:59 into customer rating, and do a question like
+01:02 show me the ratings that were 5, show me those the ones that were 4,
+01:05 show me the ones that are less than 3, things like that,
+01:08 so how do we do this in this format that MongoEngine uses?
+01:11 So I've sketched out this little 'show poorly serviced cars'
+01:14 and it doesn't do anything, it just pulls back every car
+01:17 and prints it more or less like we had before,
+01:19 except for it shows the satisfaction in addition to the other stuff;
+01:22 so the question is how do I query it, let's just run it real quick,
+01:25 and I can say show me the poorly serviced cars,
+01:28 it doesn't matter what we put now, and it literally just lists all of them,
+01:31 and notice this one has a satisfaction of 3, 3, 5 and 3,
+01:34 so that we can do some queries, let's work on two other cars,
+01:38 let's work on the Ferrari 308 and this 2017 F40.
+01:42 So let's perform some service on this one
+01:46 and let's say this one got some amazing service, the price was 12 dollars,
+01:52 and we have a let's say monthly check up again here
+01:57 spelled right even, and they were just thrilled,
+02:01 so let's do our list really quick, and now, notice this one had a very happy one
+02:07 in fact, if I say the poorly serviced cars for a moment
+02:11 it's going to show that this one had a satisfaction of 5,
+02:15 okay let's suppose the 308 is not having such a good day, let's service it,
+02:19 and let's say that its price was 10 thousand dollars,
+02:23 the type of service was fender dent repair,
+02:27 so maybe the family went out of town and the teenage son stayed home,
+02:31 the son took the Ferrari out, found the keys and crashed it,
+02:35 so you can't blame the guy for being unhappy,
+02:38 but you know, what are we supposed to do, he came in unhappy,
+02:41 we tried to make him happy, but he was just not having it, so he had a 1,
+02:44 and now let's look really quick, just list everything still,
+02:48 so you can see over here, this Ferrari has no records,
+02:52 this one, this F40 2017, was very satisfied,
+02:56 the 308 very unsatisfied, and this Testarossa has some that are satisfied.
+03:01 Okay, so great, now we have the right variety of data,
+03:05 let's go over here and write the code that we were trying to write in the first place.
+03:09 What I want to do is I want to find the cars that had great service,
+03:12 so that's pretty easy to do, we saw that we could do like
+03:15 vi_number = 7, but what about, over here—
+03:20
+03:25 remember what we want to do, find the one with lots of them,
+03:29 we want to go into service history and down into service history,
+03:33 we want to find customer rating, how do we do that in this format?
+03:36 Well, it starts with this, service history, and what's the thing called down here,
+03:41 just do a copy to be sure it's identical,
+03:44 because you don't get an error if you get it wrong, just no results.
+03:46 So I told you that double underscore has special meaning
+03:48 we used it for the push operator earlier,
+03:51 we can also use it here to traverse the hierarchy,
+03:55 so service_history_ _customer_rating
+03:57 is going to go down and let's say this is going to match
+04:00 whatever level they passed in, all right, let's try this.
+04:03 So I want to find poorly service right now it assumes
+04:09 that we're going to enter a low number, but let's just run with it for a minute,
+04:12 let's say I want to find the ones with level 1,
+04:15 all right, so it was this Ferrari 308 here,
+04:18 and I think that's the only one that has level one,
+04:21 let's go and run the poor but ask for 5,
+04:24 so like I said, bad name, servers at a level or whatever;
+04:28 now we have two, right, we have this Ferrari F40 with this here,
+04:32 and we have the Testarossa, which some of the time
+04:36 at least had really good service, the person was super thrilled.
+04:39 So that's how we search into those subarrays, we used the double underscore,
+04:45 so double underscore we used it for push onto a thing,
+04:48 we use it to navigate a hierarchy,
+04:50 the last thing that we really are looking for is
+04:53 we would like to find the cars that say have
+04:55 below excellent service or something like that,
+04:58 so let's change this a little bit, max level of satisfaction are we looking for;
+05:07 so we could say 1 and that's a really bad one,
+05:09 if we could say 3, and we could intend that to be 1, 2 or 3, as the level, right,
+05:14 so it's not going to work this way now, it's just going to be straight up a quality.
+05:18 So, once again, how do we do it in the Javascript api or PyMongo—
+05:24 we would use something like this, we would say that,
+05:27 we would say service_history.customer_rating
+05:38 and then here instead of giving a number we would give it one of those operators,
+05:44 we would say $ lte (less than or equal to) : level, right
+05:49 so how do we do that here— well, we want to use this operator
+05:55 and we're going to do that again with the double underscore,
+05:58 so we'll say double underscore __lte,
+06:00 but here's the thing, the query operators go on the end,
+06:03 the update operators go on the beginning, remember push was like this
+06:07 so the order varies, for better or worse,
+06:10 I think it has to do with the fact that the operators here go to the right in the raw api,
+06:15 and the push one goes to the left, so it's kind of trying to mirror that.
+06:19 All right, let's run this again. So let's see the poorly serviced cars,
+06:25 let's try again for 1, we should see just the 308
+06:27 because that's the only one with that level, boom, there's the 308.
+06:31 Let's look for it again, I want to find all the cars with 3 or below,
+06:35 remember, if I scroll this up a little bit, we're doing lte less than or equal to 3,
+06:40 bam, look at that, we got the 308 and we got the Testarossa,
+06:45 which some of the time did have this, all right,
+06:47 if I put 5, we would just get all of them.
+06:50 So you can see that we can use the double underscore to traverse the hierarchy,
+06:53 we can use the double underscore for the operators,
+06:55 and in fact, we can use the double underscore for multiple meanings
+06:58 in the exact same thing, right here, traverse service_history.customer_rating
+07:04 and then apply the operator less than or equal to the value that we set.

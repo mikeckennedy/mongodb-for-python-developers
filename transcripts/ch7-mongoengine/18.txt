@@ -1,0 +1,63 @@
+00:00 We saw querying in MongoEngine was really quite straightforward
+00:04 and mostly was done by way of interacting with the class
+00:07 and the arguments, not breaking down and working
+00:12 in the actual MongoDB or even PyMongo api;
+00:15 so let's look at a couple of options,
+00:17 a couple of ways in which we might do some queries.
+00:19 So here we have a function called find_car_by_id
+00:21 and notice it's taking a car id which we're using type annotations or type ins
+00:25 to indicate that this is an object id that comes in
+00:28 and what we give back, what we're returning is an individual single car
+00:31 and really for the type ins to be entirely correct
+00:34 you should say optional car, because it may be none as we saw.
+00:37 So we are going to say car.objects and then filter(id = car_id)
+00:41 so what we're doing is saying we're looking for the car object
+00:44 that has id = car_id, now this is by primary key basically
+00:48 so you expect it's one or zero, we do a first
+00:51 so that actually returns either the object or none.
+00:54 One thing to know is in the database it's _id and
+00:57 in MongoEngine they are like forget the underscore it's just straight up id,
+01:01 so minor difference there,
+01:03 we also saw that if you have just one filter, like a really simple thing
+01:06 you could just say objects_id = card_id
+01:08 and don't have to do the filter step, but I kind of like this explicit style.
+01:11 So we're going to say we're looking for one or more fields
+01:16 we're only passing id but we could pass id and vin number and other types of things
+01:21 and we call first to get one or nothing at all,
+01:26 next, we might want to query by subdocuments
+01:29 or things contained in a list inside of that document, stuff like that;
+01:33 so we can also do this with MongoEngine.
+01:36 Same type of thing card.objects.filter, however what goes in here
+01:40 is no longer just the straight name,
+01:43 in fact, we're going to use the double underscore
+01:45 to traverse that hierarchy, so we're going to go down to service history,
+01:50 then within service history we're going to look at customer rating.
+01:54 Now, if we're going to return this, we maybe don't want to return it active cursor
+01:59 we may either want to use a generator
+02:02 or here what we're doing is we're actually creating a list
+02:04 we're saying list of cars, that way by the time this function is done executing
+02:09 it actually is going to entirely have finished whatever it's doing with the database
+02:14 and you'll basically be done with the database by the time you leave this function.
+02:19 Notice we're also using type ins to say this takes a list of cars,
+02:22 this time we didn't call first we're just converting all of the responses to that list.
+02:27 All right, finally this one that we just looked at
+02:31 was looking exactly at the customer rating of 4,
+02:34 but here we want to know like show me all the cars
+02:37 that were not rated with great service, right
+02:39 that is 3, 2, 1 or 0, if that's a possibility,
+02:43 and in fact, we're going to use not pull all the cars back
+02:47 but we want to know like as a percentage how are we doing,
+02:50 how many cars that we have that had sub amazing service, versus all of them
+02:55 so we're using the count operator here,
+02:57 we can get all the cars by saying card.objects.count
+03:00 or we can run our query and say count and get just the ones that match the query.
+03:03 So in this case, we're going to say you the double underscore yet again
+03:07 this time to use the less than operator,
+03:09 so what we're saying in this case is the bad cars how many are there,
+03:13 well, we're going to go to service history.customer rating
+03:16 and show me all the ones that are less than 4
+03:18 and count how many of those occur.
+03:20 Right, so we'll just use the count operator
+03:23 instead of actually returning deserializing the documents
+03:25 this is much, much faster than saying give me all the bad cars
+03:28 do a lin operator, unless you have a really, really great service.

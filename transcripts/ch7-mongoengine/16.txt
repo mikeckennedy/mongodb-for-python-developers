@@ -1,0 +1,59 @@
+00:00 The way we primarily work with MongoEngine
+00:03 is we create classes and we map those to collections.
+00:06 So here we started out with a really simple car,
+00:08 we have a class called car and anything that maps to a collection
+00:13 is a top level document must be well derived from mongoengine.document
+00:18 and then we set up just all of the fields, these could be simple
+00:21 or as we saw they could be nested rich objects,
+00:24 all the ones listed here are simple, so we have string, string int, int and string.
+00:29 So we just do that mongoengine.stringField and so on.
+00:31 So this worked pretty well, but we said it would be nice
+00:34 if we could express that some of these are required,
+00:36 that some of these have default values and things like that,
+00:39 so we can come in here and we can say the model, the make, and the year
+00:43 these are all required, just say required = true you must type them in;
+00:47 mileage, we might be happy to go with zero for default
+00:50 this is new cars, things like that, so zero is a good default there,
+00:54 the vi number, the vin number is more interesting,
+00:57 we want to generate a large unique alpha numeric string
+01:01 automatically when a car is created,
+01:03 so we'll say default equals and will give it some kind of callable
+01:06 in this case a lambda that returns a string based on taking the uuid4,
+01:11 turn it to a string, drop the dashes, things like that.
+01:14 So this worked really well for generating our car
+01:17 and we didn't even have to set the vin number, that just got done automatically.
+01:21 Finally, we said look, our cars also are going to contain an engine
+01:24 and I don't want to go and do a separate query to a separate table
+01:28 or separate collection specifically,
+01:31 to find out details about the engine and store like the car id in the engine,
+01:34 so instead, we're just going to embed it straight into the car,
+01:38 you have a car, you have the entire details, precisely.
+01:40 So we did that by first creating an engine class
+01:43 and that engine class has to derive from mongoengine.EmbeddedDocument
+01:48 not document, don't make that mistake, EmbeddedDocument
+01:51 and then we're going to set the type of it here in the car
+01:53 to be an embedded document field,
+01:56 the embedded document feel takes two things,
+01:57 the type that you're going to put there so the engine class
+02:00 and whether it's required is optional, right,
+02:03 but we're going to say at least here yes the engine is required.
+02:06 We also wanted to store the service history,
+02:08 a set of rich documents modeled by service records,
+02:11 so again here's a class derive some embedded document
+02:13 but this time it's not one thing, it's a list of them,
+02:16 so we have an embedded document list field
+02:18 and this basically starts out as an empty list
+02:21 and then as we wish we can append these service records to it
+02:25 and then save them back.
+02:27 So if we have our car model like this and we put one into the database
+02:30 it's going to come out looking like this,
+02:32 we'll have an id, we'll have a model,
+02:34 bunch of other flat elements up there, flat fields
+02:36 we have our vin number generated as 9501, from that lambda expression,
+02:41 the engine has four properties horse power, liters, miles per gallon, serial number,
+02:45 and that is modeled by that engine object,
+02:48 and notice the curly braces, this is an embedded sub document here
+02:52 and the service history, notice square bracket this is a list or an array in Javascript
+02:57 and it has a bunch of sub documents that are the service history.
+03:00 So with our car modeled in Python on the left
+03:02 what we get here on the right is actually what you'll see in MongoDB.

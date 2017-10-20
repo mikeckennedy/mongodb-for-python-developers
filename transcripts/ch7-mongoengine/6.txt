@@ -1,0 +1,145 @@
+00:01 Alright, let's start defining our classes that we're going to map to the database.
+00:04 And I guess the first place to begin would be to describe
+00:06 how I think we're going to store the data and what the data is;
+00:09 so we're going to have a car, a car is going to have an engine,
+00:14 with lots of details about the engine like its horsepower and so on,
+00:17 a car is going to have a service history and each entry in the service history
+00:21 is going to be some additional information, like what was the work performed,
+00:24 how much did it cost, when was it done, that kind of stuff.
+00:28 There is going to be an owner who can own multiple cars
+00:32 and a car can be owned by multiple people,
+00:35 so there's a many to many relationship between owners and cars,
+00:38 and then owners have personal information like their address and stuff like that.
+00:42 So really the idea is we have cars and owners,
+00:45 and then the cars have additional things like engines
+00:47 and then the thing you can do to the car that's really interesting is
+00:50 you can give it service right, change its tires,
+00:53 change its parts and plugs, give it a new engine and so on.
+00:55 So we want to model those things, so let's start right at the heart of it,
+00:59 let's start with the car.
+01:01 So over here, we're going to define another class,
+01:05 another Python file called car,
+01:09 and we'll go down here and we're just going to define a class called car, like this.
+01:15 Now, we're going to need to work with MongoEngine,
+01:19 because the way it works is all the classes, all the entities
+01:22 we want to map to the database are going to derive from mongoengine.Document;
+01:27 now this allows us to load and save and query the documents,
+01:31 it also provides a field called id, which maps to underscore id in the database
+01:40 and by default is an object id type of thing,
+01:44 okay so we don't have to worry about this id
+01:46 whether it's an object idea or not, you can change it
+01:48 you can put a different one and overwrite it,
+01:50 but if you leave it alone this is what you get.
+01:52 Okay, so the car now has an object id and we're going to give it
+01:55 a couple of pieces of information like about what model is it,
+01:58 so if you've worked with these ORMs before, they are very similar,
+02:02 what we're going to do is we're going to define the properties of the document
+02:06 as basically a descriptor, so it's a mongoengine.
+02:09 this is going to be a string, so we'll say string field
+02:12 so you have sorted list field which is pretty sweet,
+02:14 we're going to start with a string field
+02:17 that's nice and easy, let's add while we're at it a make
+02:20 so a model might be F40, make would be a Ferrari,
+02:24 we're going to have a year, mongoengine.IntField
+02:28 now notice, we have types here, we have strings and we have integers
+02:32 in MongoDB, things have a type in bson they're strings or they're integers
+02:36 but there is no way to enforce a type, there's no way to say
+02:39 the year must be an integer you could easily make it a list if you want it,
+02:42 make anything you want, but in MongoEngine, it has a concrete type
+02:45 which is actually really valuable.
+02:47 Let's have a mileage, and let's say the mileage is going to be a float field
+02:53
+02:56 and then it's going to have a vin number, vehicle identification number
+02:59 and that is going to be a mongoengine.StringField
+03:03 because it might have alpha numeric in it, it might start with zero, things like that.
+03:07 Okay, so this pretty much is what we got to do in order to map this to the database.
+03:12 However, there's one more thing that you want to do,
+03:15 so we're going to define this meta dictionary
+03:20 and the dictionary is going to say the database alias we want to use is core,
+03:26 remember that from over here, we said this connection to this database
+03:31 with all the properties that we're not specifying because they're defaults
+03:33 but we could have a server name, port authentication, all that kind of stuff
+03:37 we're going to say go find this connection that we've registered here
+03:40 because the db alias we want to use is core;
+03:43 I find this a really nice way to partition our app up into like central parts
+03:48 and analytics and reporting and those kinds of things.
+03:51 Then we can also control the name of the collections,
+03:54 we don't want to be capital C Car, how about lower case cars.
+03:57 Alright that's more pythonic for us,
+03:59 so we're going to call our collection cars,
+04:01 and in the shell we would say db.cars.find,
+04:04 alright, but here we're going to work with MongoEngine.
+04:07 So this is not the end game, but this is definitely the beginning,
+04:10 let's go down here and write some throw away code
+04:13 just to see that we have everything hanging together.
+04:15 So let's go down, hit command b, so go to add car,
+04:18 and let's see what do we need here,
+04:22 let's go and grab the stuff we're going to need,
+04:24 in fact, you'll see that some of these we're not going to have to set
+04:27 especially when we get to the final version of what car looks like,
+04:33 but let's say we want to get the model, it's going to be input what is the model
+04:38 I could almost just enter Ferrari because that's what it always is the make,
+04:42 so we have to ask the user some questions here
+04:47 and I'm going to assume this is going to work,
+04:51 assuming that we can parse that as an integer
+04:59 and here we'll say mileage, that's going to be a float
+05:04
+05:08 and let's go and get a vin number.
+05:11
+05:18 Okay, so now we want to create a car we want to insert it into the database
+05:22 and later maybe even do a query with it, so we'll say car = Car like this
+05:25 and I could use keyword syntax to set the value here
+05:28 let's go ahead and import that to the top,
+05:32 so I could say model equal such and such, year equals each and such.
+05:35 Or I could say car.year = year, card.make = make,
+05:43 notice the auto complete which is very nice,
+05:45 model and we'll just keep going like this.
+05:49 And then, in order to insert it, all we have to do is go to the car and say save
+05:54 this is the active record style, in active record you work with a single document
+05:58 and you say load, save, query, things like that right,
+06:02 you save them individually, which maps really well to MongoDB
+06:05 because it doesn't have concepts like transactions.
+06:09 So let me just put in something wrong here for the mileage,
+06:12 remember the mileage, if you look over here, has to be a float
+06:16 so let's try to put a string in there, all right so run my thing,
+06:20 I want to add a car, it is not going to make it through I believe,
+06:23 so let's say 1998, it's going to be abc— it's going to crash,
+06:33 and it says car validation error no, no, no,
+06:37 the mileage only accepts floats and integers
+06:39 so already in the simplest form of our car, I'm going to do a lot more to it
+06:43 it's already helping us out a lot here,
+06:45 so oh yeah yeah yeah that was supposed to be a float,
+06:48 do you know how easy it is to make that mistake
+06:50 when you're working in raw dictionaries and put in a string in the database
+06:52 when it should have been a float, and then how do you do a sort,
+06:54 how do you do a greater than— you're out of luck, right
+06:57 so we already get a huge value from like the simplest variation.
+07:00 Okay, let's go and put this in for real now, add a car,
+07:03 it is a F40, it's a Ferrari, it was built in 2005,
+07:07 this time the mileage is 10 thousand miles, and the vin is af2.
+07:15 There we go, ready?
+07:18 Oh it looks like I made a small mistake configuring MongoEngine here,
+07:22 let's go back really quick, that's unfortunate,
+07:24 so over here if you look, I quickly typed in the alias and I said db
+07:29 but no no, the thing that we want to use, the name of the database is not db its name,
+07:33 so sorry about that, let's fix this here,
+07:36 all right, now let's do it again, now we should be able to add our car
+07:40 which we're going to go over here, we don't really need this anymore,
+07:47 so we are going to ask for the input from the user, create the car and save it.
+07:53 Now that it actually knows what database to use, that should be pretty easy.
+07:57 So add the car, F40, Ferrari, 2005, driven slightly further since we crashed it
+08:09 and we tried to add it but here we go,
+08:11 and this would be a F20, boom just like that,
+08:16 we've added it, remember, this demo dealership didn't even exist
+08:20 until we just hit enter there, now let's see what we got,
+08:24 go back over to our favorite shell RoboMongo,
+08:27 and now we have dealership which was already there
+08:30 but now we have demo dealership, and check this out
+08:33 we have cars and in here if we look at it like this,
+08:35 there we have our model, our make, our year, our mileage and notice,
+08:39 this is an integer, this is a float—
+08:42 why, because in the class that's how we defined it
+08:44 and the other two obviously are strings, here is the underscore id
+08:47 that was generated or brought into existence
+08:50 by being just mongoengine.document class,
+08:54 we didn't have to do anything to make that work.

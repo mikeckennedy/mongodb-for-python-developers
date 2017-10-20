@@ -1,0 +1,119 @@
+00:00 Now it's time to service the car. So, we got a couple of options here,
+00:04 one possibility would just be let's get a service,
+00:08 like a random car we grab from the database,
+00:10 the other would be to go over here and implement list cars.
+00:13 So let's actually go ahead and do this list cars here,
+00:17 so we could hit list cars and then we can ask for the id
+00:20 or something to that effect of the car.
+00:23 Ok, so let's go over here and talk about listing the cars,
+00:26 we haven't done any queries yet, everything we've really done so far is inserts
+00:30 and that's really straightforward, right, we've seen that we create an object,
+00:33 we set some properties, they may be complicated properties
+00:36 but nonetheless, we just set the properties and we call save.
+00:39 For listing or any sort of query, we're going to come over here
+00:43 and we're going to do something different,
+00:46 so what we want to query are the cars, so we want to say car.objects,
+00:50 now there's a couple of things we can do,
+00:53 we can come over here and we can say filter and set something
+00:57 or if you're doing a single filter, you could actually do it right here,
+01:00 I'll do it the long way then we'll tighten it up,
+01:02 I'm not sure there's really any benefit other than whatever you feel like typing,
+01:06 do you want to be more explicit or do you want to have code be more concise.
+01:10 We could come over here and we could do a filter on the car,
+01:14 we could say I want to see only the cars
+01:17 that are a particular year or something like that,
+01:20 so I'm not sure we really need to filter it all, really all we want to do is sort them,
+01:26 so was say order by and then what we're going to do is
+01:30 we're going to say the thing that we want to order by,
+01:32 and for order by, we use string, so let's order by the year
+01:38 and let's just get with this for just a minute,
+01:41 so we'll say cars equal this, and then for car in cars
+01:45 we want to print out, let's say the make, the model and vin, something like this.
+01:53 So here we'll say car.make, car.model, car. vi_number,
+02:01 okay excellent, so that should print those out
+02:04 and let's do maybe a little extra line at the end.
+02:06 Let's go ahead and test this, and see if everything is working,
+02:09 so let's list the cars, excellent, surprise it's all Ferraries,
+02:12 remember, we are a Ferrari dealership, and this is not super helpful
+02:15 because it doesn't show us the year,
+02:18 I want to show you that the order is working, and if you don't see that
+02:21 you're not going to be able to verify whether this is working or not.
+02:26 So let's do this, we'll come over here and we'll say car.year,
+02:29 do it one more time, now we list, all right look at that,
+02:32 so 1991, 2000, 2005, 2005 and 2017, perfect it's working,
+02:36 but I'd kind of want to see the new ones first,
+02:40 although maybe in terms of service, seeing the ones is what we want,
+02:43 let's say we want to get them in reverse, so put a negative here,
+02:46
+02:50 here we go, now we're sorting the cars, newest to oldest,
+02:53 sorting by year, descending, okay, so that's working really well,
+02:57 so what we want to do is basically use this vin number,
+03:01 to go find the car we want to service,
+03:03 now that we can see the cars I'd like to go say I want to service a car
+03:06 and come over here hit s, and it is supposed to say okay
+03:09 what car do you want to service, I give it one of these,
+03:12 we're going to go to the database, find that car and then insert a service record to it.
+03:16 With that mind, let's go and think about this here,
+03:21 let's think about actually showing the service history of each car.
+03:25 Some number of service records like that,
+03:30 format what we want to print out is a len of car.service history
+03:34 now this is as far as we're concerned in memory just a Python list,
+03:37 so we don't need any database magics,
+03:40 like a straight up length will tell us what we're looking for.
+03:42 And then for each one of these, we can go and look at it
+03:45 so as in card.service history, this doesn't go back to the database a second time,
+03:49 that's part of the beauty of just pulling it back as part of the document
+03:53 so here we'll print, we'll do like an indent, something like this,
+03:56 it'll have let's say we're going to just show the name,
+03:59 let's do the price and the name, I think that might do it.
+04:04 All right, so we're going to s.price, s.description,
+04:09 I believe is what we called it, let's go and run this,
+04:13 we should see just zero histories everywhere,
+04:16 zero service records so not super interesting,
+04:19 but it should become interesting as we write this next thing,
+04:22 Alright, so now that we can find the cars,
+04:24 the next thing to do is actually service them,
+04:27 let's go ahead and write one more query here, and then I'll carry on,
+04:30 okay, so first thing we want to do, is we're going to get the vin,
+04:33 I'll say input, now in reality, the car would be sitting in front of us,
+04:43 here we don't really know, so we need to find a way to get the car right,
+04:48 so let's say this, we want to go to the car and we'll say car.objects
+04:52 now here's where we really actually are doing the filter stuff
+04:55 so we'll say filter— and this is pretty cool, we're going to go to this
+04:59 and we're going to basically pretend this function has named parameters
+05:04 that in the simple version represents the prototypical json objects,
+05:09 we saw from the api, from the Javascript and PyMongo api.
+05:14 So let's go to the car real quick, what is the thing we're looking for,
+05:17 vi number is what I called it, so we're going to say that equals to vin,
+05:22 if we wanted to also match the make = make, right
+05:26 model = model, whatever, if we had three things
+05:28 we want to do like an and on all three, this is how we would do it,
+05:32 but we don't, we just have the vin, now this will give us a list of cars that match this,
+05:36 in theory, this should be unique, we haven't got the indexes
+05:39 or any other way to make them unique yet, but we can get there,
+05:42 now we're expecting one back so we can come here and say first,
+05:46 and that should actually pull back the one car
+05:48 so instead of getting the cursor, we're going to get either a car or none.
+05:51 If we had none, that means it wasn't found,
+05:54 so let's say if not car, print car with vin not found,
+06:03
+06:07 okay so a little bit of error handling there, this doesn't throw an exception if it misses,
+06:11 it's just going to be none, all right, so then we'll say print
+06:14 we will service let's say car.make, let's see if this works,
+06:21 okay so list cars, let's go, let me put in service, say bad vin,
+06:29 car with bad vin not found, excellent
+06:31 let's try to service this one that has this vin that I copied,
+06:34 boom, we will service Ferrari excellent, excellent,
+06:37 so we'll go into the database and get it.
+06:40 Now that doesn't really prove very much, does it,
+06:43 that this is the model, there's only one Testarossa,
+06:50 so if I do this, it should say we're going to service the Testarossa, perfect,
+06:56 all right, so now, we have everything working beautifully in terms of our filter here,
+07:01 now I told you there's two ways to do this, if we have multiple clauses
+07:05 and you want to do multiple filters and multiple ifs and conditionals,
+07:08 just keep piling on the filters, but if you want a simpler version
+07:11 you can actually do it like this, as well, and let's just verify.
+07:14 Boom, see, we're going to still service that same car.
+07:19
+07:23 So now that we have it, how do we get this service record onto the car,
+07:27 you'll see there's actually two ways, and they're both pretty decent.

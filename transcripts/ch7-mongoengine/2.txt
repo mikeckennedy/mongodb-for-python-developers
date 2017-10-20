@@ -1,0 +1,36 @@
+00:01 So here we are at mongoengine.org
+00:03 and MongoEngine is the document object mapper, right
+00:06 they say think ORM but for document databasis, right just like we said,
+00:09 and MongoEngine is a great ODM, which they maybe call it DOM,
+00:15 given their naming, I think ODM is slightly more popular;
+00:17 anyway, it's really great and flexible ODM,
+00:20 it has a very clear way of describing your classes,
+00:24 if you use something like SQLAlchemy and you like the way it works,
+00:26 you really like this, if you like Django ORM it's very similar to that,
+00:30 actually it uses the active record style, not the unit of work style
+00:34 which Django uses active record, so does Ruby On Rails,
+00:37 if you look as opposed to say SQLAlchemy which uses unit of work.
+00:41 It works well in Python 3, it also works in Python 2.
+00:44 So if you go here you'll see there's actually additional things you can get,
+00:48 you can get a Flask plug in on top of this,
+00:50 you can get a Django plug in on top of this ,
+00:52 and some extras as well, there's a couple of cool additions that you get,
+00:56 but we're just going to work with plain MongoEngine,
+00:59 that means we can use it in any application whether it's a web app or not
+01:02 and we can use it however we want in our web application.
+01:06 Like pretty much everything in this course MongoEngine is open source
+01:08 so you can go here to githug mongoengine/mongoengine,
+01:12 you can see it's almost two thousand stars, almost a thousand forks,
+01:15 it was updated fourteen days ago, it's very active and living project,
+01:18 it's one of the things I look for when I depend on
+01:22 some core part of my application is
+01:24 is this thing being updated, is it alive, things like that,
+01:28 you don't want to take on something as critical as your object document mapper
+01:32 if no one is out there maintaining it,
+01:34 you probably don't want to be writing an ODM,
+01:37 you probably want to be using ODM and building whatever it is you're trying to build,
+01:40 like a website or app, or a service api, whatever,
+01:43 it's probably not an ODM you want to be building.
+01:46 So you see, MongoEngine is quite active,
+01:48 and you can go fork it and keep a copy of it for yourself,
+01:50 but for this course, we're just going to pip install it.

@@ -1,0 +1,104 @@
+00:01 So we are able to service these cars,
+00:03 however, there is something we might consider,
+00:05 it's probably fine for this type of application,
+00:08 but if there is contention around these documents,
+00:11 like multiple things that you're trying to update the same record
+00:14 you could run into some trouble here, right,
+00:16 we could have two separate threads, run this part,
+00:18 they could each enter some stuff here,
+00:22 there's actually because the input has super long delay here,
+00:24 and then we append it and save, and which every one got saved last
+00:27 would replace the other one and just throw that data away.
+00:31 We could add optimistic concurrency by manually implementing it
+00:34 and that would solve that problem,
+00:36 but we could actually make this perform better
+00:38 as well as avoid that problem entirely,
+00:41 so let's come over here and let's duplicate this, so hit command d in PyCharm,
+00:46 control d on the other Oss, so let's come down here and do this entirely different,
+00:53 so we're going to get rid of this part here,
+00:56
+00:59 and instead of saying this, since we're not pulling back the car,
+01:02 let's actually drop this bit here, so you can compare them directly,
+01:06 so we're going to ask for the vin, we're going to create the service history
+01:11 and now, instead of pulling the record back,
+01:14 making a change and pushing the entire document
+01:17 which could be like 200 K, we just want to move this data over,
+01:21 remember that in the raw api, we talked about the operators,
+01:24 we had $addToSet, and $push, so we want to use those operators
+01:35 and just say here, this service record put it onto the list
+01:37 that is on that document under service history;
+01:41 so that's what we're going to do now instead,
+01:44 so we're going to go car and I need to find an individual car,
+01:47 so I am going to do a query here, so I'll say vi number = vin, right,
+01:54 just like we did in our find up here, but instead of pulling it back
+01:57 we're going to take this and say update one,
+02:01 when we update one, I want to say something like say service history
+02:04
+02:09 and we'll say service, but how do I tell it to use the operator,
+02:12 this is the first time we've seen this but this,
+02:14 but this pattern you'll see recur over and over and over in MongoEngine,
+02:17 how do I tell it to use the operator?
+02:19 You'll see that there's a couple of times, a couple different situations
+02:22 where MongoEngine uses double underscores
+02:25 to like represent, not just the value but the value with an operator
+02:30 so the first one that are going to see is this push,
+02:33 we'll say push double underscore, and what that means is
+02:36 we're going to push service onto service history.
+02:39
+02:44 Up here before we had a way to say if you gave us the wrong vehicle id number
+02:48 we told you no, there's no car with this,
+02:51 there's no car with this bad vi vehicle id number;
+02:56 so what do we do here— well, this doesn't pull it back
+03:00 it just updates it if it finds it, so how is this going to work?
+03:04 We need to put our test over here and say if it wasn't updated
+03:08 so updated is if it comes back with one, but if it comes back with zero,
+03:11 that is a problem, the exact same problem
+03:14 we couldn't find the car with the vehicle id number;
+03:16 so now we don't need to append this and push the whole document back
+03:20 it's all in one shot atomically on the server.
+03:23 Beautiful, so this is a much higher performance and safer thing to do
+03:27 if we don't want any details about the car,
+03:29 we literally just know that this service goes on that service history for that thing,
+03:33 let's try again and see if it works.
+03:36 So first lease the cars, I'll grab the id of the Testarossa,
+03:40 and let's try to service it— the price is one two three,
+03:44 the type of service is waxing, so we decided to wash it for them,
+03:49 our customer thought the glean on that car
+03:51 was like nobody's business, very happy,
+03:53 there's the moment of truth, ready— boom, car with id not found,
+03:58 oh, it totally worked, it totally worked,
+04:04 I just have the wrong error message, wrong case here,
+04:06 let's do a listing and run it again do a list,
+04:12 now we have our waxing, what did I do wrong—
+04:15 there's a lot of ways we could check it,
+04:18 but if updated is exactly the one we don't want,
+04:20 I could say if not updated or if updated equal zero
+04:23 or if updated less than or equal to zero, things like this,
+04:26 let's just go with == zero
+04:30 alright, let's try it again, so we'll list our cars,
+04:32 notice I still have this, so we'll go on service it,
+04:36 I'll say I want to update this, the price is twelve dollars,
+04:39 this is going to be just the check up and the customer thought
+04:44 something was wrong, we couldn't find it, so they give us a three.
+04:47 So, see, did it work, notice there were no errors
+04:50 and now the checkup twelve dollars,
+04:53 also notice the order here is literally the order that we're putting onto that list,
+04:57 so very very good, we'll do one more, I guess I'll service something bad
+05:01
+05:06 car with bad then not found, all right now, sorry about that, we got this working.
+05:12 So we used the push underscore underscore
+05:15 now the other one, remember I told you about pythonic versus non pythonic
+05:19 you could use add to set, right if you want to do sort of a uniqueness thing
+05:25 the service history is because of the date field
+05:28 and I'm not even ensure about the embedded objects
+05:31 but certainly, the date field is always different,
+05:33 so there's no point in this, just do a push,
+05:35 but if you are pushing like tags or customer ids or something like that
+05:38 which could easily be determined if there is a duplicate
+05:41 then you could use that ad to set, but remember in Javascript
+05:44 it was add to set like this, here it's the pythonic variant as it probably should be.
+05:50 Okay, so depending on how you're working with your objects
+05:55 this might make sense or this might make sense,
+05:58 I guess I would tend to say prefer this one, this is safer and faster,
+06:03 so if you have no real reason to choose one or the other,
+06:05 why not safer why not faster.

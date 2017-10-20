@@ -1,0 +1,117 @@
+00:01 Let's look at one final thing, I think it is not beautiful
+00:03 but knowing about it and expecting it is really, really important,
+00:07 not in the beginning, but as you evolve your application,
+00:10 you'll end up with some funky complications.
+00:13 I actually chose the cars that I wanted to update very, very carefully,
+00:17 let me run this again, if I list the cars, notice here in particular state
+00:22 far away from this Ferrari F40  from 2005, there's only one of those, right,
+00:27 notice the id it's d15 and ends in 7e, if I try to list the cars again
+00:31 there's that one but oh, it ends in ae, list the cars again—
+00:36 now it's ending in a1, what is up with that?
+00:43 Just to be clear, the other ones are not changing,
+00:45 like 0f that's always the value, for the first one 0f,
+00:51 there's not a problem with Mongo or anything like that,
+00:54 what is going on here is this car was inserted into the database
+00:59 when we just had a little bit of our class to find here,
+01:02 remember in the beginning, we didn't have this default concept
+01:06 when I first introduced it, and somewhere along the way
+01:09 after we had inserted a few cars, then we added this,
+01:12 let's look at Robomongo.
+01:17 If you flip through here, you'll see almost all the cars have a vi number,
+01:20 vehicle id number, vehicle id number
+01:24 except for that F40 from 2005, right at the top— none.
+01:29 Because when it was inserted, there was no definition for a vi number
+01:34 what the heck was that thing anyway,
+01:36 how was it supposed to know that was not here yet but would eventually exist;
+01:39 so we can do a couple of things,
+01:41 the reason you keep seeing this changing numbers is that there's a default value
+01:45 and basically it gets created every time
+01:50 it comes back from the serialization layer,
+01:53 but it doesn't get set from the database
+01:55 because there is nothing to set it to,
+01:57 so every time it goes back, it reruns that lambda
+01:59 and gets a new value and we're not saving it.
+02:02 So basically what we need to do is we need to upgrade our documents,
+02:04 now sometimes like I said, this doesn't matter,
+02:07 but this one where we kind of counted on a default value to be there,
+02:10 and then it wasn't, well that's unfortunate.
+02:13 So here's something, there's a couple of things we could do,
+02:17 I could simply come up here and write the script in Javascript
+02:20 and apply that, that's one option,
+02:22 another option is let's go here and let's write make sure
+02:25 we just below configure Mongo I'll say update_doc_versions, or something like this
+02:32 define that function here, and what we can do is something like this
+02:37 it's not exactly in a work, but it'll give you the idea what we're after;
+02:41 so we'll say for car in car.objects so basically
+02:44 let's look through everything in this collection and let's save it back,
+02:48 I'm going to run this, and let's list the cars and see if we solved it,
+02:53 I really wish it wasn't at the top but there is, 19, 02
+03:02 what's going on, well, it turns out that unless we somehow forcibly change this object
+03:09 it's like hey, this object is not dirty and we don't need to push it in there.
+03:12
+03:16 And say mark as changed, vi number and let's try it again—
+03:20
+03:26 here we go, so we told it that it changed
+03:30 sadly even though it generates a default value
+03:32 it doesn't look back into the database which I guess would be super expensive,
+03:37 it just says hey someone changed this, right
+03:39 it didn't really trigger that, it came from the databases none and then we set it,
+03:43 so it doesn't know to push that through, so you have to do this little bit of a trick here
+03:46 to say mark has changed, and PyCharm says you're not supposed to do that,
+03:52 let's just tell it hey, don't make me look bad,
+03:55 we have to do this you understand it, right?
+03:57 Very well, okay, so now we've got this save back to the database,
+04:01 we only want to run this the one time, right, we don't want to run at all the time,
+04:05 this is just like a one time upgrade of our documents
+04:08 and if you have a 100 thousand records, probably fine,
+04:11 if you have a billion records this is not how you want to do it,
+04:14 you want to do some kind of in place updater or something better, write the script,
+04:18 so let's run this again, and now we should see our car here,
+04:23 this is the 2005 F40, you know what,
+04:26 it is time for new tires, let's service this puppy.
+04:30 Now we come down here and say I don't know how much new tires are in Ferrari,
+04:33 but let's say they're 2000, new tires,
+04:35 the customer is pretty happy they had the low profile ones they were looking for
+04:39 but they could have been like a certain kind, who knows, whatever.
+04:43 Perfect, that worked, now if we list our cars again,
+04:46 you can see that this one that was basically, we couldn't get to
+04:50 because its vin number kept changing is now fixed
+04:54 and that's because when we reran that we said hey,
+04:58 force of the default of the vin number in there,
+05:01 notice that none of these other ones changed,
+05:03 it did write them back to the database, but it wrote them back
+05:06 in exactly the way they were before, so nothing changed there,
+05:09 I'll just run it one more time, this second one is,
+05:12 I'll just copy this and we can go pull it back in a second,
+05:14 so if we put this back one more time, and then we try to service this car
+05:23 one dollar test service they were pretty thrilled with that
+05:30 here you can see the test service, okay.
+05:37 So the ids are not changing when we do this,
+05:39 it's just if they're not there they are created.
+05:42 Alright, so if that seemed kind of annoying, I'm sure it was annoying,
+05:46 but let's think how this would be in a relational database,
+05:50 what would have happened if this was a say SQLAlchemy or something to that effect,
+05:55 or if this was some other thing, we would have a lot more trouble
+05:58 evolving from one to the next, right,
+06:01 so we wouldn't have the problem of
+06:03 hey here's a car that doesn't have a vin number,
+06:05 because if we didn't actually go and manually changed the database
+06:10 every time we added something here, when we added this
+06:13 we would have had to go back to the database
+06:17 and do like a migration or data transformation SQL query
+06:20 to actually change and add this column, same thing for this,
+06:23 but none of that was required, it was just this one case
+06:26 where we went back in time that we had to do a little bit of work here.
+06:29 So, sometimes you still have these scripts you've got to run,
+06:32 sometimes you still have these changes, you got to do
+06:35 and consider the version history,
+06:37 but it's much much less often than with relational databases
+06:41 where every little change requires a script
+06:43 or it's just oops things are out of sync, bam we can no longer work,
+06:46 but I did want to point that out to you that look,
+06:49 you're going to have to be really careful, some of the time.
+06:52 as these things evolve, how are you going to deal with the fact
+06:54 that in the database there is this thing that has no vehicle id number.
+06:58 If we're using PyMongo, it would have just come up as none
+07:02 or key error or something like that, it would have been a little more obvious
+07:06 but that's just one of the trade-offs you get with these ODMs.

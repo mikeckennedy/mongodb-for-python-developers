@@ -1,0 +1,85 @@
+00:01 Now let's begin by setting up MongoEngine,
+00:03 there's a few start of the app kind of configuration things we need to do
+00:06 in order to use MongoEngine, and then we just use
+00:10 the classes and types throughout the app.
+00:13 So what I want to do is I'm going to create a folder here
+00:16 let's call it NoSQL, so we're going to put
+00:18 a number of MongoEngine related things in here
+00:22 and I don't want to call it MongoEngine because then it will conflict with the name
+00:26 so, lacking creativity I'm calling it this,
+00:29 now there's a couple of things we need to do
+00:30 we need to set up the connections and then we need to define the classes,
+00:34 this first part we're just going to set up the connection.
+00:39 I'll create a module called Mongo setup, ok
+00:43 so down here, let's define a function
+00:49 called global init, we are going to call this function from outside.
+00:53 Now, in real life later as we talk to like sort of the production stuff
+00:57 we're going to want to pass in like the user name, the password, the server name
+01:00 all sorts of stuff that you know maybe in a real app comes from
+01:04 like a config file or the environment in a production server, something like that,
+01:07 but for now we're just going to put this in here.
+01:10 So to get started, we have to import MongoEngine,
+01:14 we don't need PyMongo but MongoEngine we need.
+01:16 And then down here, it's really simple what we need to do,
+01:19 we're going to register a connection,
+01:22 so we're not actually going to open the connection here,
+01:24 this doesn't talk to the database, but it basically says
+01:26 look if you have a class that maps
+01:30 to a particular type or named part of our application
+01:34 use this database connection to do the backend work.
+01:37 So we're going to come down and say Mongoengine.register connection
+01:40 and see it has alias name and then other,
+01:42 and what comes with the other, the .... there
+01:46 is like the connection string information
+01:48 like server name, port name, host name, use ssl, replica set, all that kind of stuff.
+01:52 Okay, so we're going to say, make it really explicit here
+01:56 we're going to say alias, I was going to call this core
+01:59 and I'll you what that means in a minute, so let's call this demo_dealership.
+02:04 Now normally, I would probably just use dealership
+02:07 but I already have that for something else
+02:09 in a previous example, I kind of want to keep it around
+02:12 so we're going to say demo_dealership,
+02:16 there we go, and that's all we're going to need to do.
+02:18 So the idea is here, we could have multiple things like analytics
+02:22 it could be here, and this could be visits or whatever,
+02:26 it could be mapping to another database assuming I spelled analytics correctly ;
+02:31 so in our classes, we can say this class belongs in the core database,
+02:34 whatever that happens to be configured as,
+02:37 this one over here, happens to belong in the analytics database
+02:40 and so I find it's really valuable if you've got like some core data
+02:44 that are required to make your app run,
+02:46 and then like huge amounts of extra analytical type data,
+02:49 that if you lost, it's like oh well I'd rather have that data
+02:52 but if for some reason I want to back up
+02:54 let's say you've got 5 GB of analytic data and a 100 MB of core data,
+02:59 you could run backups on the core server
+03:02 much more frequently than the analytics one
+03:04 and by partitioning them to different databases or even different servers
+03:07 you can do a lot of cool tricks like that.
+03:10 Alright, all that said, we're not doing that,
+03:12 we're just going to have one database that we're calling core
+03:15 so we're going to register this connection
+03:17 and when we get to defining the classes
+03:19 you'll see a place where we refer to the core connection,
+03:21 that's what we've configured here, and it's going to default local host
+03:25 default port everything like that.
+03:27 Again, when we get to the using MongoDB in production,
+03:30 we're going to talk about how to pass all the extra information you need
+03:33 to use this for real, on another server, on another port,
+03:36 with authentication, everything,
+03:39 but for now, this is what we're going to do to set it up.
+03:41 So let's go ahead and get started, using this,
+03:43 let's go down here, and we've got our print header,
+03:46 let's go ahead and do a config Mongo,
+03:50
+03:59 so it's easy enough to import, let's go up here at the top, our module,
+04:03
+04:09 so we'll just call it Mongo setup like this, and I'll just say global init
+04:13
+04:18 do a little pep8 formatting, and we're good to go,
+04:20 and it thinks this is misspelled, no, just short alias for MongoDB.
+04:25 Okay let's just run it to make sure everything is working,
+04:29 alright, there is no real way to test it yet, but in a moment, we will,
+04:32 so far everything worked, we configured our MongoDB connection,
+04:35 next up, it's to actually think about modelling these cars
+04:38 and owners and service, and all those kinds of things.

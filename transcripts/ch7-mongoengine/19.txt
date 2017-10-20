@@ -1,0 +1,71 @@
+00:01 Finally, let's talk about updating documents.
+00:03 It's actually really really easy in Mongo Engine to update document,
+00:06 once you get one back from the database
+00:09 it could be either you've gotten one or you've gotten a whole list
+00:12 and you just happen to be making a change to a particular one of them,
+00:16 it doesn't really matter, so in this case like see in line three,
+00:19 here we're getting a car, we're finding it by id, and we're saying first;
+00:22 first of all, we are verifying that we got the car back;
+00:25 on line five, we're like no, no car, error
+00:28 but let's assume we got the car,
+00:30 we're going to create one of these service records
+00:32 and we're going to append it to the list that is the service history
+00:34 and we want to push that down into the database,
+00:37 we want to save that so all we have to do is call car.save
+00:39 and it will actually push that down.
+00:41 And we saw that there was a possible conflict,
+00:44 a possible raise conditions at the database level
+00:47 if this type of code or changes to other parts of that car
+00:51 that some other operation was being done on the car with the same id
+00:54 it's possible that we could overwrite those changes, maybe, not for sure,
+00:58 depending on how everybody sort of changed different parts of the car,
+01:01 but there could be a problem of saving this here.
+01:04 So you want to careful when you're doing this,
+01:07 but this works totally fine, most of the time, it depends on your situation
+01:11 how actively you're changing, how much contention there is
+01:14 for particular documents, but assuming the contention is low
+01:17 we're going to be able to say get the car,
+01:19 we should make the changes to it and call save,
+01:21 and it'll push that right back to the database.
+01:23 However, if the contention is high, you care about performance
+01:26 or you really just want to take most advantage of MongoDB
+01:30 both for safety and performance, you can use the in place updates.
+01:34 Here you can see we have this owner object that we've introduced
+01:38 and this is like the owner of the car,
+01:41 so maybe we want to record how many times
+01:43 has this owner been to our service shop,
+01:46 owners could own more than one car,
+01:48 and so maybe we want to know like for this particular person
+01:52 they've been in ten times, even though they have a new car
+01:54 that's only been in twice, so we're going to have this number of visits
+01:57 which is an integer on the owner
+01:59 and we can actually use the increment operator right on it like this
+02:03 we can say owner objects id = customer id
+02:06 that's like the primary key, then update one,
+02:08 increment operator double underscore name of the field
+02:10 so incremental_ _number of visits;
+02:12 you can increment it by whatever you want
+02:14 even a negative number which is really a decrement
+02:16 but there's just the increment operator.
+02:18 So basically add that number on the right the one here to the number of visits,
+02:22 so this is cool for the individual operators
+02:25 you can use set, you can use increment, some of those particular operators,
+02:28 but if we're going to work with the set in our case
+02:32 like we just saw we are adding a service record to a car
+02:35 here we could do the same thing,
+02:37 but we could do this in place with the push operator
+02:39 instead of pulling the document back, adding it and saving it again,
+02:42 so we want to create a service record, and this time we're going to say
+02:45 card.objects again the queries the where clause if you will it's id is car id
+02:52 and then we want to say update one and use the push operator
+02:54 so push on to the service history this subdocument.
+02:58 In this case, what we get back is the number of updated items
+03:00 we set up date one so you can bet it's one or a zero
+03:03 and if it's not one something went wrong.
+03:06 So it supports in place updates with the individual value operators
+03:11 like increment and so on, it also supports things like push and add to set
+03:16 for working with sets or arrays in the documents.
+03:20 This is both better in terms of safety because you get this transactional behavior
+03:24 it's also better in terms of performance,
+03:26 because you don't bring the document back
+03:28 make changes and push it in, you just shove the delta down to the server.

@@ -1,0 +1,84 @@
+00:01 Now that we have our engine stored in our car
+00:04 over here as an embedded document,
+00:06 the next thing that we need to work on in our car model
+00:08 is how do we store the service histories,
+00:11 first of all, what kind of data are we going to have in the service history itself.
+00:15 So let's go create a class that represents that
+00:17 and then we'll figure out what to do with it.
+00:20 Again we're going to import MongoEngine, create a class called service history
+00:27 and we're going to postpone discussing what goes in there for a minute.
+00:32 So this is going to have a date, where this has happened
+00:36 either like a create a date or the date when the service was done,
+00:39 so let's create a MongoEngine, a date time field and let's even set the default to now,
+00:45 so we'll go over here and say—
+00:48
+00:53 so we want to set this to be a lambda,
+00:55 actually we don't need to set it to a lambda,
+00:57 we'll just set it to datetime.datetime.now without parenthesis,
+01:01 we don't want to call it, we want to just pass that function,
+01:04 so we're going to call the now function whenever something gets inserted
+01:07 so the date we could even call this like service date if we want,
+01:10 but I'm going to stick with date.
+01:13 The next thing is let's have some kind of description here
+01:15 like just some text, we'll say description,
+01:18 it's going to be a mongoengine.StringField,
+01:22 and it is just going to be like changed the oil, they had a flat tire,
+01:26 a nail was stuck in it, we patched the tire and everything was good,
+01:30 something like that, right super simple;
+01:32 we have a price, this is how much they paid for the service,
+01:35 so it will be a float field, and lastly we care about our customers
+01:38 we're primarily a service shop and sometimes we sell our Fearraries
+01:43 and sometimes we just service them, but we want our customers to be happy
+01:47 and how do you know whether they're happy— we better ask them,
+01:50 so let's ask about their customer rating
+01:55 and this is going to be an int field, so we're going to set this
+01:58 this number is going to go from let's say one to five
+02:03 five being the most satisfied, one being the least satisfied.
+02:07 Great, so now here's the deal, do we want to embed this into the car
+02:12 like we did the engine or do we need to come over here and say something like this
+02:17 car_id = mongoengine.ObjectIdField, like this, right
+02:23 so we're going to have a relationship over to the car
+02:25 or maybe the other way around, on the car, we could have some bunch of ids
+02:31 that represent the service history, or there's a bunch of other options.
+02:33 So remember when we're designing our documents
+02:36 one of the primary questions is in our application
+02:39 do we want that embedded data with us, most of the time
+02:43 and it turns out because almost all of our data work
+02:47 are reason to pull up one of these cars is to actually look at the history of it
+02:51 we are going to decide for that reason, that we do
+02:54 almost always want the service history associated with the car
+02:57 and we don't usually need the service history without the car,
+02:59 we need details about the car like the mileage for example.
+03:02 How are we going to do all that— let that means
+03:06 we probably want to embed the service history as an array into this car;
+03:10 the other thing we have to care about is
+03:13 is that set bounded and is that bound small?
+03:15 You know, a car how much could it possibly get worked on,
+03:18 right let's say it gets worked on once a month every month, just ongoing,
+03:24 very very unlikely, but that would give us at most a hundred of these service histories
+03:28 let's say for some reason that like that upper bound is totally fine with us,
+03:32 it's certainly not crazy unbounded where it's going to escape the 16 MB ram
+03:36 I mean, how much could one these service histories be, 2 K each, not a huge deal.
+03:40 So for all those reasons we are deciding to embed the service history into the car
+03:45 so we want to come over here just like we did with engine
+03:47 I'll say service history, could be plural could be singular, let's go with singular
+03:51 so I'm going to go mongoengine, now it's not an embedded document field
+03:54 because this is not a single document, this is a list,
+03:57 so instead, is we are going to have an embedded document list field,
+04:01 now over here in this one, we said what is the type that is the embedded document
+04:05 here what we can say is what things, what type of things are contained in that list
+04:10 so this will be a service history, we've got to import that, thank you PyCharm,
+04:16 and then we could come over here and we could say
+04:19 the default value is like a new array or something, a new list
+04:22 but in fact, that's what it already is,
+04:24 so the default value for embedded document list is a new list for each entry,
+04:29 so we're just going to go with that, that seems totally good to us.
+04:32 All right, so now we have this mapped, let's actually go back to our app
+04:36 and add the ability to create and insert some histories.
+04:40 One thing that we almost forgot, since we decided
+04:43 we're going to embed this service history,
+04:46 that tells us how we need to treat the base class for the service history.
+04:49 So recall for the embedded items,
+04:52 this is going to be a mongoengine.EmbeddedDocument,
+04:55 if it was going to be standalone and in its own collection it would just be a document.
+04:59 There we go, now our service history is ready to go.

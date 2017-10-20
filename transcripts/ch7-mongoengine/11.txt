@@ -1,0 +1,83 @@
+00:01 Okay, so we can list the cars, we can now go and find the individual cars
+00:04 using this query and a little bit of error handling here.
+00:08 Now, let's go and actually add the service record
+00:10 so we are going to create a service = service record
+00:16 I think this is what we called it, no, service history, sorry,
+00:20
+00:24 we're going to import that, so we're going to allocate one of these
+00:27 and we just need to set a few properties, the price is
+00:29 let's just straight up input this— what is the price right,
+00:35 maybe we would look up at the type of service
+00:37 and it would have an associated price
+00:39 but this is just a demo, right,  just trying to get it to work;
+00:41 so this is the float, some kind of currency thing, I want to say service.date,
+00:48 we don't need to set the date, this should happen automatically,
+00:50 description is going to be input what type of service is this,
+00:56 and then the next one we want is going to be the customer rating,
+01:02 and this is an integer, how happy is our customer, I want to put a one to five,
+01:10 something like this to remind them that that's the scale they get to work with.
+01:14 Okay, we're just assuming this is parsable by float,
+01:17 this can be an integer right, we're not dealing with bad input.
+01:21 So that should work, let's just double check the service history
+01:24 these three we're setting, this one has a default, perfect.
+01:27 Ok, so finally all we have to do is we don't insert the service history directly
+01:32 because the service history is not a top level object
+01:36 it doesn't belong in its own collection,
+01:39 instead what we do is we go to the car and we say service history
+01:42 it's a list, so we're going to put it on it like this, like so,
+01:45 the ones we've changed the car we need to push that to the database like this,
+01:49 so that's all we got to do, we're just going to put the service history here and insert,
+01:54 let's go and run this and see what we get,
+01:57 alright, once again we're going to list the cars
+01:59 and notice we're going to work on the one that is really obvious
+02:01 this 2005 Testarossa, okay so let's service it,
+02:03 here's our vin number, excellent we're going to service it,
+02:06 what is the price of the service— this is expensive, 15 thousand,
+02:10 this is going to be a new engine, they blew the engine
+02:13 a customer was very happy, normally, new engine is 20 thousand
+02:17 and so we got him a good deal— bam, just like that, we've inserted it,
+02:21 let's try to list it I might still have that format wrong;
+02:24 no I got it sort of right, so we definitely got that to work there,
+02:29 let me just change that format like I said,
+02:35 there we go, actually let's just drop the currency, I'm sorry drop the decimal points,
+02:43 so here 15 thousand dollars, for our new engine,
+02:46 look at that, it's in there, let's go and actually do another service on that same car
+02:50 the price of this one is a 102 dollars, this is going to be a flat tire,
+02:55 and the customer was a little grumpy, felt like we took too long to fix the car
+03:00 but they still like us, they give us a three;
+03:03 so now if we list it you can see now there's two service records on the Testarossa,
+03:07 pretty cool, right, that's super easy, and we don't need to do a join to get this information,
+03:11 it comes built in even if we're doing horizontal scaling across ten shards it's all there,
+03:17 let's go look at Robomongo,
+03:21 it's a little small, what do you think, it does that sometimes, I don't know way,
+03:25 okay, here is our demo dealership, let's view the documents
+03:28 and we can say vi number, now of course we don't really need to do this,
+03:33 but we can, just to show you, we have tons of data,
+03:37 we look down here and now check this out, is that cool,
+03:39 so we've got our flat level things, here's the vin we just did a search by
+03:43 we have this embedded engine we already saw,
+03:45 we have our service history and moreover our service history is setting the date
+03:48 right, so right now it's like eight o'clock 04 seconds and 56 seconds right,
+03:53 the price of this is beautiful, just beautiful,
+03:57 so now if we do a query against this,
+03:59 we go and say show me the vehicle with this id number,
+04:02 we're going to automatically get the details about the engine,
+04:04 we're going to automatically get the details about their service history,
+04:07 without going back to the database or doing lazy loading,
+04:10 or joins or any of those kinds of things, because it's a sweet document database.
+04:15 Notice, also that some of these over here, some of these have a service history,
+04:22 some of them don't even have engine,
+04:24 this one doesn't have an engine or a service history,
+04:26 and that's probably ok, right, the schema is flexible in MongoDB,
+04:29 the schema is not flexible in our application, it's a class,
+04:33 it is what the shape of that class is, period,
+04:35 but in the sort of evolution of this as the data grows,
+04:39 you can think of this as like an older version of this record
+04:42 and here is a much newer one, it has an engine and a service history, right,
+04:46 but if we ask questions about show me the cars
+04:49 with the service history greater than this, you know, five or greater,
+04:52 these are not going to come up, they will just not appear in those results.
+04:56 So it's probably okay if we really need to upgrade them,
+04:59 to make sure the shape is exactly matching
+05:02 we could just run a script, the script would be a Javascript migrate script
+05:04 rather than a sequel dvl type migrate script, but a script nonetheless.

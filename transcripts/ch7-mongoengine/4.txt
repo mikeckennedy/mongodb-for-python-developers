@@ -1,0 +1,61 @@
+00:01 Here we are in the github repository for the course,
+00:03 now notice I put the PyMongo play around stuff that we did
+00:06 into a folder called dir 5 PyMongo,
+00:09 now, we're over into our MongoEngine section,
+00:12 and there's actually two things here,
+00:14 there's a service central starter and then there's a server central;
+00:18 so a lot of times people like to follow along with the code examples
+00:20 which I totally encourage, and this one is the way,
+00:23 it when we saved in the repository exactly the way we're about to get started.
+00:27 This one we're going to evolve throughout this demo
+00:30 until it becomes sort of the final version,
+00:32 so I want to open this in PyCharm, and I want to use a virtual environment to do that,
+00:37 so there's a couple of cool tricks I could do to make a life as easy as possible,
+00:40 so here I am in that service central place, and if I do an ls
+00:47 even pin files you see there's nothing other than
+00:49 this sort of starter Python ting we'll talk about in a minute.
+00:51 So the first thing I want to do is I want to actually set up a virtual environment
+00:55 with Python 3s venv, I'll do a dash copies , and I'm going to call .env,
+01:00 and the name .env here is something that PyCharm will look for,
+01:03 so if I open this in PyCharm, after doing this
+01:06 it will actually automatically use this virtual environment,
+01:09 so that's cool, that'll save me a few clicks.
+01:12 Let's go over here and throw this in PyCharm,
+01:16 now it's going to take it a second, it's sort of looking
+01:19 through that virtual directory, let me add the source control.
+01:26
+01:28 So here's a really simple starter application that we're going to talk about
+01:31 but first let's make sure that we have PyMongo installed.
+01:34 So let's just do a quick list, and notice
+01:37 we're already automatically using our virtual environment,
+01:41 that's because it's top level the project, and it's named .env
+01:45 so PyCharm said cool, we'll use that, I didn't have to do anything
+01:48 that's why I did that first thing in the terminal before open in here.
+01:50 So notice we have basically nothing,
+01:53 probably worthwhile to upgrade setup tools,
+01:59 some of the things that depends on C completion sometimes a little nicer,
+02:04 if I have that set up, ok so now we can pip install MongoEngine
+02:08 and you'll see that also it's going to install PyMongo,
+02:11 depends on 2.7.1. or greater, and it's thinking about PyMongo,
+02:15 thinking about MongoEngine, and then we'll be done.
+02:19 Perfect, it also uses six for Python 2, Python 3 compatibility.
+02:24 All right, so now we have our system all set up, we have PyMongo installed
+02:29 and here let me just show you this super simple little app,
+02:32 there's absolutely no MongoDB stuff going on,
+02:34 so we have this main that is going to print this header,
+02:37 very cool, you can see we're going to call our app service central
+02:41 and it's going to do this user loop, and the user loop just says
+02:46 here's some actions that you can do, you can add a car,
+02:48 you can list cars and if you look at implementation,
+02:52 all of these are entirely empty,
+02:54 here is where the MongoDB stuff is going to be happening,
+02:56 so let's go and run this, notice there's no run configuration over here
+02:59 no green button to run, so I can right click on this and say run
+03:03 and it runs and actually let's make this little higher,
+03:07 notice that it's running with the Python out of our virtual environment, Python 3,
+03:11 okay, and now here are little header and then here's our user loop,
+03:15 it says you can add a car, cool to do add a car,
+03:17 you can list the cars, you can find a car, you perform service,
+03:21 right so we just basically have the structure in place
+03:23 and we're going to use this for the rest of this demo,
+03:27 and like I said, we're going to be building on this concept of what we create here.
