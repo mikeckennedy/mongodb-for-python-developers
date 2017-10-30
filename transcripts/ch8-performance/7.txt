@@ -1,0 +1,298 @@
+00:01 Now that you've seen how to create indexes in the shell in Javascript effectively,
+00:04 let's go and see how to do this in MongoEngine.
+00:07 I think it's preferable to do this in MongoEngine because that means
+00:11 simply pushing your code into production will ensure
+00:14 that the database has all the right indexes set up for to operate correctly.
+00:19 You theoretically could end up with too many,
+00:21 if you have one in code and then you take it out
+00:23 but you can always manage that from the shell,
+00:26 this way at least the indexes that are required will be there.
+00:29 I dropped all the indexes again, let's go back through our questions here
+00:33 and see how we're doing.
+00:36 It says how many owners, how many cars,
+00:38 this is just based on the natural sort however it's in the database
+00:41 there's really nothing to do here,
+00:44 but this one, find the 10 thousandth car by owner, let's look at that;
+00:48 that is going to basically be this name, we'll use test,
+00:55 it doesn't really matter what we put here
+00:57 if we put explain, this should come back as column scan or something like that,
+01:01 yeah, no indexes, okay, so how long did it take to answer that question?
+01:06 Find the 10 thousandth owner by name,
+01:12 it didn't say by name, I'll go and add by name,
+01:16 well that took 300 milliseconds, well that seems bad
+01:21 and look we're actually using sorting,
+01:24 we're actually using paging skip and limit those types of things here,
+01:27 but in order for that to mean anything, we have to sort it,
+01:31 it's really the sort that we're running into.
+01:34 Maybe I should change this, like so,
+01:38 sort like so, we could just put one, I guess it's the way we're sorting it,
+01:47 so here you can see down there the sort pattern name is one
+01:49 and guess what, we're still doing column scan.
+01:53 Any time you want to do a filter by, a greater than, an equality,
+01:56 or you want to do a sort, you need an index.
+01:59 Let's go over to the owner here, this is the owner class
+02:04 and let's add the ability to sort it by name or
+02:08 equivalently also do a filter like find exactly by name,
+02:12 so we're going to come down here
+02:14 we're going to add another thing to this meta section,
+02:16 and we're going to add indexes,
+02:20 and indexes are a list of indexes,
+02:25 now this is going to be simple strings
+02:28 or they can be complex subdictionaries,
+02:31 for composite indexes or uniqueness constraints, things like that,
+02:34 but for name all we need is name.
+02:38 Let's run this, first of all, let's go over here
+02:41 and notice, if I go to owners and refresh, no name,
+02:46 let's run this code, find the 10 thousandth owner by name,
+02:52 19 milliseconds, that's pretty good,
+02:55 let me run it one more time,
+02:57 15 yeah okay, so that seems pretty stable,
+03:00 and let's go over here and do a refresh, hey look there's one by name;
+03:03 we can see it went from what was that,
+03:08 something like 300 milliseconds to 15 milliseconds, so that's good.
+03:11 How many cars are owned by the 10 thousandth owner,
+03:15 so that's 3 milliseconds, but let's go ahead and have a look at this question anyway.
+03:19 How many cars are owned by the 10 thousandth owner,
+03:22 so here's this function right here that we're calling
+03:25 it doesn't quite fit into a lambda expression, so we put it up here
+03:28 so we want to go and find the owner by id,
+03:30 that should be indexed right, that should be indexed right there
+03:34 because it's the id, the id always says an index,
+03:36 and now we are saying the id is in this set,
+03:40 so we're doing two queries, but both of them are hitting the id thing,
+03:44 so those should both be indexed and 3 milliseconds,
+03:47 well that really seems to indicate that that's the case.
+03:50 How many owners own the 10 thousandth car, that is right here.
+03:54 So we'll go find the car, ask how many owners own it.
+03:59 Now this one is interesting, so remember when we're doing this
+04:02 basically this in query, let's do a quick print of car id here,
+04:11 so if we go back over to this, we say let's go over to the owners
+04:17 save your documents, so this is going to be car ids,
+04:21 it's going to have an object id of that,
+04:26 all right, so run this, zero records, apparently this person owns nothing,
+04:33 but notice it's taking 77 milliseconds, we could do our explain again here
+04:37 and column scan, yet again, not the most amazing.
+04:43 So what we want is we want to have an index on car ids, right
+04:48 because column scan, not good,
+04:50 I think it's not really telling us in our store example
+04:53 but for the find it definitely should be.
+04:55 So we can come back to our owner over here,
+04:58 let's add also like an index on car_ids,
+05:02 If we'd run this once again, just the act of restarting it
+05:05 should regenerate the database, how long did it take over here—
+05:09 a little late now isn't it, because I did the explain,
+05:13 I can look at this one, how many cars,
+05:16 how many owners does the 10 thousandth car have,
+05:19 66 milliseconds, if we look at it now—
+05:22 how many owners own the 10 thousandth car, 1.9 milliseconds,
+05:29 so 33 times faster by adding that index, excellent,
+05:34 find the 50 thousandth owner by name, that's already done.
+05:38
+05:40 Alright we already have an index on owners name so that goes nice and quick,
+05:45 and how is this doing, one millisecond perfect,
+05:48 this one is super bad, the cars with expensive service 712 milliseconds,
+05:52 alright so here, we're looking at service history
+05:56 and then we're navigating that .relationship, that hierarchy,
+06:00 with the double underscore, going to the price,
+06:02 greater than, less than, equal it doesn't matter,
+06:05 we're basically working with this value here, this subdocument.
+06:08 Let's go over to the car and make that work,
+06:11 now the car doesn't yet have any indexes but it will in a second,
+06:14 so what we want to do is represent that here
+06:17 and in the the raw way of discussing this with MongoDB
+06:21 we use . (dot) not double underscore, so . represents the hierarchy here.
+06:25 Let's run that again, notice expensive service, 712,
+06:30 cars with expensive service, instead of 712 we have 2.4 milliseconds,
+06:39 now notice that first time I ran it there is was a pause,
+06:42 the second time it was like immediate,
+06:45 and that's because it basically was recreating that index
+06:47 and that pause time was how long that index took to create.
+06:51 So here we have cars with expensive service,
+06:53 now we're getting into something more interesting, look at this one with spark plugs,
+06:58 we're querying on two things, we're querying on the history and the service,
+07:04 let's actually put this over in the shell so we can look at it.
+07:07
+07:19 I've got to convert this over, do the dots there,
+07:23 this is going to be the dollar greater operator, colon, like so,
+07:30 all right, so we're comparing that service history.price
+07:35 and this one, again because you can't put dots in normal json,
+07:39 do the dot here and quotes, and this one is just spark plugs,
+07:46 alright, let's run this, okay 22 milliseconds,
+07:52 how long is it taking over here— 20 milliseconds,
+07:56 so that's actually pretty good and the reason I think it's pretty good is
+07:59 we already have an index on this half
+08:02 and so it has to just basically sort the result, let's find out.
+08:05
+08:11 Winning plan, index on this one, yes, exactly
+08:14 so this one is just going to be crank across there
+08:18 but we're going to use at least this index here, this by price
+08:22 so that gets part of the query there.
+08:25 Now maybe we want to be able to do a query just based on the description
+08:30 show me all the spark plugs, well that's a column scan,
+08:33 so let's go back and add over here one for the description.
+08:40 Now how do I know what goes in this part,
+08:44 see I have a service history here, if we actually look at the service record object
+08:49 it has a price and description, right
+08:52 so we know that that results in this hierarchy of
+08:54 service history.price, service history.description.
+08:57 If we'd run this again, it will regenerate those and let's go over here
+09:01 and run this, and let's see, now we're doing index scan on price,
+09:09 what else do we got, rejected plans, okay so we got this and query
+09:18 and it looks like we're still using the— yes, oh my goodness,
+09:24 how about that for a mistake, comma, so what did that do
+09:28 that created, in Python you can wrap these lines and that just created this,
+09:33 and obviously, that's not what we want, that comma is super important there.
+09:38 So let me go over here and drop this nonsense thing,
+09:41 try this again, I can see it's building index right now,
+09:47 okay, once again we can explain this, okay great,
+09:51 so now we're using price and actually we use the description this time
+09:58 and you can see the rejected plan is the one that would have used the price,
+10:04 so we're using description, not price,
+10:06 and how long does it take to run that query— 7.9 milliseconds, that's better
+10:13 but what would be even better still is if we could do
+10:16 the description and price as a single thing. How do we do that?
+10:22 This gets to be a little trickier, if we look at the query we're running,
+10:25 we're first asking for the price and then the description,
+10:30 so we can actually create a composite index here as well,
+10:35 and we do that by putting a little dictionary, saying fields
+10:39 and putting a list of the names of the fields
+10:44 and you can bet those go like this,
+10:48 now this turns out to be really important, the order that you put them here
+10:52 price and the description versus description price, for sorting,
+10:56 not so much for matching, run it one more time,
+11:00 alright, expensive cars with spark plugs,
+11:04
+11:07 here we go, look at that, less than one millisecond,
+11:10 so we added one index, it took it from like 66 milliseconds down to 15,
+11:16 and then, we added the description one, it turns out that was a better index
+11:21 and it took it from 15 to 9, we added the composite index,
+11:24 and we took it from 9 to half a millisecond, a 0.6 milliseconds, that is really cool.
+11:31 Notice over here, this got faster, let's go back and look at what that is.
+11:36 Load cars, so this is the one we are optimizing
+11:40 and what are we doing here— let me wrap this so you can see,
+11:43 we're doing a count, okay, we're doing a count
+11:46 and so it's basically having the database do all the work
+11:48 but there's zero serialization.
+11:52 Now in this one, we're actually calling list
+11:55 so we're deserializing, we're actually pulling all of those records back
+11:59 and let's just go over here and see how many there are,
+12:03
+12:08 well that's not super interesting, to have just one, is it,
+12:12 alright, that's good, but let's actually make this just this,
+12:17
+12:23 let's drop this spark plug thing and just see
+12:26 how many cars there are with this,
+12:30 okay there we go, now we have some data to work with,
+12:33 65 thousand cars had 15 thousand dollar service or higher,
+12:36 after all, this is a Ferrari dealership, right.
+12:39 Now, it turns out it's a really bad idea to pull back that many cars,
+12:43 let me stop this, let's limit that to just a thousand here as well.
+12:52
+12:54 Okay, so we're pulling back thousand cars because we're limited to this
+13:00 and we're pulling back a thousand cars here.
+13:03 But notice, this car name and id versus the entire car
+13:08 so let's go over here cars with expensive service, car name and id,
+13:13 so notice the time, so to pull back and serialize those thousand records
+13:17 took actually a while, so it took one basically a second,
+13:21 and if we don't ask for all the other pieces,
+13:25 if we just say give me just the make, the model and the id,
+13:29 here we're using the only keywords, it says don't pull back the other things
+13:34 just give me the these three fields when you create them,
+13:37 it makes it basically ten times faster,
+13:40 let's turn this down to a 100 and see, maybe get a little more realistic set of data.
+13:44 Okay, there we go, a 100 milliseconds down to 14 milliseconds,
+13:49 so it turns out that the deserialization step in MongoEngine is a little bit expensive
+13:55 so if you like blast a million cars into that list, it's going to take a little bit.
+14:01 If we can express like I only want to pull back these items,
+14:05 than it turns out to be quite a bit faster,
+14:10 in this case not quite faster, but definitely faster.
+14:15 Let's round this out here and finish this up.
+14:17 Here we're asking for the highly rated, highly priced cars,
+14:20 we're asking like hey for all the people that come and spend a lot of money
+14:26 how did they feel about it?
+14:29 And then also what cars had a low price and also a low rating,
+14:33 so maybe we could have just somehow changed our service
+14:37 for these sort of cheaper like oil change type people.
+14:39 It turns out that that one is quite fast,
+14:42 this one we could do some work and fixing one will really fix the other
+14:46 so we have this customer rating thing, we probably want to have an index on,
+14:52 and we already have one on the price,
+14:54 so I think that that's why it's pretty quick actually.
+14:57 Go over here, and we don't yet have one on the price, on the rating rather,
+15:03 so we can do that and see if things get better,
+15:07 not too much, it didn't really make too much of a difference,
+15:12 it's probably better to use the price than it is the rating,
+15:16 because we're kind of doing that together, so we're also going to go down here
+15:19 and have the price and customer rating,
+15:21 one of these composite indexes, once again,
+15:24 and maybe if we change price one more time,
+15:29 rating and price— it doesn't seem like we're getting much better,
+15:36 so down here this is about as fast as we can get, 16 milliseconds
+15:40 and this is less than one millisecond, so that's really good.
+15:44 The final thing is, we are looking for high mileage cars,
+15:47 so let's go down here and say find where the mileage of the car
+15:51 is greater than 140 thousand miles, do we have an index on that,
+15:55 you can bet the answer is no.
+15:58 Now we could go to the shell and see that, but no we don't have one,
+16:01 so let's go up here and add one more,
+16:04 and this is in fact the only index we have here in this thing
+16:07 that is on like just plain field, not one of these nested ones like this;
+16:13 so maybe we also want to be able to select by year,
+16:16 so we could have one for year as well. I'm going to add those in.
+16:21 Now this high mileage car goes from a hundred and something milliseconds
+16:26 down to six, maybe one more time just to make sure,
+16:28 yep, 5, 6, seems pretty stable around there.
+16:32 So we've gone and we've added these indexes
+16:34 to our models, our MongoEngine documents by adding indexes
+16:40 and we can have flat ones like this, or we have these here,
+16:48 and we also can have composite ones or richer things,
+16:52 if we create a little dictionary and we have fields and things like that.
+16:57 Similarly an owner, we didn't have as many things we were after
+17:00 but we did want to find them by their name and by car id,
+17:03 so we had those two indexes,
+17:05 honestly this is just a simpler document than the cars.
+17:08 So with these things added here, we can run this one more time
+17:11 and see how we're doing that code all runs really quick,
+17:14 if we kind of scan through here, there's nothing that stands out like super bad,
+17:18 5 milliseconds, half, 18, 6, half, 1, 3, 1, let's say,
+17:26 this one, I really wish we could do better,
+17:29 it just turns out there is like so many records there
+17:32 that if we run that here you can see that the whole thing runs in one millisecond,
+17:38 super, super fast, we can't make it any faster than that.
+17:41 The slowness is basically the allocation,
+17:45 assignment, verification of 100 car objects.
+17:48 I'd like to see a little better serialization time out of MongoEngine,
+17:53 if you have some part of your code that has to load tons of these things
+17:56 and it's super performance critical, you could drop down to PyMongo,
+18:00 talk to it directly and probably in the case where you're doing that
+18:05 you don't need to pull back many, many objects,
+18:07 but also you can see that if we limit what we ask for down here,
+18:12 that goes back to 14 miliseconds which is really great,
+18:15 here we're looking at a lot of events, this is like 16 thousand
+18:21 or no, 65 thousand, that's quite a bit, this one is really fast,
+18:25 this one is really fast, so I feel like from an index perspective
+18:28 we've done quite a good job, how do we know we're done?
+18:32 I guess this is the final question, this has been a bit of a long—
+18:35 how do we know we're done with this performance bit?
+18:39 We know we're done when all of these numbers come by
+18:43 and they're all within reason of what we're willing to take.
+18:47 Here I have set this up as these are the explicit queries
+18:51 we're going to ask and then we'll just time them,
+18:54 like your real application does not work that way.
+18:56 How do you know what questions is your applications asking and how long it's taking.
+19:01 So you want to set up profiling, so you can come over here
+19:05 and definitely google how to do profiling in MongoDB,
+19:08 so we can came over here and let's just say, db set profiling level
+19:13 and you can use this function to say I'm looking for slow queries
+19:18 and to me slow means 10 milliseconds, 20 milliseconds something like that,
+19:23 it will generate a table called system.profile and you can just go look in there
+19:29 and see what queries are slow, clear it out,
+19:33 run your app, see what shows up in there
+19:35 add a bunch of indexes, make them fast, clear that table,
+19:38 then turn around and run your app again,
+19:43 and just until stuff stops showing up in there,
+19:46 you can basically find the slowest one, make it faster, clear out the profile
+19:51 and just iterate on that process, and that will effectively like gather up
+19:55 all of the meaningful queries that your app is going to do,
+19:59 and then you can go through the same process here
+20:01 to figure out what indexes you need to create.

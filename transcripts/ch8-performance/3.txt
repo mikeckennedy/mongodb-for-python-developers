@@ -1,0 +1,30 @@
+00:01 Let's return to our dealership.
+00:03 This was the example we started back when we began the MongoEngine section,
+00:05 and it turns out the dealership is super popular now.
+00:08 Before we just had a couple of cars, now we have a quarter million cars
+00:11 in our database, we have a 100 thousand owners,
+00:15 I don't believe we talked about owners before in terms of what that looks like in our code,
+00:19 but I've added this concept of owners
+00:21 so we can ask interesting like cross-document related type questions,
+00:25 and we'll look at the details of them, when we get to the code, in just a moment.
+00:28 Each one of these owners, these 100 thousand owners,
+00:31 owns an average of 2.5 cars, this is kind of like collectors, right,
+00:36 not a standard person that drives to work or whatever, these are Ferraries,
+00:39 and each car has on average about 5 service records
+00:43 and that could be like a new engine,
+00:45 change the tires, change the spark plug, whatever;
+00:48 in particular, there's about 1.25 million service histories,
+00:51 so when we ask questions about like those nested documents
+00:54 that have to do with service histories like customer ratings and price,
+00:57 you can see that that is really quite impressive I think,
+01:01 we got the quarter million cars and within those quarter million documents
+01:04 interspersed are 1.25 million service histories.
+01:07 So our job is to make a lot of the typical things that we might ask this database,
+01:11 the queries will run to do so in a couple of milliseconds, not in seconds,
+01:17 so that's going to be what the basic goal of this whole section is.
+01:23 Now, the other things you might want to know is
+01:25 we've got about 180 megs of data
+01:28 and on average each document of the various document kinds,
+01:30 all average together is about 500 bytes per document.
+01:33 So let's return to or example slightly transformed
+01:37 and see how it's performing now and let's make it fast.

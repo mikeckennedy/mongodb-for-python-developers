@@ -1,0 +1,92 @@
+00:01 One of the most important things you can do for performance
+00:04 in your database and these document databases
+00:06 is think about your document design,
+00:08 should you embed stuff, should you not, what embeds where,
+00:11 do you embed just ids, do you embed the whole thing;
+00:14 all of these are really important questions
+00:16 and it takes a little bit of experience to know what the right thing to do is.
+00:20 It also really depends on your application's use case,
+00:24 so something that's really obviously a thing we should consider
+00:28 is this service history thing, this adds the most weight to these car objects,
+00:34 so we've got this embedded document list field
+00:38 so how often do we need these histories?
+00:44 How many histories might a car have?
+00:46 Should those maybe be in a separate collection
+00:49 where it has all the stuff that service record, the class has,
+00:52 plus car id, or something to that effect?
+00:56 So this is a really important question,
+00:59 and it really depends on how we're using this car object, this car document
+01:05 if almost all the time we want to work with the service history,
+01:07 it's probably good to go in and put it here,
+01:10 unless these can be really large or something to that effect,
+01:13 but if you don't need them often, you'll consider putting them in their own collection,
+01:16 there's just a tension between complexity and separation,
+01:20 safety and separation, speed of having them in separate
+01:24 so you don't pull them back all the time;
+01:26 you can also consider using the only keyword or only operator in MongoEngine
+01:30 to say if I don't need it, exclude the service history,
+01:34 it adds a little bit of complexity because you often know,
+01:38 hey is this the car that came with service history
+01:40 or is it a car where that was excluded, things like that,
+01:42 but you could use performance profiling and tuning
+01:45 to figure out where you might use only.
+01:48 Let's look at one more thing around document design.
+01:50 You want to consider the size of the document,
+01:52 remember MongoDB has a limit on how large these documents can be,
+01:56 that's 16 MB per record, that doesn't mean you should think
+02:01 oh it's only 10 MB so everything is fine for my document design,
+02:05 that might be terrible this is like a hard upper bound,
+02:07 like the database stops working after it hits 16 MB,
+02:11 so you really want to think about what is the right size,
+02:14 so let's look at a couple examples:
+02:16 we can go to any collection and say .stats
+02:18 and it will talk about the size of the documents and things like that,
+02:21 so here we ran db.cars.stats in MongoEngine,
+02:25 and we see that the average object size is about 700 bytes,
+02:29 there is information about how many there are, and all that kind of stuff,
+02:33 but really the most interesting thing for this discussion is
+02:35 what is the average object size, 700 bytes
+02:38 that seems like a pretty good size to me, it's not huge by any means,
+02:42 and this is the cars that contain those service histories,
+02:45 so this is probably fine for what we're doing.
+02:48 Let me give you a more realistic example.
+02:50 Let's think about the Talk Python Training website,
+02:52 and the courses and chapters, we talked about them before,
+02:56 so here if we run that same thing, db.courses.stats
+03:02 you can see that the average object size is 900 bytes for a course,
+03:07 and remember the course has the description that shows on the page
+03:10 and that's probably most the size, it has a few other things as well,
+03:13 like student testimonials and whatnot,
+03:16 but basically it's the description and a few hyperlinks.
+03:19 So I think this is again a totally good object, average object size.
+03:23 Now one of the considerations was I could have taken the chapters
+03:27 which themselves contain all the lectures,
+03:29 and embedded those within the course,
+03:32 would that have been a good idea—
+03:34 I think I might have even had it created that way
+03:36 in the very beginning, and it was a lot slower than I was hoping for,
+03:38 so I redesigned the documents.
+03:40 If we run this on this chapter section, you can see
+03:43 that the average object size is 2.3 KB,
+03:46 this is starting to get a little bit big, on its own it's fine,
+03:50 but think about the fact that a course on average has like 10 to 20 chapters,
+03:55 so if I embedded the chapters in the course
+03:58 instead of putting them to a separate document like I do,
+04:02 this is how it actually runs at the time of the recording,
+04:04 then it would be something like these courses would be
+04:07 24 up to maybe 50 KB of data per entry,
+04:12 think about that you go to like the courses page
+04:15 and it shows you a big list of all the courses
+04:17 and there might be 10 or later 20 courses,
+04:20 we're pulling back and deserializing like megabytes of data
+04:24 to render a really, really common page, that is probably not ok,
+04:28 so this is why I did not embed the chapters and lectures inside the course,
+04:34 I just said okay, this is the breaking point
+04:37 I looked at the objects' size I looked at where the performance was
+04:41 and I said you know what, really it's not that common
+04:44 that we actually want more than one chapter at a time,
+04:46 but it is common we want lectures, so it's probably the right partitioning,
+04:51 but you build it one way, you try it, it doesn't work,
+04:53 you just redesign your class structure, recreate the database and try it again,
+04:57 but you do want to think about the average object size
+05:00 and you can do it super easy with db.colection name.stats.

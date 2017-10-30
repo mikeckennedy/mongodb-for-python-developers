@@ -1,0 +1,39 @@
+00:01 Now if we're using MongoEngine,
+00:03 we don't have to go to the shell and manually type all the indexes
+00:05 we basically go to each individual top level document
+00:08 so all the things that derive from mongoengine.document
+00:11 not the embedded documents, and we go to the meta section
+00:14 and we add an indexes, basically array
+00:17 so here we want to have, you can see the blue stuff that's highlighted
+00:20 we want an index on make, we want an index on service history
+00:23 and within service history, remember these are service records showing on the bottom
+00:27 we went an index the description and price.
+00:30 So for index that we put 'make', that's straightforward
+00:34 and then we have service_history.customer_rating
+00:37 so service history is the field name
+00:39 and then customer rating is the field name of service record
+00:42 and for some reason I don't have it blue, it's that last one down there
+00:45 but we also want this composite key
+00:47 so service_history.price and service_history.description
+00:50 we want to be able to find where both of those match
+00:53 and we're going to do that up by having
+00:56 a more complicated entry in the indexes bit here
+00:58 this is going to be a dictionary where the fields are set
+01:00 to be this array of strings and not just the flat string itself.
+01:04 So once we add this, when we run our code,
+01:07 it's actually going to first time we work with that document
+01:10 ensure that all the indexes are there,
+01:12 and remember that like hung up our application for just a little bit,
+01:16 but the real benefit here is our app is always going to be in sync,
+01:21 we don't have to go oh oops, I forgot to add the index,
+01:24 that one particular index to say the staging server,
+01:27 or when I push to production are there new indexes,
+01:30 I got to go out on the database,
+01:32 now you don't worry about that, you just push your code,
+01:34 restart your web app or whatever kind of app it is,
+01:36 and then as part of interacting with it,
+01:38 it will make sure that those indexes are there.
+01:41 If you don't want that pause to be there,
+01:43 just go and create the indexes you know the thing is going to create
+01:48 put them on the production server and then push the new version of code
+01:50 and it will just go great, these indexes exist.

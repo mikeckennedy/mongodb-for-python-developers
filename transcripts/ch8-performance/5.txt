@@ -1,0 +1,104 @@
+00:01 Let's explore this slightly updated version of our code.
+00:04 Here we are in the github repository,
+00:07 and I am in the source folder and I've added an 08_perf section,
+00:10 and we have the starter_big_dealership and we have the big_dealership
+00:15 it even has instructions here to tell you basically how to restore
+00:17 that database we did just in the previous video.
+00:20 This one is going to be a snapshot of how this chapter starts,
+00:24 it's what we're starting from now and will remain that way;
+00:27 here we're going to take basically a copy of that one
+00:29 and evolve it into the fast high performance version,
+00:33 so let's go over here and see what we've got.
+00:35 Now, we have a few things that are slightly different,
+00:38 the car is basically unchanged from before
+00:41 although I added a little comment about how do we get to the owners.
+00:45 The one thing that is new here, in terms of the model is this owner idea,
+00:50 so cars can now have an owner
+00:52 and how do we know which cars are owned by this owner
+00:57 is we have a list of object ids, those object ids are the object ids of the cars
+01:02 so we're going to push the ids of the cars that are owned here
+01:06 I guess we could run it as a many to many or one to many relationship,
+01:10 just depending on how we treat the owner, but theoretically,
+01:13 we can have owners where there is a single car that is multiple owners
+01:17 and there are owners that own multiple cars, and we can manage it this way,
+01:21 you almost never see like a car to owner intermediate table,
+01:25 so you're almost always going to have something like
+01:27 those ids are either embedded in the owner or in the car,
+01:32 or under rare circumstances both.
+01:35 So here's how we refer back to the cars,
+01:38 then we have a few basic things like the name,
+01:41 when was this owner created, how many times have they visited and things like that.
+01:45 We want to call it owners in the database and it's just this core collection,
+01:49 so other than that, there's not a whole lot going on here,
+01:51 let's look over here, we now have these services,
+01:54 I've taken all the car queries and moved them down here
+01:57 do you want to create a car, you call this function,
+01:59 do you want to record a customer visit, here we can go to the owner
+02:03 and we can use this increment operator
+02:06 to increment the number of visits in place.
+02:09 Find cars by make, find owner by name and so on.
+02:16 Number of cars with bad service, a lot of this stuff is what we wrote previously;
+02:20 there was the program thing that we ran over here that was interactive
+02:23 and I've replaced that with a few things,
+02:25 one is this db stats and you can run this and it will tell you
+02:28 like how many cars are there, how many owners are there,
+02:31 what's the average number of histories,
+02:33 this is basically those stats that I presented to you before,
+02:36 this takes a while to run on this database, I don't recommend you run it
+02:39 but if you want to just run it and see what you get you can.
+02:42 The database was originally created using this script,
+02:46 I am using something interesting you may not have heard about,
+02:49 I am using this thing called Faker, so down here
+02:53 Faker lets you create this thing and I'm seeding it
+02:59 so it always generates exactly the same things,
+03:01 I'm seeding random and fake and you can see down here
+03:04 it's creating the owners and you can ask it for things like
+03:06 give me a fake name, give me a fake date
+03:08 between these two dates, things like that.
+03:12 Similarly with cars, we're using random to get a hold of a lot of the numbers
+03:15 then we can use fake for anything else we might.
+03:18 We ran this, with the right amount of data, it'll build it all up for us,
+03:25 so for some reason if you need to recreate it
+03:27 run this low data thing, you can have it create a small one,
+03:30 if you comment, uncomment that or a large one
+03:32 if you only run it with those settings.
+03:34 Those are all good, this is like the foundation and this is where we are.
+03:37 Next, we're going to ask interesting questions of this database
+03:43 and we want to know how long those questions take to answer,
+03:46 so I've written this super simple function called time
+03:48 you pass it a message and a function,
+03:50 it will time how long the function takes to run
+03:53 and then print out the message along with the time in terms of milliseconds.
+03:57 And then we're going to go through
+03:59 and we're going to ask interesting questions here
+04:01 like how many owners, how many cars, who is the 10 thousandth owner,
+04:05 notice the slicing here to give us a slice of item of length one
+04:10 and then we'll just access it,
+04:12 and then we can start asking interesting questions like
+04:14 how many cars are owned by the 10 thousandth owner,
+04:17 or if we go down here, how many owners own the 10 thousandth car,
+04:21 so ask it in the reverse direction.
+04:23 Here we want to find the 50 thousand owner by name,
+04:26 so yes, technically have them but the idea is
+04:30 we want to do a query based on the name field
+04:32 and we originally won't have any performance
+04:35 around these types of queries so it should be slow.
+04:38 This one, how many cars are there with expensive service
+04:40 this was the one with the snail
+04:43 and in one of the first videos in this chapter,
+04:46 I showed you look this takes 700 milliseconds to run to ask this question
+04:49 how many cars have a service history with a price greater than 16800.
+04:55 So we're going to be to be able to ask all of these questions
+04:58 and this program will let us explore that
+05:02 and we'll see how to add indexes
+05:04 and I'll show you how to add indexes in the shell
+05:06 and how to add them in MongoEngine, and MongoEngine is really nice
+05:09 because as you evolve your indexes, as you add new ones
+05:13 simply deploying your Python web app
+05:15 will adapt the database that it goes and finds
+05:18 to automatically upgrade to those indexes, so it's really really nice.
+05:22 So here you can see we're going to run this code and ask a bunch of questions
+05:25 we could load the data from here, we could generate the data,
+05:28 but you're much better off importing the data from that zip file
+05:32 because this takes like half an hour to run,
+05:35 you saw that zip takes like five seconds.

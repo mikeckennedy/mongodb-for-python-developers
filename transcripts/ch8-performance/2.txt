@@ -1,0 +1,124 @@
+00:01 You've heard MongoDB is fast, really fast,
+00:03 and you've gone through setting up your documents and modeling things,
+00:07 you inserted, you imported your data, and you're ready to go;
+00:11 and you run a query and it comes back,
+00:13 so okay, I want to find all the service histories
+00:15 that have a certain price, greater than such and such, how many are there—
+00:18 apparently there's 989, but it took almost a second to answer that question.
+00:22 So this is a new version of the database, so we are going to talk about it shortly.
+00:27 Instead of having just a handful of cars and service histories
+00:30 that we maybe entered in our little play-around app,
+00:32 it has a quarter million cars with a million service histories, something to that effect.
+00:38 And the fact that we were able to answer this query
+00:41 of how many sort of nested documents had this property
+00:44 in less than a second, on one hand that's kind of impressive,
+00:48 but to be honest, it feels like MongoDB is just dragging,
+00:51 this is not very special, this is not great.
+00:55 So this is what you get out of the box, if you just follow what we've done so far
+00:59 this is how MongoDB is going to perform.
+01:02 However, in this chapter, we're going to make this better, a lot better.
+01:06 How much— well, let's see, we're going to make it fast,
+01:09 here's that same query after applying just some of the techniques of this chapter.
+01:13 Notice now it runs in one millisecond, not 706 milliseconds.
+01:17 So we've made our MongoDB just take off,
+01:21 it's running over 700 times faster than what the default MongoDB does.
+01:26 Well, how do we do it, how do we make this fast?
+01:30 Let's have a look at the various knobs
+01:33 that we can turn to control MongoDB performance.
+01:35 Some of which we're going to cover in this course,
+01:38 and some are well beyond the scope of what we're doing,
+01:40 but it's still great to know about them.
+01:42 The first knob are indexes, so it turns out
+01:44 that there are not too many indexes added to MongoDB by default,
+01:48 in fact, the only index that gets set up is on _id
+01:52 which is basically an index as well as a uniqueness constraint,
+01:55 but other than that, there are no indexes,
+01:57 and it might be a little non intuitive at first, when you first hear about this,
+02:02 but indexes and manually tuning and tweaking and understanding the indexes
+02:06 in document databases is far more important
+02:10 than understanding indexes in a third normal form designed relational database.
+02:15 So why would that be? That seems really odd.
+02:18 So think about a third normal form database,
+02:21 you've broken everything up into little tiny tables that link back to each other
+02:24 and they often have foreign key constraints traversing all of these relationships,
+02:28 well, those foreign key constraints go back to primary keys on the main tables,
+02:33 those are indexed, every time you have one of those relationships
+02:35 it usually at least on one end has an index on that thing.
+02:39 In document databases, because we take some of those external tables
+02:43 and we embed them in documents,
+02:45 those subdocuments while they kind of logically play the same role
+02:49 there is no concept of an index being added to those.
+02:52 So we have fewer tables, but we still have
+02:55 basically the same amount of relationships
+02:57 and because of the way documents work,
+02:59 we actually have fewer indexes than we do in say a relational database.
+03:04 So we're going to see that working with understanding
+03:07 and basically exploring indexes is super, super important
+03:09 and that's going to be the most important thing that we do.
+03:12 In fact, the MongoDB folks, one of their things they do is
+03:16 they sell like services, consulting and what not to help their customers
+03:19 and you could hire them, say hey I got this big cluster and it's slow
+03:24 can you help me make it faster— the single most dramatic thing that they do,
+03:30 the thing that almost always is the problem is incorrect use of indexes.
+03:34 So we're going to talk about how to use, discover and explore indexes for sure.
+03:38 Next is document design, all that discussion about to embed or not to embed,
+03:43 how should you relate documents, this is sort of the beginning of this conversation,
+03:47 it turns out the document design has dramatic implications across the board
+03:52 and we did talk quite a bit about this, but we'll touch on it again in this chapter.
+03:56 Query style, how are you writing your queries,
+04:01 is there a way that you could maybe restructure a query,
+04:05 or ask the question differently and end up with
+04:08 a more high performance query, maybe one example misses an index
+04:12 and the other particular example uses a better index or something to this effect.
+04:16 Projections and subsets are also something that we can control,
+04:20 remember when we talked about the Javascript api
+04:23 we saw that you could limit your set of returned responses
+04:26 and this can be super helpful for performance;
+04:29 you could write a query where it returns 5 MB of data
+04:32 but if you restrict that to just the few fields that you actually care about
+04:36 maybe its all K instead of 5 MB, it could be really dramatic,
+04:40 depending on how large and nested your documents might be.
+04:43 We're going to talk about how we can do this, especially from MongoEngine.
+04:46 These are the knobs that we're going to turn in this course,
+04:49 these are the things that will work even if you have a single individual database,
+04:53 so you should always think about these things,
+04:56 some of them happen on the database side, document design, indexes,
+04:59 and the other, maybe is in your application interacting with the database, the other two,
+05:04 but MongoDB being a NoSql database, allows for other types of interactions,
+05:08 other configurations and network topologies and so on.
+05:11 So, one of the things that it supports is something called replication,
+05:14 now replication is largely responsible for redundancy and failover.
+05:19 Instead of just having one server I could have three servers,
+05:22 and they could work in triplicate, basically one is what's called the primary,
+05:26 and you read and write from this database,
+05:28 and the other two are just there ready to spring into action,
+05:31 always getting themselves in sync with the primary,
+05:34 and if one goes down, the other will spring in to be the primary
+05:36 and they will sort of fix themselves as the what used to be the primary comes back.
+05:40 There is no performance benefit from that at all.
+05:43 However, there are ways to configure your connection to say
+05:46 allow me to read not just from the primary one, but also from the secondary,
+05:50 so you can configure a replication for a performance boost,
+05:53 but mostly this is a durability thing.
+05:55 The other type of network configuration you can do is what's called sharding.
+05:59 This is where you take your data instead of putting all into one individual server,
+06:02 you might spread this across 10 or 20 servers,
+06:06 one 20th, hopefully, of evenly balanced,
+06:09 across all of them, and then when you issue a query,
+06:12 can either figure out where if it's based on the shard key,
+06:15 which server to point that at and let that one
+06:17 handle the query across the smaller set of data,
+06:20 or if it's general like show me all the things with greater than this for the price,
+06:23 it might need to fan that out to all 20 servers,
+06:26 but it would run on parallel on 20 machines.
+06:30 So sharding is all about speeding up performance,
+06:32 especially write performance, but also queries as well,
+06:35 so you can get tons of scalability out of sharding,
+06:38 and you can even combine these like, when I said there is 20 shards,
+06:41 each one of those could actually be a replica set,
+06:43 so there is a lot of stuff you could do with network topology
+06:46 and clustering and sharding and scaling and so on.
+06:48 We're not turning those knobs in this course,
+06:50 I'll show you how to make individual pieces fast,
+06:52 the same idea applies to these replicas and shards,
+06:54 just on a much grander scale if you want to go look at them.

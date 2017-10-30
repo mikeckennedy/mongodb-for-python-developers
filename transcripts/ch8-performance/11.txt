@@ -1,0 +1,35 @@
+00:01 One of the last simple tools you have in your tool belt
+00:04 when we're working with MongoEngine or even in PyMongo, just different api
+00:08 is this ability to restrict the data returned from the document.
+00:13 In our car object we've got the make, the model, the id, some other things,
+00:17 we've got the engine which is a subdocument or an embedded document there
+00:22 and then the biggest thing that contributes to the size
+00:25 is actually the service history which might be many service record entries.
+00:30 If really all we care about is the make, the model and the id of a car,
+00:34 and we're going to create like a list or something like that,
+00:36 we can use this .only operator here
+00:39 and dramatically reduce the amount of data returned from MongoDB
+00:43 so this is an operation that we saw when we first learned about the api
+00:46 actually operates at the database level,
+00:48 you're able to restrict the elements returned from the queries
+00:52 so when it gets back to MongoEngine
+00:54 basically it looks at what comes back and it says,
+00:57 alright, I need to create some cars
+00:59 and I need to set their make to this, the model to that
+01:01 and their id to whatever comes back,
+01:03 and then nothing else is transferred, deserialized, anything.
+01:05 So you can, if you don't need them, exclude the heavyweight things
+01:09 like the engine and the service histories for this particular use case.
+01:12 So this is kind of like select make, model, id from table such and such in SQL,
+01:20 and it really can improve the performance
+01:22 especially when you have either large documents or many documents.
+01:27 So you've seen a lot of different ways to turn the knobs of MongoDB
+01:31 to make it faster and to use MongoEngine to control those knobs.
+01:35 Now this applies to a single individual database server
+01:38 and if you use this to tune your database,
+01:41 you can actually make the need for having a sharded cluster
+01:45 and all these scaling things possibly go away,
+01:48 but even if you do end up with one of these more interesting topologies,
+01:52 all of these techniques still apply and they'll make your cluster go faster,
+01:56 they'll make your replicas go faster, all of those things.
+01:59 What you've learned here are really the foundational items of making MognoDB go fast.

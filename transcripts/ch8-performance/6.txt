@@ -1,0 +1,165 @@
+00:01 Let's go ahead and run this code, you've seen the minor changes
+00:04 like the addition of this concept of an owner,
+00:06 and how we generated all this data, and how you can restore it.
+00:09 Let's go ahead and run it, and see what's happening.
+00:13 Let's look at this from two perspectives, let's begin over actually in Robomongo,
+00:17 so we're going to ask the question, basically how many owners own a certain car
+00:21 the idea is more or less we're going to call this function which goes right here,
+00:25 really what we're looking for is this query,
+00:28 find me all of the owners where this car id is in their car ids collection,
+00:33 just generate and deserialize that.
+00:37 The other one that we're going to focus on is
+00:39 show me the cars with the expensive service history,
+00:42 how many cars or what cars had some kind of service
+00:46 that cost over 16800 dollars.
+00:49 Let's begin by looking at those in Robomongo.
+00:54 Here we have this concept, we could simplify this a little bit, but it doesn't matter,
+00:57 cars here's the service history, let's go to the price
+01:00 where that's greater than 16800, how many of them are there.
+01:05 If I run this, notice, it took a while to come back,
+01:08 run it again, here's the speed right there, 0.724 sec, 0.731, 0.733,
+01:14 so it's pretty reliably taking around 700 milliseconds to answer that question.
+01:19 We're going to come back to this.
+01:22 Here's a more interesting example, like go and randomly grab a car
+01:25 somewhere deep in the list, in this case I put 61600,
+01:30 grab that car and then find me all the owners,
+01:33 where that car id appears in their id list, and then we'll just dump that out,
+01:38 by saying var it doesn't appear if you just state the name it will show up down here,
+01:43 so make sure to deselect it and run this,
+01:45 and this is actually surprisingly fast, given all the stuff that's going on here,
+01:48 but it's taking still about 75, 80 milliseconds to run here,
+01:53 which, I don't know, maybe in your database
+01:55 going across a 100 thousand records 80 milliseconds seems decent,
+01:59 I can tell you in MongoDB 80 milliseconds is terrible
+02:02 you should really think about making something that's 80 milliseconds faster
+02:06 it's not always possible you can do it,
+02:08 but most of the queries as we'll see are possible.
+02:11 Let's take this one and just try to understand what's happening here
+02:16 and then we're going to go look at it in Python,
+02:19 but let's just explore it here in the shell for just a moment.
+02:21 Why is this taking 700 milliseconds?
+02:24 MongoDB has this way to basically ask how are you running this query,
+02:29 and the way you do that is you say explain, like so,
+02:35 so I can say this query instead of giving me a result tell me how you're running it,
+02:38 if I unselect it, it just runs the selected stuff if there's something there,
+02:42 so we can go and look at it in this mode,
+02:44 so it says okay, here's what the query planner found for you,
+02:47 we've parsed this query, and this is something
+02:50 it's basically what went into the find,
+02:52 it also might have something to the effect of like a sword
+02:55 and other things that are happening, but this is a simple query.
+02:58 Look down here, see this winning plan, stage column scan,
+03:02 that is bad, that is really, really bad.
+03:05 Also notice the rejected plan, so if there are multiple indexes
+03:08 and other things that could have done
+03:10 it might have attempted a bunch of them and said no, no, no this is the best,
+03:13 let's see it doesn't seem to tell us any more about what it did there,
+03:18 like sometimes it'll tell you how many records it scanned and things like this,
+03:21 but it's just basically reading entirely in the forward direction
+03:25 over this and just doing a comparison.
+03:27 So that's why this was taking 700 milliseconds
+03:32 as it was literally reading and comparing 100 thousand entries
+03:36 or actually more, remember their is 1.2 million search histories
+03:40 across those 250 thousand cars, so not 100 thousand,
+03:43 1.2 million records it scanned over, that's bad, you don't want that.
+03:47 So what we can do is we can actually add an index,
+03:51 now there's two ways to add an index,
+03:54 but before I add the index, let's go over here
+03:58 just explain is super, super valuable,
+04:00 any time something is slow we're going to explain
+04:03 there's actually way to turn on profiling and say log all of the queries
+04:07 that you see MongoDB that are slower than x,
+04:11 you providing them like say 10 milliseconds might be great,
+04:14 show me all the queries that take more than 10 milliseconds
+04:17 and then you can drop them in here, put an explain
+04:19 and then start creating indexes to make them faster.
+04:22 So just google mongodb profile enable slow queries
+04:26 or something like this, it's pretty straightforward.
+04:29 Now let's run this code, we're asking a lot of questions
+04:31 what we want to run is q and a, so we go over here and just right click and say run,
+04:37 notice some of these things are taking time,
+04:42 the database might be cold, it might have not loaded that stuff,
+04:46 so let me run it one more time just to be fair,
+04:49 there's a few things that are already really fast, and that's cool,
+04:55 so let's go here and review, how many owners are there—
+04:58 well, I can tell you it doesn't show the answer
+05:01 it just sort of says this is the question I'm asking here is how long it takes.
+05:04 Three milliseconds, that is solid, how many cars— half a millisecond.
+05:07 That's pretty solid, I don't think we can improve the count on the entire collection
+05:11 but this one, find the 10 thousandth owner— not good,
+05:14 so let's see how many cars are owned by that person—
+05:19 this is pretty fast actually, this is surprisingly fast,
+05:23 how many owners this can have— 66 milliseconds
+05:26 that's the one we were looking at in there.
+05:29 I'm going to take these numbers and put them over here,
+05:32 let's say, this will be Without indexes
+05:36 we're going to get this, we don't really care about the exit code, do we?
+05:41 With indexes, and we're going to kind of iterate on this a little bit
+05:45 so let's begin over here, and we're going to talk about
+05:49 how we can add an index in MongoDB and then for the most part
+05:55 do this in MongoEngine because it's really part of the way our application works,
+06:00 what the indexes are, and it's better to make that part of our document
+06:03 then kind of do a separate database setup step;
+06:07 we could create a script in Javascript and run it,
+06:09 it will do these things and that may be fine, but let's go over here and work on this.
+06:14 Again we had the count, here's the almost 800 milliseconds,
+06:19 let's go over here and just I'll take this, I'll make a copy,
+06:24
+06:28 so here is what we can do, instead of doing the find operation
+06:31 we can say create index,
+06:35 and then we have the thing that we're doing the query on,
+06:38 most the time this is one item but you can have composite indexes
+06:43 they are a little more nuance so we'll talk about them later,
+06:45 but let's just do this one, we want to be able to query by service history's price
+06:52 Here we can put one of two things, one or minus one,
+06:56 what do you want the default sort, descending or ascending?
+06:59 A lot of times it doesn't really matter,
+07:01 it can read from the back or it can read from the front, whatever,
+07:04 you saw the forward direction on our column scan for example.
+07:06 So over here we could say one, this creates an index, there's no count;
+07:09 the other thing we can do is we can give it a name
+07:13 so we can come over here and say name is search by service history price,
+07:24 so if we go look in this little indexes, we'll see the name here,
+07:27 we can also say run in the background,
+07:30 if I don't say that it's going to block the database until the index is generated,
+07:33 if you're doing this in production, and you have tons and tons of data
+07:36 maybe background is the way to go.
+07:38 Okay, anyway let's go ahead and run this and see what happens.
+07:41 Notice the pause, this is it's actually computing the index
+07:44 right now the database is effectively down, now it's back,
+07:47 what do we get ok, we created collection automatically know it already existed
+07:51 a number of indexes before was one, now we have two
+07:54 and everything was a ok so if I refresh,
+07:57
+07:59 here's that index and I can actually edit this over here in Robomongo,
+08:05 go for the advanced properties, here is the create index and background
+08:09 whether it's sparse, how long it lives,
+08:11 whether it's based on text search or whatever, but here's just the basic thing.
+08:15
+08:18 We've added this index, remember this took 800 milliseconds
+08:21 ask the same question now, boom, 8 milliseconds.
+08:24 Ask it one more time, 2, here we go, 2, 2, 2, 3, 2, 2,
+08:28 right, the screen sharing is probably put in a pretty heavy load on the server
+08:32 that's also the database server, right but still,
+08:35 we're getting it down 350, 400 times faster by adding that.
+08:39 Now if I go back and I ask that question explain
+08:42 now we get something way better, winning plan is index scan
+08:50 index name search by service history price, that is really awesome;
+08:57 that means we're using our index which is so much faster.
+09:02 There was no rejected plans, so it only found one index
+09:06 it tried to use it if found that it was awesome, it's very happy.
+09:09
+09:16 Go back to my account more time,
+09:21 boom 2 milliseconds, and that's a really good answer,
+09:24 let's go run our Python code and see what answers we get now,
+09:27 that was already faster, let's go over here
+09:32 and load car name and ids with expensive prices and spark plugs,
+09:38 20 milliseconds this is actually a pretty complicated query
+09:43 we'll get into cars with expensive service, 1.9 milliseconds.
+09:47 This is exactly what we saw in Robomongo,
+09:51 so over here in MongoEngine, we're getting essentially the same results— how cool is that?
+09:56 Very nice, we're going to go through and in Python from now on
+10:02 we're going to add the necessary index to start making these
+10:05 almost all of these run super fast, all of them run fast
+10:09 some of them we can get incredibly fast, like one millisecond,
+10:11 others not quite that fast, but we'll still do good on all of them.

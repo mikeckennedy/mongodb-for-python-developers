@@ -1,0 +1,53 @@
+00:01 Now that you know how to work MongoDB, you know how to work its shell,
+00:04 what the query syntax is, you've seen PyMongo as well as MongoEngine,
+00:07 it's time to turn our attention to tuning MongoDB
+00:11 to be the best database it can possibly be.
+00:14 We're going to focus on how to make our regular MongoDB server
+00:18 a high performance MongoDB database
+00:21 and you'll see there's no magic here, a lot of the things that you can do
+00:24 are relatively straightforward, and there's a systematic way to go about it.
+00:29 I want to start this section by maybe putting a little perspective on it.
+00:34 I want to start this section, this chapter, by putting a little perspective out there.
+00:41 When people come to NoSql and they start looking for alternative databases
+00:44 often the allure of these databases is their performance
+00:49 you hear about things like sharding, horizontally scaling them,
+00:52 some incredible performance numbers, things like that.
+00:55 That may be what you really need, that may be the most important thing
+00:58 and certainly if you don't have performance out of your database it's a big problem.
+01:03 We're going to certainly figure out how to make our databases faster
+01:07 and the variety of techniques that we have available to us in MongoDB.
+01:11 That said, your biggest problem probably isn't performance,
+01:14 you may have a big data problem, you may have terabytes or petabytes of data
+01:19 but most applications don't.
+01:22 You may have a performance problem, it may be that you have so much data
+01:26 or you are asking such complex queries that it really does take
+01:30 very precise tuning and scaling to make it work.
+01:33 So we're going to focus on some of these types of things.
+01:36 That said, we all have a complexity problem with our application,
+01:40 it's always a pain to maintain these databases
+01:43 especially when we're working with relational databases,
+01:46 you hear about things like migrations and updating your schema
+01:49 adding, removing, transforming columns, all of this stuff is really complex
+01:53 and it even makes deployment really, really challenging,
+01:56 you want to release a new version of something based on SQLAlchemy
+01:59 but you need to change the database scheme before it will even run—
+02:02 okay, that sounds like it could be a little bit of a problem.
+02:05 What you'll see with MongoDB and these document databases is
+02:10 one of their biggest benefits is the simplicity that they bring.
+02:14 The document structure means there's fewer tables,
+02:18 there is much fewer connections between these tables,
+02:21 so when you think about the trade-offs and performance and things like that
+02:24 keep in mind that probably the biggest benefit
+02:27 that you are going to get from MongoDB is you are going to have
+02:30 simpler versioning, evolution, maintainability, development story.
+02:33 I just want to put that out there, because I know sometimes
+02:36 people will say well, I got MongoDB to perform at this speed
+02:40 and I cut this other database, and if I tweak it like this and adapt it like that
+02:44 maybe I could get it to go a little faster, so maybe we should use that instead.
+02:47 And maybe, I don't know, it depends on the situation,
+02:50 and this is very abstract, so it's hard to say, but keep in mind
+02:53 that one of the biggest things these document databases
+02:55 bring to you to the table here, is this simplicity.
+02:59 It just so happens we can also make them really, really fast.
+03:03 So simple and fast, sounds like a great combination,
+03:05 so let's get into this section where we are going to make MongoDB much faster.

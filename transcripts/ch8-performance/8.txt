@@ -1,0 +1,33 @@
+00:01 We've seen how powerful adding indexes to MongoDB is
+00:04 and I talked a little bit how the nested nature of these documents means
+00:09 there's naturally fewer primary keys,
+00:11 so there's fewer on average actual indexes
+00:15 that get created just as part of working with the database;
+00:18 so creating these indexes is even more important in document databases
+00:22 than it is in relational databases.
+00:24 So here we are in the shell, this would be Robomongo
+00:27 or just the Mongo command line interface
+00:30 and we can create an index on a collection by saying db.collection name
+00:33 so here we have cars.createIndex
+00:35 and then we pass it two things, first one required, second one optional
+00:39 we pass it the actual fields we want to create the index on;
+00:44 so here we have service_history.customer_rating
+00:48 so we could traverse this hierarchy if necessary
+00:51 we just use that dot like we have been in the shell the whole time
+00:55 and then we say one or minus one,
+00:57 so do you want to sort ascending or descending.
+00:59 And this mostly matters for either what you might consider the natural sort
+01:03 or if you're doing a composite key or a composite index
+01:08 and that composite index is being used for sorting on both fields
+01:12 and all the orders have to line up exactly for the sort to use that index.
+01:17 Then we can pass additional information,
+01:19 here we have background as true and the name,
+01:21 I like to name my indexes if I'm doing this shell
+01:24 because then it's easier to see like okay why did I create this index
+01:28 here we want the customer ratings of service,
+01:31 so that's pretty nice, background true, that's not the default
+01:35 but that means it will run basically in the background
+01:38 without blocking the database operations,
+01:41 if you don't put that, when you hit go
+01:43 the database will stop doing any sort of database stuff
+01:46 until this index is generated so be aware.

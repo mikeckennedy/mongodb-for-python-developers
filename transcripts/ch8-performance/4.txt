@@ -1,0 +1,42 @@
+00:01 Here we are in the github repository for this course
+00:04 and notice we have this data section
+00:06 and in here I have this thing called dealership db 250 K
+00:09 that is this data that I just talked about,
+00:12 with the 250 thousand cars, 100 thousand owners, that sort of thing.
+00:16 So I'm going to put that over here on the desktop and unzip it
+00:21 and if we look in here, you'll see that there's a cars collection and an owners collection,
+00:29 and I don't believe we've spoken about how to get this data into MongoDB,
+00:33 so let's go over here and I'll use RoboMongo,
+00:37 notice we have these two dealership things that I have been playing with
+00:42 and I want to create one called like test dealership or something to that effect.
+00:46 We're going to restore this— how do we do that,
+00:51 we'll go like this, we'll say mongorestore
+00:55 and this is the way that we get this exported data imported into MongoDB,
+01:00 now, the first thing you have to ask yourself is this additive to the database,
+01:05 if it exists do you want to also insert this,
+01:07 or do you want to have this be the database and replace anything it exists,
+01:11 we want this one to replace existing data
+01:14 so I'll say --drop and then I need to tell it what database
+01:18 so I'll say db and I could say what you should say is this dealership,
+01:23 but just because I don't want to wipe away what I currently have,
+01:28 I'll say dealership example, but the code that you're going to run
+01:31 expects the name of the database to be just a dealership;
+01:34 and then I need to give it the folder that it's going to work from,
+01:37 so I am just going to give it this folder like so, all right.
+01:41 So mongorestore, drop to replace the data -- db to name it, and then the location,
+01:46 we hit go, and it's going to go cranking away on this
+01:50 and you can see it's inserting, inserting and done,
+01:53 that was really fast for like close to 1.5 million records.
+01:57 All right, so let's go over here and refresh
+02:00 and here's our example and we can see that we have our collection,
+02:03 here's our cars and we could just ask how many cars are there.
+02:07 Notice, there is that many, and if we change this to owners,
+02:11 remember you can also write it like this, owners like this,
+02:16 Now notice, I think the restore data we got here,
+02:19 you want to drop this index right here, I have it only have the id indexes, ok
+02:26 so that's this example I just restored,
+02:28 we're going to work with something you can imagine is exactly the same.
+02:33 So we're going to work with this dealership code
+02:36 but the way it got there, I'll show you the app I used to originally create it,
+02:39 and then I just restored it using mongorestore just as I showed you up here.
+02:43 So the way to generate the data that goes into mongorestore, you say mongo dump.
