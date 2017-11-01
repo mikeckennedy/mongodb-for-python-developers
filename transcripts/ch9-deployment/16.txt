@@ -1,0 +1,95 @@
+00:01 It's great that we have our MongoDB running in production
+00:03 we've got our web server and a MongoDB server
+00:06 and they're entirely locked down, we saw before
+00:08 if we try to connect to that Mongo server,
+00:10 even though it's on a different port with ssl and authentication,
+00:13 we can't talk to it because the Ubuntu firewall is blocking access
+00:17 from everywhere in the world except for that one fake web server thing.
+00:21 So we can't talk to it, we can't for example manage it with Robomongo,
+00:24 which would be totally sweet, right,
+00:27 but we can't even connect to it via the shell, can we?
+00:30 Well, we tried that and we saw it failed and if I do it again it will fail;
+00:32 but I can ssh into the Mongo server like this, we've seen that,
+00:37 so that's cool, now what can we do with this?
+00:41 It turns out we can set up an ssh tunnel using that mechanism
+00:44 so here if we run this command -f to run in the background
+00:49 ssh over here, map the local port, 10001,
+00:53 on the remote machine say the local host 10001, like that.
+00:59 So if we run this code, it takes a second
+01:03 and it creates a background task of ssh tunneling one port locally over there;
+01:08 now, what if we try this— we're going to run the same command
+01:13 we saw working in production with authentication being this,
+01:16 here is the password, the admin and so on, notice there's no host up here
+01:19 we have the port 10001, what is the host if we don't put one— local host,
+01:24 but local host 10001 really means the Mongo server 10001.
+01:29 Let's do it. Check that out, it's working okay,
+01:34
+01:39 we can ask it how are you doing, how many things you got going on here,
+01:45 what is your host, this is what I was looking for, your host is the Mongo server,
+01:49 we're connected to the Mongo server, that's really cool.
+01:52 Now we can say things like show dbs,
+01:56 we could come over here and say use that,
+02:00 we could even do our pretty find here so cars.find.pretty
+02:05 and there's our data, okay so we can access this.
+02:09 And just like we could in the shell.
+02:12 Well if we can get to it this way, maybe,
+02:15 just maybe something magical could happen with better tools.
+02:18 And yes, yes it can, we'll create, it's going to be a direct connection,
+02:23 I'll call this themngoserver, connect on the local host 10001, that part is good,
+02:32 authentication database is good, copy these over, paste that in,
+02:41 you can see this here, a mechanism is good, so this is all set,
+02:47 come over and say use ssl, I've not tried to do anything else,
+02:54 let's try this, let's test it— all right, under ssl we say use a self signed certificate,
+03:02 there we go, good, alright, so we have themongoserver,
+03:07 I didn't test it, but let's go ahead and give it a shot anyway.
+03:14 Authentication failure, okay let's go and edit that again,
+03:21
+03:26 oh look at that, have a little space right there, how frustrating,
+03:29 couldn't somebody give me a trim,
+03:32 connecting, authorized, yes! That is so awesome.
+03:35 Okay, save the connection, now let's go over here, double click
+03:40 it's a little bit slow because hey, it's going over tunnels
+03:43 but look at that, if we go over here we got our cars, we can view the documents
+03:47 we have everything that you could have done before with Robomongo,
+03:51 you can do now, here's the two documents
+03:54 you saw me create in that Python section,
+03:57 oil change, tire rotation, Enzo Ferrari and so on.
+04:01 And we can do things like maybe we had the service_history.price as an index
+04:07 well, add an index, it's going to be service history price,
+04:14 and down here we'll say { 'service_history.price' :1 } like that, save
+04:22 and now how about that, we could even do a little thing
+04:26 come down here say  service_history.price is let's say 100,
+04:31 this should return just one record, and it does
+04:37 and if we say explain, all the stuff we were doing, does it work— you bet it does.
+04:41 It's using that index that we just created remotely using Robomongo,
+04:48 so this is super cool, last thing let's see about doing a backup.
+04:53
+04:56 The next thing that I want to show you which I don't think we've done before,
+05:01 let's go to our desktop here and we'll say make a directory called backtest
+05:06 cd the backup, notice it's there on the back up, nothing is in it,
+05:12 so the last thing I want to do is show you how to use Mongodump
+05:16 so you can go to help and see all of the things that this does
+05:22 but we're going to use Mongodump with basically all the same settings down to here
+05:28 we're going to go to demo dealership as we've named it
+05:33 and the output is going to be into the working folder which is this.
+05:37 Because we're tunneled into the production machine
+05:41 we can go and grab that data from there and back it up locally, let's try.
+05:46 Boom, we wrote two, we're whopping two documents
+05:54 but over here, we have this, now the data comes out in this binary json
+05:58 but you can't really look at, we could technically look at this
+06:01 but the point is this worked, we got our two documents,
+06:04 now you might wonder like ok that's cool for two documents that kind of works,
+06:09 can you really do this for like actual data— yes, yes you can.
+06:13 So I do something like this for Talk Python To Me and the training site, all these things,
+06:18 and I can back them all up in one giant script that does things along these lines
+06:23 and it will back up to six million of records, six million documents,
+06:28 I would say it probably takes less than a minute and a half
+06:33 over my pretty standard connection, and I'm on the West Coast of the US,
+06:37 and that server is on the East Coast in Virginia,
+06:40 so it's not like I'm right next door, that's why it works.
+06:42 So this actually works better than I expected it to work I guess,
+06:46 and it really is quite nice, so using this ssh tunnel means
+06:51 we never have to open up that port,
+06:53 but we can go through ssh and still work with our server, with all of our cool tools.
+06:59 Over here, come back, which one do you want to work with—
+07:08 local or remote, remote one of course.

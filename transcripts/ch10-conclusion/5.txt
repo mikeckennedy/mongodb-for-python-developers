@@ -1,0 +1,48 @@
+00:01 Next up was document design.
+00:03 Some of the concepts and ideas of relational databases still apply here,
+00:07 you still are modeling data, you still put it into a database,
+00:10 but many of the techniques fall down,
+00:13 this whole concept of third normal form
+00:15 doesn't make nearly as much sense as it does in a relational database.
+00:18 What more we focus on often is really
+00:21 how do we make relationships either between documents or within documents.
+00:25 We saw the primary question, not the only one, but the most challenging one,
+00:30 the one you have to think most carefully about is to embed or not to embed,
+00:34 and I gave you a few rules or tips to help you guide this decision.
+00:38 One— is the embedded data wanted and you use it 80 percent of the time or more,
+00:44 most of the time when you get that containing document?
+00:48 If that's true, you probably want to embed,
+00:51 if that's false, maybe consider that as a warning sign not to.
+00:54 How often do you want the embedded document without the outer containing document?
+00:59 If often what you really want to get access to is these little inside pieces,
+01:03 there's a lot of overhead and it really kind of complicates the way
+01:07 you access it through your application,
+01:09 if you want to get them most of the time, or frequently, on their own.
+01:13 Is the embedded data abounded set?
+01:16 Remember, these documents can only be sixteen megabytes or larger,
+01:19 the number is way higher than you really want it to be,
+01:22 if this is an unbounded set you're going to continue to add to it,
+01:25 it very easily could outgrow the actual size that you're allowed to store.
+01:28 Really for a performance reason though, is it abounded set and is that set small?
+01:34 Because if you put huge amounts of data in there,
+01:36 you're going to really slow down your read time
+01:38 for these database operations that involve this document.
+01:41 These are the four main rules here,
+01:43 you also want to consider how your application accesses this data,
+01:47 it might be really easy to answer these four questions
+01:50 because there's a very constrained and small set of queries
+01:53 you run against your database;
+01:55 or it could be that you ask all sorts of questions in a highly varied ways
+01:59 in which case it's harder to answer those questions,
+02:02 the more types of queries you have the harder it is to know
+02:05 whether most of the time you want the embedded data for example.
+02:08 The more varied your queries are, the more you'll trend
+02:11 towards third normal form, relational style and less embedding.
+02:15 One of the situations where you have lots of varied queries is
+02:18 if you have this thing called an integration database,
+02:21 which we talked about sort of sharing a database across different applications,
+02:24 versus having one dedicated to a particular application
+02:27 where you can understand these questions very clearly.
+02:30 So when you're designing these documents
+02:33 you want to really think most carefully about do you want to embed this data
+02:36 or create a soft foreign key type of relationship.

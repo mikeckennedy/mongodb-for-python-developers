@@ -1,0 +1,72 @@
+00:00 After we talked about document design
+00:03 and we talked about the raw access from PyMongo
+00:05 we said let's take this up a level of abstraction,
+00:08 let's actually build classes and map those over ORM style into MongoDB.
+00:14 We saw a really nice way to do that is with the ODM called MongoEngine.
+00:19 Let's review the main way that we sort of define classes
+00:23 and add constraints and things like that.
+00:25 Over here we are going to create this car object, this is our dealership example
+00:30 and we are going to store the car in the database.
+00:33 The way we create something that MongoEngine can manage
+00:37 in MongoDB as a top level document,
+00:40 is that we're going to derive from mongoengine.document.
+00:43 And then every field is going to be one of these fundamental field types,
+00:46 like StringField, IntField, FloatField and so on.
+00:50 And we can have some of them required, the first three required,
+00:53 we can have some of them with basic default values, like mileage defaults to zero
+00:59 but we can also have interesting functions,
+01:01 for example the vin number is automatically generated
+01:04 and we're based in this on the uuid4 random alphanumeric thing,
+01:08 so what we have here so far is really sort of equivalent
+01:11 to what you might have in a traditional relational database,
+01:15 there's entry and there is a flat set of what you would call columns,
+01:19 this is only part of the story,
+01:21 remember we can have nested documents,
+01:24 we can have actually a rich hierarchy of nested objects.
+01:27 One thing we might want to store in the car is an engine
+01:30 and the engine itself is a special type,
+01:33 here in the field it's going to be an embedded document field
+01:36 an engine derives from mongoengine.EmbeddedDocument,
+01:40 not document, embedded document.
+01:42 These we're never going to directly insert into the database,
+01:44 in fact, we're going to always put them into a car,
+01:48 so this is like a strong relationship between a car and its engine,
+01:51 we can even mark it as required.
+01:53 Now going a little further than that,
+01:55 our service history actually contains a list of subdocuments,
+01:58 each one modeled by the service record.
+02:00 The service record has things like the customer satisfaction,
+02:03 what service was performed and so on.
+02:06 Now if we take this, put some appropriate data into it and store it,
+02:10 we'll get something looking along the lines of this,
+02:12 in our document database in MongoDB,
+02:15 so here we have the first few elements that are just the flat fields
+02:18 and then we have the nested engine, one of them,
+02:21 we have the nested array of nested items for the service histories,
+02:24 and this really gets at the power of MongoDB,
+02:28 this nesting and these strong relationships
+02:31 where you get this aggregate object the car,
+02:34 that always contains everything we need to know about it.
+02:37 How about queering— we're not going to write now in the low level api,
+02:42 we're going to use basically the properties of these objects.
+02:46 Here's the function that we wrote where we wanted to ask the question
+02:49 what percentage of cars have bad customer rating,
+02:53 that would be average or below,
+02:56 so we're going to go to the car and we say objects,
+02:58 we could do lots of these objects.filter.filter.filter
+03:02 but if you just have one query you can just stick it in object,
+03:04 so as the objects service_history, now we can't say dot here,
+03:08 because service_history . customer_rating
+03:10 would not be a valid variable name or parameter name in Python,
+03:13 so we're going to traverse a hierarchy with a double underscore.
+03:17 We also might want to apply one of the operators,
+03:18 in this case we're going to say less than 4,
+03:21 so we're going to use again this double underscore,
+03:24 but in this case it's going to say on the left is the name of the target
+03:28 and on the right is the operator we're going to apply to it.
+03:31 You don't put the dollar again, that wouldn't be valid in Python,
+03:34 but double underscore __lt, and then we can ask
+03:38 things like count, or go and get the first one, or things like that.
+03:42 We can even do paging by slicing on that result.
+03:45 This syntax lets us use almost the entire spectrum of the way of creating MongoDB
+03:50 really straightforward and in a way that ties back to the car object that we defined.

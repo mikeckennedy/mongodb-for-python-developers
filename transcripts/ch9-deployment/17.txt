@@ -1,0 +1,45 @@
+00:01 We've seen that we can use our ssh as a tunnel
+00:04 to give us access to our production MongoDB server
+00:07 without exposing too much of it.
+00:10 So we can run this ssh command to the Mongo server
+00:13 and say map locally the port 10001 over to the machine called local host over
+00:18 in your area Mongo server to port 10001,
+00:23 which means we basically can connect our local host
+00:25 and we connect to the Mongo server on that side of things.
+00:28 Once we do that, we can go to things like Robomongo,
+00:32 and say I'd like to connect to here local host 10001,
+00:36 and the user name is whatever it is, the password is whatever it is,
+00:40 make sure you check perform authentication and also use ssl, check that,
+00:47 you want to use the self signed certificate if that's the way you did it
+00:53 you saw that it doesn't work, kind of blocked me when I said certificate
+00:56 because it is like no, no this is an invalid certificate we won't talk to the server,
+01:00 you decide how you do the certificate management
+01:02 but if you followed along exactly,
+01:04 you want to make sure you use self signed certificate
+01:05 and then ta-da, you are connected to the server just as if it was local
+01:13 there's a slight latency but like I said, once it spins up and starts moving
+01:17 it can actually ship a lot of data over that connection pretty quickly.
+01:20 The other thing you might want to do is connect with the Mongo shell,
+01:23 we've already seen how to do that, here's the command to do it once again
+01:26 remember, this is using a port 10001 on my local dev machine
+01:31 tunneling through the ssh tunnel back to the server;
+01:34 same type of thing you put on the server, basically goes right here
+01:38 as long as you have that ssh tunnel running.
+01:40 We can also use Mongodump and Mongodump is one of the ways
+01:44 in which you can back up a database
+01:46 so same commands exactly except we said --db dealership output is local folder,
+01:52 that will dump out all that data, and like I said
+01:55 this actually works pretty well over that ssh tunnel, for large amounts of data.
+02:00 There you have it, we have our production MongoDB server up and running
+02:04 we installed it through aptitude which means
+02:07 if there's update, security or otherwise
+02:09 it will automatically apt upgrade— boom take care of it for us,
+02:13 that is really super nice, we've got over the wire encryption,
+02:17 we've got non default ports, we've got authentication
+02:22 and we even saw how we can use ssh to still use our local dev machine
+02:27 we even saw how we can use ssh tunnels
+02:30 and our local database management tools,
+02:33 Robomongo, the Mongo shell and things like that
+02:36 to get back into the production server and manage it,
+02:39 without punching holes in the firewall for that purpose.
+02:42 So all in all, I'd call this a pretty good setup.

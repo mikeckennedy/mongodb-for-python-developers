@@ -1,0 +1,20 @@
+00:01 We saw that we can basically leverage the package manager on Ubuntu
+00:04 to install MongoDB, but it won't work by default, we've got to add some things.
+00:10 Now notice this link at the bottom, you shouldn't be typing in
+00:12 at least not the first two lines at all,
+00:16 you can just copy them from down there, right.
+00:19 So go to the install on Ubuntu, or if you have a different distribution pick that one,
+00:23 and it will show you how to do it with your package manager most likely,
+00:26 so here we are going to add the MongoDb key,
+00:29 so we trust the list, the file list we're going to set up,
+00:33 then we're going to basically set up this mongodb.org file list here
+00:37 and then in order to actually have the stuff in the list available
+00:41 we need to run a quick update, so it pulls it down
+00:44 and then we can say apt install mongodb-org to install everything
+00:47 or you saw that there's subpackages you can choose
+00:51 we're going to manage the server via the just editing etc/mongod.conf
+00:57 and then make changes, restart the service
+01:00 and then it will just pick up those changes which is really nice.
+01:04 Of course, this doesn't mean it's running,
+01:06 it's just ready to run next time you reboot the server
+01:08 so you just say service mongod start and you'll be golden.

@@ -1,0 +1,19 @@
+00:01 Let's review how we added encryption.
+00:03 Somehow we got a hold of an ssl certificate and a private key
+00:06 so the way we did this is we just went into the location
+00:10 where we typically store those analytics
+00:13 and we ran open ssl to generate a self signed certificate,
+00:16 the only change that I made here from the recommendation from MongoDB
+00:20 is I added, I made it a ten year certificate,
+00:23 because look as long as it's not trusted let's not trust it for a long time.
+00:26 Anyway, we did that and then we combined the private key and the certificate
+00:30 into this pem file, which we point MongoDB at
+00:33 we restarted, I first paused on the left, go to the right,
+00:36 we added this ssl section, we added the mode to require ssl
+00:39 and here's the file to do that, and then we were able to connect to MongoDB
+00:44 but only if we say --allow invalid certificates and --ssl,
+00:49 all of this is documented in that url below
+00:52 manual, tutorial, configure -ssl, so you can check that out and like I said,
+00:56 copy the details from there, not by typing them in from watching me do it.
+01:00 Alright, so a really nice step and important step to enabling ssl
+01:04 and secure communication on our MongoDB server.

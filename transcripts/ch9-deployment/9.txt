@@ -1,0 +1,68 @@
+00:00 For our MongoDB server we want to add
+00:02 communication level encryption, basically ssl.
+00:05 Now we could go get a proper ssl certificate, we could even use let's encrypt,
+00:10 but because this is only talked to from our few servers
+00:14 we can actually just do an auto generated one, so a self signed certificate.
+00:18 Let's go over here to etc/ssl, let's see what's here—
+00:22 not so much, alright, so the next thing that we want to do
+00:26 is we want to run open ssl to generate this key.
+00:29 Now, I'm going to give you a link that you can copy this from
+00:32 so don't worry about trying to type this in,
+00:34 so notice it's good for 365 days,
+00:36 we could put way more on here if we really wanted,
+00:43 save yourself some trouble,
+00:46 and it's going to be output into these two a public and private key. Let's go.
+00:53 Then you can basically put whatever you want, I'll go in and put some stuff here
+00:58
+01:03 okay, so I entered some, sort of, kind of accurate data,
+01:07 and now we have our two keys, out two MongoDB public and private keys,
+01:11 the next thing is to generate a pem file
+01:15 which is really just the combination of the public and private key
+01:19 and we could do that with a cat command like this,
+01:23 so we run this, and now we've got the private key and the certificate there, okay great.
+01:32 Now, the next thing to do is actually tell MongoDB
+01:36 hey, I would like you to use encryption
+01:39 and I would like you to use this particular key
+01:43 so notice, we're over here in the etc/ssl,
+01:46 and we're going to get that mongodb.pem we just got,
+01:50 so let's edit the config here, we'll go under security
+01:57
+02:02 oh actually sorry, it's not under security, not yet, we're going to be there in a minute,
+02:07 we want to go to network here, and we're going to say ssl
+02:10 say mode is require ssl like so, not model, mode
+02:18 and the pem key file like this is going to be /etc/ssl/mongo.pem
+02:30 Okay, so make sure we save that, and then we just have to restart mongo
+02:35 so service mongod restart, let's see if that went well.
+02:44 It doesn't look so great, does it? Well, why is that?
+02:49 let me grab our little log file here, there's our log file
+02:57
+03:00 ah so, it says here's the error, etc/ssl/mongo.pem file not found
+03:05 now I can just edit this out of the video right and we would skip it,
+03:07 but I kind of want to show you like oh jeez,
+03:10 what do you do when something goes wrong?
+03:12 Well, you go to look at the log file, first of all you can quickly ask
+03:15 on the status and it'll say crash something bad, go look at the log file
+03:21 and then go from there, maybe you want to tail it in a real production thing.
+03:26 So we are just going to edit this again and say you know what, you're right,
+03:30 I believe that's mongodb, so we'll restart it
+03:38 ask for the status and hey, look, a running process, super, that is so much better.
+03:44 Okay, so let's try to connect to this on the same machine here
+03:48 so we tried Mongo, and it said no, no, no you can't find it there
+03:52 so we did the port 10001, and it said I can't connect to this,
+03:58 this is not so good, I'm not sure what this error message is
+04:01 but we need to basically say one more thing,
+04:05 we need to say allow invalid ssl certificates
+04:08 because it doesn't trust itself and use ssl;
+04:11 there we go, so you can see this network error while attempting to run is master
+04:16 basically said I tried to run an unencrypted command on an encrypted connection
+04:21 and I got junk back— yeah, because it was encrypted.
+04:24 Now we're kind of talking to the server on its non default port
+04:28 using its non valid ssl certificate,
+04:31 you can generate valid ones if you want, you can use other things lets encrypt,
+04:34 you can buy them, whatever, but like I said it's probably fine to use this.
+04:39 We're very close to coming over here,
+04:41 and coming down and changing this to 0000 which will allow our web app to talk
+04:51 so we have the encryption of a communication that's good,
+04:54 but still, this is not good enough, what we need to be able to do is
+04:58 restrict this to only people with username and password
+05:02 and because we're doing this over ssl that password exchange is relatively safe.

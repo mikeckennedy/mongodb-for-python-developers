@@ -1,0 +1,76 @@
+00:00 So we've encrypted our MongoDB,
+00:03 we've got it hidden behind a firewall and
+00:05 listening on a non standard port, let's get into it.
+00:08 Here we are connected to our Mongo,
+00:10 there is really nothing going on yet, it's just empty,
+00:12 we haven't added our data or anything like that, but nonetheless here it is,
+00:16 notice there was no user name or password required to get in,
+00:19 that's what we're going to fix next.
+00:21 So the first thing to do is we're going to run this db.create user command.
+00:25 We want to create a user to admin entire database server
+00:30 like all of MongoDB not just wherever we happen to be,
+00:34 which is called test, not an amazing name.
+00:38 So we're going to say use admin and now you can see db is admin
+00:44 so we can show collections, see what's here
+00:46 and it's basically empty, but now we can run these db commands
+00:50 focused on creating users against admin which means kind of global.
+00:54 So we're going to run this command here, paste it so I don't get it wrong
+00:59 because these roles have to be just so, it's very touchy,
+01:02 go with this for the db admin, that's probably fine,
+01:07 or mongodb admin, you can take your pick
+01:10 and the password is probably little wimpy, let's try to fix that.
+01:14
+01:18 Let's go over here and run pt python and import uuid, okay,
+01:24 and then let's do something like this, print
+01:28
+01:37 we'll call uuid that uuid4, call that, there we go,
+01:43 what do you think is that a decent password?
+01:47 I would say so, that's going to definitely slow down some dictionary attacks.
+01:51 Now over here, we got to delete this,
+01:55 sadly you can't paste over a selection in MacOS,
+01:58 alright, so we're going to run this user, this password
+02:01 and now we have to specify the roles
+02:04 we could create like multiple users
+02:06 that have certain restricted access to different databases
+02:10 and that's probably not a bad idea, but for this example
+02:12 we're just going to say this thing can admin read databases,
+02:17 admin any databases or clusters
+02:19 by the way just because you are an admin for a database
+02:22 does not mean you can read and write to it
+02:25 you could just create users and things like that, so you need them all.
+02:28 Let's try this, boom, successfully created.
+02:32 Now, did magic happen when we did this?
+02:34 Let me copy this real quick, if I exit and I go over here
+02:42 and I try to connect without any authentication,
+02:44 no, nothing happened; why, if we come over here and we check out our config,
+02:52 down here at the security, this puupy is wide open
+02:57 so we need to go down and say authorization is enabled;
+03:05 now, if we do that and we restart MongoDB,
+03:07 so service mongo d restart, probably a good idea to ask for status,
+03:12 also not happy, again, what have we done, let's have a look.
+03:18 I think it might help if I spelled this right,
+03:20 not very forgiving these computers are they,
+03:23 all right, everything is running that's all good,
+03:26 and if we try to connect to it again, now it's going to come over here and say
+03:31 hello you are connected right, db.version for example, like this,
+03:37 right so we're connected to it, we can sort of interact with it
+03:42 but watch this, show dbs, failure you cannot show dbs,
+03:47 in fact, you can't do anything other than basically log in.
+03:51 So I can come over and say db, I say this use admin db.auth
+03:58 and I could set the username and password, so I could say
+04:04 user is this, password is whatever we want to put here,
+04:10 you have to forgive me if I don't want to type that again, copy and paste that,
+04:14 pwd rather not password, so we could log in this way, as you'll see
+04:22 now I can say show dbs, use test and so on, show collection,
+04:30 so I am basically authenticated at this point, right,
+04:34 so I can log in this way and do this, but you probably don't want to do this,
+04:38 you probably don't want to do it that way,
+04:40 instead you probably want to say user is this,
+04:44 it says pwd, I think it might be, is this
+04:49
+04:52 oh one more thing, I forgot, so we have the username and the password
+04:56 but we also have to add the authentication database being admin
+04:59 there we go, okay, notice our warning about running without authentication is gone
+05:08 and I can now show dbs straight away, I don't have to go do this like
+05:12 switch to admin, do the auth and so on.
+05:15 So this is really handy for our scripts here that we're going to use later.

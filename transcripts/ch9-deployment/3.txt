@@ -1,0 +1,133 @@
+00:01 To deploy our database and set up our production environment
+00:04 I'm going to use Digital Ocean,
+00:06 I've run web applications in MongoDB, in AWS, EC2,
+00:11 I've done it in Azure, and various other places I'll talk about some of those,
+00:15 and I found something like Digital Ocean really to be just such a nice service,
+00:22 simple, extremely fast, extremely affordable compared to the other options.
+00:25 We're going to use Digital Ocean, but what I'm going to show you
+00:29 is not specific Digital Ocean for the most part
+00:31 you can use any other server that lets you basically set up vms,
+00:36 and in a single data center.
+00:39 We're going to use this and if we come down here we'll look at the various options,
+00:46 we'll see that we can basically choose different machines,
+00:49 now it turns out for reasonable amounts of data
+00:53 I'll describe what I think but reasonable is,
+00:56 certainly ten dollars a month is absolutely fine,
+00:59 we've got 30 gigs of disk space on an ssd disc,
+01:03 we've got tons of bandwidth and I don't even know
+01:05 if it counts within data center bandwidth,
+01:07 1GB is not a ton a memory, but it is enough,
+01:10 this is really nice and cheap, the five dollar one,
+01:13 but it's going to put you up against memory limits pretty quickly,
+01:15 if you have lots of data, so what do I mean by a lot,
+01:18 so right now I'm running most of my websites
+01:20 using a shared MongoDB server, separate databases, but shared server
+01:24 and it's running on one of these ten dollar machines
+01:27 and it's got about six million documents in there,
+01:31 something around six million documents, and it takes about
+01:35 let's say 30 percent of the memory of 1GB, so about 300MB resident,
+01:41 if I had lots more than six million things, than probably I'd need to move up.
+01:47 Also if I wanted to run a replica set on the same machine,
+01:51 all these kinds of things, but this is probably a totally decent starting point,
+01:55 unless you really have quite a bit of data.
+01:58 Anyway, we'll get started with Digital Ocean.
+02:00 The first thing we're going to do, what we're going to do in this video, in this lecture is
+02:03 we're just going to create two servers,
+02:06 one that's going to be our web server that's just the thing
+02:09 that's going to try to access MongoDB our app
+02:11 and the one that is the deployment production server
+02:14 that we've kind of locked down and hardened,
+02:16 so let's switch over here for now, and we're going to go and create a droplet.
+02:23 I've done a tiny amount of work in advance,
+02:25 I've created a certificate that I'm going to use to ssh in,
+02:28 I'll show you where the step is and there's a button you can click
+02:31 and it basically says type this, put the contents here, you're good.
+02:35 When we come in here there's a couple of options,
+02:37 the first thing is to choose an image,
+02:40 so we could choose all these different versions of Ubuntu,
+02:42 I'll just take the default, I'm tempted to take the new one
+02:45 but it will take the long term to support one.
+02:47 If you wanted to use another distribution, you totally could,
+02:49 also they've got this one click apps thing that is pretty interesting
+02:52 and I could come down here and even click MongoDB
+02:55 but I don't want to assume that using Digital Ocean you have this button
+02:58 I want to show you how to set up a fresh Linux machine
+03:01 running MongoDB in the end basically.
+03:03 So I'm not going to click this, but this is a totally reasonable option to click this
+03:06 and it has ability to upgrade basically through apt update.
+03:10 So for this, let's go with the ten dollar one, it's charged by the hour
+03:16 we actually pay for this course, it's going to be quite quite low,
+03:20 I'm not going to leave it running for months at a time.
+03:22 We're going to do this, 10 dollars a month, standard Ubuntu,
+03:25 I don't care about block storage, I'm on the West Coast of the US,
+03:28 so let's pick something somewhat nearby
+03:30 but you see there is other data centers,
+03:33 probably you want monitoring, this allows you to go back and do a droplet
+03:36 and get graphs of like cpu, disk, memory, over time that's kind of cool,
+03:40 maybe private networking, but again we're not going to do that here,
+03:42 I have already set up the ssh key,
+03:45 so I'm going to pick this Digital Ocean course test key,
+03:48 which doesn't want for anything but this test bit that I'm doing right here,
+03:52 we also create a new ssh key and there's a little help button you can click,
+03:55 and I'll just show you how to create and store one of these here.
+03:58 Alright, so last thing we want to go over here,
+04:03 we got to give it a name, this Ubuntu name not the most amazing,
+04:06 we'll call it the mongo server, that seems decent right,
+04:11 it doesn't like this, so we'll just go like—
+04:14 so this is all looking good, we've got our ssh key
+04:19 we just need one of these types of things and we click go.
+04:23 I'll let this go in real time, so not sure how long it's going to take today
+04:33 but I'm not going to speed up this part,
+04:36 you can see this is just a real time creation here.
+04:39
+04:45 And we're good, it says happy coding, I love it.
+04:48 Alright, so let's copy this, let's go ahead, I think my ssh is already registered
+04:53 if not I might have to add that, let's go,
+04:56 so we're going to go here like this,
+04:59 and it says you've never connected to this server, no it's brand new.
+05:04 Apparently I have not added that, so go down here, add ssh-add
+05:12 at the k is added to my keychain, like so, so it's added
+05:16 now if I ssh again, do this one, how about the one we're actually working with.
+05:22 Okay, look at that, we are connected,
+05:27 so I had generated my key but I hadn't added it to this user profile,
+05:31 so this is great, and it should also be somewhat concerning
+05:34 that there are 16 security updates right now,
+05:37 so first thing we are going to do, we're going to apt update,
+05:40 go refresh the possible updates and a real quick upgrade,
+05:46 and we'll be back in a minute.
+05:51 Okay, everything is done, now let's exit out real quick and just come straight back
+05:57 and notice, there's no more updates, but a restart is required
+06:01 in order to make this basically finalize those changes,
+06:06 something deep down in the guts was updated,
+06:09 so we'll just do a quick reboot and just to show you the time in here
+06:12 I will not speed this part up either.
+06:15
+06:19 Usually it takes about ten seconds,
+06:21 but with that many updates it might take a little bit longer;
+06:25
+06:29 let's be optimistic give it a shot, and we're back,
+06:33 so really quickly we updated our system, we rebooted
+06:36 so we've got Ubuntu 16.04.2 long term support, and it's all up to date.
+06:43 This is great, this is our Mongo server, let's do this one more time
+06:47 let's go and do this for here, go back to the other stuff in a minute,
+06:55 let's do this for the fake web app that we're going to have talk to this.
+06:59 We'll come down here and pick Ubuntu, five dollar one
+07:03 we don't need block storage, sfo 1, same data center as before
+07:06 that's very important for latency;
+07:09 go ahead and add monitoring, use this ssh key,
+07:16 and we'll call this the web server,
+07:21 and go— good, these are the same data center
+07:27 and we'll do the same thing, I'll ssh into here I'll do apt update, apt upgrade
+07:34 and give it a good reboot, and then we'll have two fresh up to date machines
+07:39 and we'll start configuring them afterwards,
+07:41 let's just double check this one,
+07:44
+07:51 so it's alive, but make those a little bit quick, there we go,
+07:54 now it took a moment just to turn on, excellent, everything is good here
+07:59 let's say apt update, it says there's no packages
+08:03 but I'm not so sure, it's basically running that right now
+08:09 so let's come back in a second,
+08:12 oh look, there's a whole bunch of stuff that we got to do
+08:15 so apt upgrade and we'll do this, I'll kind of shorten the video here
+08:21 you've gone through this before, and we'll just let it do all the upgrades
+08:25 and then we'll come back and talk about installing MongoDB on the Mongo server.

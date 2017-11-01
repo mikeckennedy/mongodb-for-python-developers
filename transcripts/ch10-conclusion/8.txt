@@ -1,0 +1,41 @@
+00:00 After we had everything we needed for our database up and working,
+00:02 our code was working, we said time to put this puppy in the cloud
+00:06 and let people access it, so we talked about deployments.
+00:09 Now, there's a couple of things we could do,
+00:11 if you go to the MongoDB website and you pick the Linux deployment,
+00:14 you pick your distribution, it actually has a lot of really clear steps,
+00:17 like these are the steps that takes to use your package manager on Linux
+00:20 to get MongoDB installed, and I recommend you to use the package manager
+00:24 because then you get automatic updates, and things like that, it's really nice.
+00:27 However, we also talked about the ways in which MongoDB is
+00:31 maybe going to put you at risk,
+00:33 let's say if you don't know what you're doing about configuring it,
+00:37 so if you configure it to just listen on the open internet without say authentication,
+00:40 you are just asking for some sort of punishment,
+00:43 so there's a couple of things that we went through,
+00:46 a very detailed set of here is how you limit network access on Ubuntu,
+00:50 here is how you enable encryption, here's how you enable authentication, and so on,
+00:55 so the checklist we went through was,
+00:57 first thing to do is limit network exposure.
+01:00 That was a couple of things, one we set up the firewall on Ubuntu,
+01:04 if you want to use a cloud provider that's fine as well,
+01:06 so we set up the firewall, we actually listened on a non default port
+01:10 which we blocked by the firewall, and then we let the few servers in the world
+01:16 that needed to talk to it back in by explicitly allowing in those ip addresses.
+01:19 We enabled access control by creating an account
+01:23 and go into the configuration and enforcing authentication, say it's required,
+01:26 we added encrypted communication by creating
+01:30 a self signed ssl certificates and then adding that in there,
+01:34 you may consider adding encryption at rest as well,
+01:37 so like the actual stuff on disc is encrypted,
+01:41 we didn't go to that it wasn't really necessary for what we were doing.
+01:44 You could audit what's happening on your server,
+01:49 we didn't talk about that but it's pretty straightforward,
+01:51 we also talked about how you can run backups,
+01:54 I mentioned that you can do replication and some of these live backups
+01:56 but you can also use Mongodump for reasonably small data,
+02:00 not terabytes type of data but gigabytes, and that works pretty well as well,
+02:05 we saw that we can even do that over our ssh, so back up, back up, back up.
+02:09 Here's the whole security checklist that we talked about
+02:13 you can go through and read all the ways do it,
+02:15 or just go back and look at the various steps in the previous chapter's video.

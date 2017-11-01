@@ -1,0 +1,19 @@
+00:01 Now let's see about enabling access control,
+00:03 we're going to connect to the shell like we have been,
+00:05 again specifying the extra things like ssl, import and so on,
+00:08 we're going to say use the admin database
+00:11 and then we want to create a user, I set the user to pwd
+00:13 and do not forget the roles this is very important.
+00:17 Once we've done this, this doesn't magically make authentication work,
+00:20 we have to go over to our Mongo config
+00:22 and say security authorization is enabled, then we want to talk to it,
+00:27 we can now pass the port, the, ssl stuff,
+00:32 the users, the user name, the password- p password
+00:35 and authentication database is admin, don't forget that, it doesn't work without it.
+00:40 At this point, you've basically set up your MongoDB in a safe way
+00:43 the final thing that you might consider,
+00:46 and it depends on how you want to run your database and so on,
+00:49 and you might set up a replica set to have failover
+00:52 and multi machine redundancy and things like that,
+00:55 that's certainly a next step that you could take
+00:58 but it's beyond the scope of this course so check out the docs.

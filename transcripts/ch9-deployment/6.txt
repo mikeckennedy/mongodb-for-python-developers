@@ -1,0 +1,23 @@
+00:01 One of the most important things we can do to make our MongoDB server safe
+00:03 even if we screw up the configuration, the authentication, the encryption, all those things
+00:08 is to make sure nobody can talk to it.
+00:11 So we're going to do two simple things right away to lock down our server.
+00:15 Obviously our web app, or whatever app, our service
+00:20 whatever we're building that uses MongoDB should be able to talk to it,
+00:23 and it's this probably within a data center
+00:26 we could possibly get to it from our local machines,
+00:28 but well do things like ssl tunnels and so on to do that,
+00:31 so we won't open up any extra ports for this.
+00:34 However, there's always something out there lurking,
+00:37 I showed you that super scary warning at the beginning
+00:40 and they're out there looking, they are saying
+00:43 hey I would love to talk to the server on port 27017 the default port
+00:46 or maybe 1.8 or 1.9, or 20, depending on the service you're running.
+00:50 So we want to block those guys, we want to block them with the firewall
+00:53 and a couple of other things.
+00:56 That's what we're going to do next.
+00:58 We're going to do this like I said, in Linux itself, in Ubuntu itself,
+01:01 we could the cloud computing stuff like Digital Ocean just announced
+01:06 this cloud firewall thing that is really probably easier
+01:09 and if you're using Digital Ocean have a look at that,
+01:12 but we'll do it here and it works just fine.

@@ -1,0 +1,18 @@
+00:01 Before we put the wraps on this course
+00:04 let's do a quick lightning review of each chapter that we've covered.
+00:06 We're certainly not going to cover everything that we covered in the chapter,
+00:09 this is just a really quick review, but maybe the main takeaway from each chapter.
+00:13 So we began the course by talking about what is NoSql,
+00:17 and I think there's a little bit of a misunderstanding
+00:20 or maybe multiple definitions of what NoSql means
+00:23 sometimes people say it's not only sql,
+00:26 sometimes you people say it means that there's no sql, the language involved in this.
+00:31 Well what we saw is looking at the history back in 2009,
+00:34 this concept of NoSql came about by a meeting of people
+00:39 working on horizontal scales type of databases,
+00:42 like what trade-offs do they make against relational databases,
+00:45 so that they are more easily horizontally scalable,
+00:48 and basically cluster friendly databases.
+00:50 That world it's not whether or not there's no sequel
+00:53 or there is sequel in the language, it's really about the style of databases
+00:57 and the trade-offs around how they work with that data.

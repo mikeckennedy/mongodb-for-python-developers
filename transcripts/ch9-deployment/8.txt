@@ -1,0 +1,32 @@
+00:01 Limiting network exposure in concepts, so what do we do?
+00:04 First of all, I said listening on the default port is just crazy
+00:07 because people are going to be scanning that like nobody's business,
+00:10 they may scan every port on your machine, connect to it,
+00:13 somehow distinguish it's a MongoDB port,
+00:15 but chances are that's not going to happen,
+00:18 chances are people are just going to check the few ports
+00:21 and just move on to scanning millions or billions of other ip addresses,
+00:24 even if they do connect, we're going to have
+00:27 some additional layers of security there,
+00:29 hopefully the firewall makes all of this redundant.
+00:32 But still, it's a good idea to just have layers of security
+00:35 so here we have a port that is non default, 10001.
+00:39 Now, we're also going to turn on our firewall
+00:43 so in fact it's very unlikely anyone can get to that from outside of our data center
+00:48 other than the apps or the servers that we said explicitly they can get to it.
+00:53 So by default, deny all incoming connections, allow all outgoing connections
+00:57 allow ssh so that we can get back in
+01:00 or this is going to be the last time we ever see this server,
+01:03 so we're going to allow ssh and then we're going to enable it,
+01:06 that's the moment of truth, it says are you sure
+01:08 I suggest doing this right away before you have lots of important data on the server.
+01:12 And then we're also going to allow from the ip address
+01:15 that is the application that's based upon MongoDB,
+01:19 and then to any port this one here.
+01:23 We've got our farewell set up, we've got MongoDB set up
+01:26 to be non default of firewall rules, reflect that non default port.
+01:30 So this is the web app address, this is the configured MongoDB port
+01:36 this, we're not ready for listening on the internet yet.
+01:40 Two more things, encryption of the connection,
+01:43 which within the same data center may be it doesn't matter
+01:45 but we're going to add it anyway and authentication.

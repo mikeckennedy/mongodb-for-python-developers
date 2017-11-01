@@ -1,0 +1,50 @@
+00:00 Let's go through the MongoDB security checklist.
+00:03 Now, most of these come from MongoDB,
+00:05 but also from me personally, from my experience running the server.
+00:09 I've run professional commercial websites
+00:12 using MongoDB for many years, 5 or 6 years
+00:14 and we've never had any problems, but you have to follow the rules.
+00:17 Some of the rules include things like limit network exposure,
+00:20 so this is always a good idea for databases
+00:23 or anything else that listens on the internet,
+00:26 if something doesn't need to talk to it, don't allow it to have an open connection.
+00:30 Enable access control, that means add users and require them to authenticate,
+00:36 this should really be the default, if I were king of MongoDB,
+00:41 and I'm not, but if I were a king of MongoDB,
+00:43 I would make a decree, a new rule that says
+00:46 MongoDB is not allowed to listen on anything other than local host,
+00:50 unless it has access control enabled, period.
+00:54 That's not the way it works right now though,
+00:56 by default you can just say listen on 0000
+00:59 and it will, even if that's wide open, so that can be problematic,
+01:04 so we're going to change that,
+01:07 encrypt the communication, so certainly what goes on the wire
+01:09 should be ssl style encrypted,
+01:12 but there is an option to encrypt the data at rest,
+01:15 I think you have to get the enterprise version of MongoDB which is the paid version
+01:20 this is not something I worry too much about
+01:22 but if it's something that you were about,
+01:24 you can encrypt the data at rest using the wire tiger engine.
+01:27 You can audit system activity, this is easy enough
+01:32 turn on what's called a caped collection and turn on auditing
+01:36 so it will keep some standard amount
+01:39 obviously set up logging, all those types of things.
+01:42 Back up, obviously you want to back up your data
+01:46 this is production data, so back up, back up, back up, back up,
+01:49 set up some way to back up and we'll see that there's two options
+01:52 we can run a tool called Mongo dump which will just take a complete backup
+01:56 and for a certain size of data, that could be pretty large actually
+02:00 but for certain size that works fine,
+02:03 at some point if you truly are working
+02:05 with tremendous amounts of data that doesn't work so well
+02:07 so there's various ways to set up replicas
+02:09 that are like delayed or right on time, things like this
+02:13 but back up, back up, back up, an important thing to do.
+02:16 So you can find all the details on how to do this here
+02:20 at mongodb.com/manual/administration/security-checklist
+02:23 now you're welcome to go over there and check that out
+02:25 and I encourage you to do so,
+02:28 but we're going to go through each of the yellow steps here
+02:30 we're not going to talk about auditing, but everything else pretty much
+02:32 and encryption and rest, we're also not going to do that,
+02:35 everything else we're going to do as part of this chapter.

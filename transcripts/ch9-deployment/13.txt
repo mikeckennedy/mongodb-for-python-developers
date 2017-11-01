@@ -1,0 +1,53 @@
+00:01 I think our big moment has arrived.
+00:03 We're finally ready to make this thing actually listen on the network
+00:06 and do what it is supposed to do.
+00:08 So with everything set up the ssl right here, security right here,
+00:15 also not default port right there, firewall in place, all these things
+00:20 let's change that to the glorious 0.0.0.0
+00:24 now, let's restart the server, see if it liked it,
+00:30 excellent it definitely liked it;
+00:33 see if we can still connect to it here on our local machine— we can,
+00:38 everything seems to be working well.
+00:42 It's now listening at least on local host, let's go over here to this one,
+00:45 now here's all the connection info we got built up,
+00:49 port, certificates, username, password, auth db, let's go add one more thing,
+00:57 because obviously local host is not where this server is running.
+01:01 So we are going to add host and put the ip address of the Mongo server,
+01:08 the moment of truth—we're in, look at that
+01:13 now, that's pretty cool, we could even do stuff on it,
+01:17 let  me go over you and copy this and let's try one more thing,
+01:20 maybe we've screwed up somehow,
+01:22 maybe something super bad is happening here and this is just wide open,
+01:26 let's try to connect to it, notice I am on my Mac book,
+01:29 I'm not on the web server or the Mongo server, I'm on my Mac book
+01:34 and timing, timing, it's timing out, ta-da, that's awesome, that's what you want,
+01:40 no connection possible, we couldn't connect to this
+01:44 because why— only that one server magically gets to connect to it, beautiful.
+01:48 And of course, we saw that we have to pass this auth stuff right,
+01:52 for some reason we don't pass that.
+01:55
+02:00 We still can connect as you saw, but we can't do anything whatsoever
+02:04 so I am not sure if I like that, I kind of would prefer
+02:07 that you can't even connect unless you just go through the authentication step
+02:11 but I guess more or less the same thing.
+02:15 So exit out and now we're back, working,
+02:18 because I ran the one that passed username and password,
+02:21 so this configuration of this little fake web server
+02:25 and this not fake Mongo server is running.
+02:30 Let's do one more thing, let's say pip install glances
+02:34 but we don't have pip, so apt install glances, let's skip that,
+02:41 like this, it's going to take a moment,
+02:45 so glances is pretty heavyweight, you may or may not want to install it
+02:47 but it's a really cool way to look at our server,
+02:50 so if we come over here and look around, it will show us things like
+02:54 how much memory our server is using, right now 15 percent.
+02:57 If we want to know how much cpu it's using, not much at all,
+03:02 right now we're sorting by cpu and here you can see
+03:05 Mongo is here just kind of hanging out that's 0.6 cpu
+03:08 like it must be doing some maintenance on itself,
+03:11 you can sort by memory and it will almost always put MongoDB at the top
+03:15 so over here you can see it's using really in terms of resident memory
+03:20 only six percent, that's not much but it has no data in it.
+03:24 So we'll come over here and we'll use this glances program
+03:27 to have a look at Mongo, maybe later we could load it up
+03:31 with this big dealership database that has the 1.5 million records or so in it.

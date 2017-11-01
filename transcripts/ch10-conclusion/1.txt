@@ -1,0 +1,23 @@
+00:00 There it is, the finish line!
+00:03 That's right, you've made it all the way to the end of this course,
+00:05 I hope you found it super interesting and you've learned a lot,
+00:08 because I believe you now have enough to build production ready applications
+00:13 and deploy them based on MongoDB.
+00:15 So really, the big question you need to be asking yourself is
+00:17 what are you going to build now,
+00:19 you have this amazing new power, this amazing new database,
+00:22 and way of writing data driven applications, what are you going to build?
+00:24 I hope you take what you learned in this course,
+00:26 and you go build something amazing.
+00:28 Now, before you do leave, and you go build that thing,
+00:31 let's talk about a few wrap up details;
+00:33 first of all, make sure you get the materials from the github repository,
+00:36 if you haven't already, go to
+00:38 github.com/mikeyckennedy/mongodb-for-python-developers,
+00:42 the url is there at the bottom, and star this, and consider also forking it
+00:46 so you have a permanent version for yourself.
+00:49 As far as I know, the git materials are entirely finished and published,
+00:54 there is a chance that somebody will find a small bug
+00:57 throughout the course and I'll amend that,
+00:59 so very likely what you see at this github repository is the final materials,
+01:04 it's certainly what you saw me create online during these videos.

@@ -1,0 +1,80 @@
+00:01 Alright, so on the left here we're logged into our MongoDB server
+00:03 and let's go to the web server, we're logged in here,
+00:12 now on the web server, just for now, I'm going to set up the Mongo shell
+00:16 so that we can sort of simulate talking to this
+00:20 from the web application, our little fake web application in Python
+00:24 which we haven't gotten to yet, but we'll do that later in this chapter.
+00:26 And we already added the list here, so we're going to install, apt install this,
+00:31
+00:38 ok so let's go Mongo, you're going to run something great, not the right one,
+00:42 okay, so before we do anything let's see if we can get to our Mongo server,
+00:48 and the answer will be no,
+00:52 so here this is the host name of the Mongo server,
+00:57 right now if I try to connect to it, it's going to say no,
+01:00 if I come over here and I type mongo it connects, what is going on?
+01:05 Remember this, remember it's listening only on local host. 01:14 So we're going to want to change this, but not before we make it safe,
+01:17 so we don't want to just tell it to listen on the open internet right away
+01:22 so let's first block access to all of these ports
+01:27 and everything basically except for initially ssh,
+01:31 so what we're going to use is we are going to use something built into Ubuntu
+01:36 called uncomplicated firewall.
+01:40 The first thing that we're going to do is say ufw default deny incoming.
+01:45 By default we're blocking all of the ports.
+01:51 Now, we're going to say allow outgoing,
+01:55 so by default allow our server to get back out, that's cool.
+01:58 The other thing that we want to allow, unless this is going to be
+02:02 the very last time we see the server,
+02:04 we're going to need to allow ssh back to this server.
+02:07 Not default, just allow ssh.
+02:14 Okay, great, it updated for ipv4 and ipv6, that's pretty sweet.
+02:19 Now the last thing is a moment of truth, we're going to enable it,
+02:23 we could ask the status, it's not enabled,
+02:28 it says you know, if you are blocking ssh, you're going to be done for; we're not.
+02:34 And let's just verify, just connect, reconnect, okay, we're good.
+02:40 So at least now nothing can talk to any port except for 22 ssh, at all on this server.
+02:47 The one final thing to do, let's go over here and say ping the web server,
+02:58 so this, that's the ip address of the web server,
+03:04 what I want is to allow the web server to get to the Mongo server,
+03:09 so one more thing I'll say ufw allow from here,
+03:14 so uncomplicated firewall allow from this to any port
+03:18 and we're going to give it a port here and normally you would type this,
+03:23 27017,  that's the default port,
+03:29 but the very next thing we are going to do is say
+03:32 running MongoDB on the default port probably is a stupid idea,
+03:35 everyone is scanning the wide open internet for 27017
+03:38 and then seeing what kind of havoc they can wreak upon that.
+03:41 So even though we think our firewalls are blocking the wide open internet
+03:45 for everything except for ssh— let's go ahead and change the port,
+03:51 so we're going to say 100001 is the port we're going to run Mongo,
+03:55 so we're going to allow that thing to come back to 10001,
+03:57 where MongoDB is going to be listening.
+04:01 Okay, rule added. So it is running,  it's listening on just that port.
+04:07 Next thing to do is we're going to want to go and change the port here,
+04:12
+04:15 like this, and change this port, 10001.
+04:19
+04:23 Excellent, okay, so MongoDB, we're going to have to go do a service restart,
+04:30 now if I type Mongo fail, but if I say --port, like that, we're good.
+04:36 So it looks like everything is working over here.
+04:39 It's still not going to listen to us,
+04:45 because we're still not listening on the public internet,
+04:49 we're just listening on local host.
+04:52 Okay, but this is one step in the right path,
+04:55 we've got basically the firewall here restricting access to everything,
+05:00 except for wide open ssh and MongoDB
+05:05 on a default port only from the web server.
+05:08 Let's while we're over here go ahead and do this as well.
+05:11 Just assuming that you're treating this as your web server,
+05:14 let's go ahead do the same thing.
+05:18 So by default we're going to do deny incoming allow outgoing,
+05:23
+05:28 allow ssh, and let's say allow 80 and 443 to simulate this being the web server,
+05:37 we're not actually going to run a website, like I said,
+05:40 but that is what I would do, and then we would do an enable.
+05:44 It says are you sure you want to do this, we'll exit one more time,
+05:46 make sure we can get back, and we can, fabulous.
+05:49 So now, we've got that server sort of foul lock down just to play along,
+05:54 this one is like actually lock down and this thing can talk to it,
+05:57 but this one is not listening.
+05:59 I don't want to make that one listen, until we go through a few other steps,
+06:01 so you are going to have to hold off on having this whole connection thing working.

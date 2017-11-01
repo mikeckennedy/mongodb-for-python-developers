@@ -1,0 +1,33 @@
+00:01 The MongoDB shell and native query syntax;
+00:03 we saw that the MongoDB shell which you start by typing the word 'mongo'
+00:07 and it just runs the shell, tries to talk to the local one,
+00:10 there's all the different ways to get it to connect to different servers as we've seen.
+00:13 So once it starts you get this little greater than prompt
+00:16 and you write Javascript so we interact with MongoDB at the lowest level
+00:22 in Javascript in a textual way
+00:24 and actually this is converted to bson a binary extended version of json.
+00:29 So here we type something like db so this is the database we have active
+00:33 and book would be the collection name
+00:35 or table if you're still thinking relationally, but the collection name,
+00:38 and we say things like find or count or sort, or things like this
+00:42 and what we give it is this prototypical json object
+00:45 and what we get back are all the things that match the elements of that prototype.
+00:50 So here you can see we got two records back
+00:53 and they both had the same title as the title we indicated here.
+00:56 So it's very much about passing these prototypical json documents,
+01:00 however sometimes we have to do more than just say
+01:04 I want basically equality in my search,
+01:07 I would like to express things like greater than.
+01:09 So this query here that we have written
+01:12 is actually doing a couple of very interesting things,
+01:14 maybe the thing that stands out the most is this greater than operator,
+01:17 so the dollar gte is indicating, the dollar indicates an operator,
+01:20 and gte is the name the greater than or equal to operator,
+01:23 so instead of just saying ratings.value is nine,
+01:26 we're saying I'd like all the ratings where the value is either equal to or greater than nine.
+01:30 The other powerful and interesting thing here is
+01:33 we're actually traversing this hierarchy of the document
+01:36 we're going to find the ratings array which is a list of subdocuments
+01:39 which has a value as an integer,
+01:41 so we're actually reaching down inside that document
+01:44 and we're doing this query with this operator.

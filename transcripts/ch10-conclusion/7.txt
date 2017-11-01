@@ -1,0 +1,46 @@
+00:01 At this point, we pretty much had MongoDB
+00:03 doing everything we needed it to do,
+00:05 and we'd heard MongoDB was fast,
+00:07 but it turned out it didn't really seem to be behaving as quickly as maybe we hoped,
+00:11 we put a ton of data from our dealership in there,
+00:14 and we were getting query times of like one second, 700 milliseconds, stuff like that.
+00:17 It was okay, but really, we saw it can do much better.
+00:20 What levers and knobs do we have to turn to make this faster?
+00:24 The most important one, even more important than in relational databases,
+00:28 are the indexes, we'll see MongoEngine as well as PyMongo in the shell
+00:33 all have really good ways to deal with this.
+00:35 Document design is really important, mostly around this embedding question
+00:39 but there are many ways to think about document design,
+00:42 there's a lot of really non intuitive and powerful patterns,
+00:45 design patterns you can apply here.
+00:48 What is your query style, maybe one query is better than another
+00:51 and using projections to only pull back a subset of responses,
+00:56 suppose we have a car that has a ton of those service histories
+00:59 and we don't care about them for a particular query
+01:02 we could suppress returning those from the database
+01:04 which saves us a lot of bandwidth on the network,
+01:07 disks reads on the database server and deserialization processing on our side.
+01:11 We also saw there is some network apology things we can do,
+01:15 replication and sharding, and those are both interesting and powerful
+01:19 but not part of this course, so go check that out on your own if you're interested.
+01:23 For indexes, we took an example like our car
+01:27 and we said let's suppose we have make here
+01:30 that we're interested in querying by a service history,
+01:32 and if you look below how service history is defined as the service record objects
+01:36 and they have a description and a customer rating
+01:39 and things like this, price for example,
+01:41 so our goal is to query these things, the make, the service history and stuff, quickly,
+01:45 so we saw adding an index which really a powerful way to do that,
+01:48 so all we've got to do is go to our meta object, our meta element here
+01:52 and say these are the index as an array
+01:55 now these indexes can simply be the name of the thing,
+01:58 like make that's super straightforward,
+02:01 they could traverse the hierarchy using the Javascript style, using the dot,
+02:05 so we'll service_history.customer_rating
+02:08 and that would go down and let us do queries deep into these cars
+02:12 and say let's find the ones that are either good or low customer ratings
+02:17 and we can even do composite indexes,
+02:19 so here we're having a composite index on price and description,
+02:22 within the service history, so we do that by having this fields dictionary thing
+02:27 and the fields are an array, so you can use the simple version
+02:29 or if you need to, you can get a more complex definition of the index there.

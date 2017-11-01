@@ -1,0 +1,136 @@
+00:01 Let's go back to our little play-around service app,
+00:04 I'll go and run this for you, it probably looks familiar,
+00:07 remember our service central version 2.0, this is demo edition
+00:11 let me actually change that little header to prod edition, not that it much matters,
+00:16 but we're going to set this up to run in our production environment.
+00:19 If I try to do things like list the car, it will show me my local cars
+00:24 because I'm running on my Mac, however if I push this up to the server
+00:28 and I put it onto that fake web server server,
+00:32 it's going to try to talk to local host and have a big fall,
+00:35 right that's not going to work well.
+00:38 So instead, what we need to do is we need to do is
+00:41 we need to go and adjust our little connection bit here.
+00:45 Now, let me go and actually add some parameters to this
+00:50 we're going to add a password, say user, a password,
+00:57 a port, a server, use ssl, and I think that'll do, okay.
+01:07 So now I want to use those things to actually connect,
+01:10 so we're going to have like this dual mode thing going on,
+01:15 and I'll do it like this, we'll say if user or password,
+01:20 so if either of those are set we're going to do something else,
+01:24 we're going to just fall back and just do this little simple bit or right here,
+01:30 here I'll do a print, registering dev connection,
+01:35 so go like this, and it is not going to love it,
+01:40 so let's go over here and give this some defaults, so none for all of these;
+01:46 default here's to 27017, server=local host and use_ssl = false
+02:01 actually let's go and default that to true.
+02:06 Okay so now I should be able to run this here and list cars
+02:11 actually up here we'll see registering dev connection
+02:16 and let's put a little kind of indicator, something to the say
+02:22 hey this is like an extra thing, so go over here and we'll say registering prod connection
+02:32 and I want to give it some extra info, and let's hold off
+02:36 and what goes there just for a second,
+02:39 okay so we want to gather this up, we actually have to pass more information than this
+02:42 and just to make sort of recording how we connected a little bit easier,
+02:46 I'm going to create this dictionary where we set all these,
+02:51 so username is this, password, server, port, authentication sources, admin
+02:55 authentication mechanism is SCRAM-SHA-1,
+02:59 ssl is, use ssl and we have to say ignore the self signed certificate
+03:04 if we don't do this, it will say your certificate is not valid.
+03:09 Now PyCharm warns that this thing is basically missing from ssl
+03:15 but it's not, just ignore that.
+03:17 So we're going to come over here, and we're going to do this as well
+03:22 let's go and say, actually let me change the order real quick,
+03:29 so we're going to say all of these are keyword arguments for this method
+03:32 so we can just say **data
+03:35 and that's going to basically set username= user, password = password and so on,
+03:39 why did I put it like this— because I'd like to capture all those details.
+03:42 So let me just do really quick data of password equals this,
+03:52 and then I'll just print out this dictionary here
+03:56 so registering, production, connection with those details.
+03:59 Okay, so if you pass a username or password in
+04:03 it's going to work differently, let's just make sure everything still runs
+04:06 can I list the cars, see the dev connection, yeah, excellent.
+04:11 So things are still working good on of the dev side of the story.
+04:14 The next thing we've got to do is come over here where we're calling this,
+04:18 and let's just go ahead and pass in all the details here.
+04:25 We wanted to use ssl that defaults to true, so that's all good.
+04:31 Now if I run this, you're going to see not amazing stuff
+04:35 so like list is probably going to time out, it takes a while for it to time actually,
+04:40 let's try to renegotiate the connection and it really doesn't want to crash
+04:43 but eventually this is going to timeout,
+04:46 we already saw we can't connect to the server here.
+04:49 So let me push this up to the git repository
+04:55 and then we'll get it on to the server and production and make sure everything works.
+05:00 I pushed those changes to github and let's go over to the web server
+05:05 see I am already here, I'm just in my home directory/root
+05:10 so what I want to do is I want to go and get that code over here,
+05:14 so we're going to go and go to the github repository for our code here
+05:20 notice when I do a refresh, you should see
+05:22 that I just added now with production capabilities,
+05:26 so let's copy this, and let's say git clone this, its a public repository
+05:31 so I don't need any credentials or any of that business.
+05:34
+05:39 Okay, so things are good, we'll go to Mongo and notice there's a source
+05:44 and I have 09 deploys, so if we look in here,
+05:50 we've got service central deploy and service starter,
+05:55 server central deploy is the starter obviously it's what we started with,
+05:58 the service central deploys is the one that we just changed;
+06:03 so for example, if we look at this
+06:08 you can see it's using this complicated version here,
+06:12 if we look at this one, you can see we're setting a MongoDB just the way we like.
+06:18 Okay, so now what we have to do is run it and let's go over here
+06:24 connect to the MongoDb server and say show dbs,
+06:29 hey there's nothing here, so let's go and run this,
+06:33 so we've got our service deploy, so we'll say it Python 3
+06:36 we didn't use a … or change its execution states.
+06:41 Now one thing we need is we need to install Mongoengine of course
+06:44 so let's do this, we'll just let Python do it,
+06:47 so we'll save Python 3 -m venv to create a virtual environment,
+06:56 here we need to apt install Python 3 -venv, try again,
+07:08 so now we'll source activate this and our prompt changes.
+07:15 Okay good, so now we should be able to run our Python 3 thing again,
+07:19 oh yeah, well it's active, we still need to pip install Mongoengine
+07:23 and that'll take PyMongo along with it.
+07:27 I believe that failed building a wheel because set up tools is out of date,
+07:32 anyway, it should still work. Let's give this another shot,
+07:36 now we have Mongoengine registered in a virtual environment,
+07:39 a virtual environment is active, our code is here
+07:42 a lot of deployment stuff, let's go.
+07:45 Oh, look at that, so now we're registering the production connection,
+07:48 I mean, you probably don't want to print this out all the time
+07:51 but notice the hosts, authentication, everything,
+07:54 it seemed to take it like the register worked
+07:56 we haven't tried to talk to the database yet, let's try to list the cars.
+07:59 There are no cars, did that make in a dent?
+08:04 No, no dent yet. Let's add a car this is going to be an F40,
+08:10 it's going to be built in 2010, that didn't crash, let's try to list the cars,
+08:17 look at that, let's add a service record, service that car.
+08:24 The vin number is that, the price of the service is a thousand dollars
+08:30 and this is going to be a new tires, the customer is extremely happy, loved it.
+08:36 Now we've got our new tires, so look at this, show dbs,
+08:40 use demo dealership, show collections, db.cars.find.pretty
+08:52 bam, look at that, we were able to make our Python code
+08:58 on the right machine with all the right settings,
+09:00 and all the farewell rules and everything,
+09:04 go over and talk to the MongoDB server.
+09:06 This is pretty excellent, we can go add another car
+09:10 obviously like at this point once you see it creating some documents
+09:13 and working to some degree everything is going to work, right,
+09:16 there's really nothing to it, so this is excellent,
+09:19 let me just go create one more car so we have two things,
+09:22 this is going to be Enzo and this was build very recently
+09:29 let's list the cars and add a service record for it.
+09:33 The Enzo needs some work, so for a 100 dollars that will be oil change,
+09:40 pretty happy, yeah, one more, the same car,
+09:47 this is going to be 250 tire rotation moderately happy,
+09:53 so let's go over here and do this again.
+09:56 There we go, we've got our Enzo with two service histories
+09:59 our F40 with one service history and so on.
+10:02 Okay excellent, so it looks like this is working,
+10:05 I added this other record here so we have a little bit of data
+10:08 because the next thing that we want to look at is how do we manage this,
+10:11 how do we connect our database management tools
+10:14 and backup things and what not to.
+10:16 As far as Python goes, this baby is rocking.
+10:19 I guess maybe connect one more time, boom, list the cars,
+10:23 there they are, yeah looks good to me.

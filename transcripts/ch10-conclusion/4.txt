@@ -1,0 +1,63 @@
+00:00 Next step we worked with— PyMongo.
+00:02 So we put our Javascript away, we said all right enough with the Javascript stuff,
+00:05 we're going to write in Python basically for the rest of this course.
+00:08 So the lowest level way to talk to MongoDB from Python is with PyMongo.
+00:13 So let's look at a couple of the crud operations here.
+00:16 We'll start of course by importing the package, import PyMongo,
+00:20 and if you don't have it just pip install it;
+00:22 and then we need to create a Mongo client by passing a connection string,
+00:26 I believe if you actually get a hold of the PyMongo connection
+00:29 you can use it directly, but you should not, because the Mongo client handles
+00:34 reconnects and connection pulling is stuff like that
+00:36 whereas the connection itself wouldn't do those kinds of things.
+00:39 Then if we want to work with the database,
+00:42 we have this sort of interesting highly dynamic api,
+00:46 we go to the client and we just say . (dot) the name of the database
+00:49 so we say client.the_small_bookstore, and we assign that to db
+00:54 so it looks like the rest of the shell stuff that we have been doing,
+00:57 but technically that's optional.
+00:59 This database doesn't even have to exist,
+01:02 we could create the database in this style just by doing our first insert into it.
+01:05 Whether or not it exists, we get all the database
+01:08 and now we can operate on the collections.
+01:11 Let's imagine that in that database there's a collection called books
+01:15 and we want to know how many of them are,
+01:17 we would just say db.books.count
+01:20 and that would actually go there and do this operation.
+01:22 If it happens to be that either the database of the collection doesn't exist,
+01:25 it doesn't crash, you get zero.
+01:27 We could also do a find_one, this line here is notable
+01:31 because in the Javascript api is findOne
+01:34 and they've made a pythonic version here, so find_one
+01:39 just be aware that it's not always a one to one
+01:42 exact verbatim match from the native query syntax over to PyMongo.
+01:46 We can also do an actual search,
+01:50 before we said find_one I basically got the first
+01:54 here we're going to say I want to find a book by isbn, I want to pass it over,
+01:57 here we use Python dictionaries
+01:59 which play the role of those prototypical json objects.
+02:01 We also insert new data, so here we're going to say
+02:06 insert this thing which is a dictionary, it has a title called new book
+02:10 and an isbn of whatever is written there and we get back this result,
+02:15 the result will have this object id in the field inserted _id,
+02:20 we can go requery it and do all sorts of stuff with it.
+02:23 Basically when we say insert one, we get this result
+02:26 which, if it succeeds has the inserted id.
+02:29 Now these are the straightforward crud operations,
+02:31 we can also use our fancy in place operators,
+02:34 so here let's just insert this book, so we see what we get,
+02:36 and we grab a hold of the inserted id,
+02:38 and now suppose we want to add a field called favorited_by,
+02:43 and this is going to be a list, and we want the list to be basically distinct
+02:47 we're adding the ids of the customers or people visiting our site
+02:50 who have favorited in this book, and we'd like to put them in there
+02:54 but there's no reason to have them in there twice,
+02:56 that can cause all sorts of problems.
+02:58 We're going to use the dollar add to set, so we run this,
+03:01 run it again for 1002, and hey we could run it a second time for 1002,
+03:05 and what we'll end up with is an object that looks like this,
+03:08 the two things we inserted, the generated_id
+03:11 and his favorited_by list which has 1001 and 1002.
+03:15 Definitely keep in mind these in place operators
+03:19 because they're very powerful and they leverage some of the special properties
+03:23 of the way MongoDB treats documents atomically.

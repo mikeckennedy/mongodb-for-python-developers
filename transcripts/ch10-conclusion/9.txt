@@ -1,0 +1,8 @@
+00:00 That's it! I want to say thank you, thank you, thank you,
+00:03 I really appreciate you taking my course,
+00:05 I hope you learned a lot, and I hope you found it valuable and enjoyable,
+00:08 and generally just had a great time.
+00:10 I also hope you go build something amazing with MongoDB,
+00:12 if you do, send me a message, either here on twitter at @mkennedy,
+00:16 or visit the website and send us an email and tell us all about it.
+00:19 Until then, take care and thanks again

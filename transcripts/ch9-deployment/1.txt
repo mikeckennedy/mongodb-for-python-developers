@@ -1,0 +1,80 @@
+00:01 You've learned almost everything you need to know about MongoDB
+00:04 to work with it, to make it fast, to access it from things like MongoEngine.
+00:07 The last thing is to actually put it into production,
+00:11 to use MongoDB in production to set up our applications,
+00:14 to talk to a secured version of MongoDB, all of those things.
+00:18 So we're going to focus on two main areas,
+00:21 one deploy MongoDB for production servers, two, doing that safely.
+00:25 So far, what we've been doing is we've been running our web app,
+00:30 or script, our little test app, whatever it is that we're going to be building,
+00:34 a little thing we even playing with, and that's the blue thing here,
+00:37 and we've been running it and talking to MongoDB on our local machine,
+00:40 probably our laptop, and we've been just on the local loop back,
+00:44 127.0.0.1, talking to MongoDB, and I have gone on and on
+00:49 about how you must not listen on another ip address on your local dev machine,
+00:55 take that thing to a coffee shop or worse, to like a big hotel
+00:59 where there's a tech conference, god forbid, black hat or something going on
+01:04 and that thing will be in some serious, serious trouble right away.
+01:08 By the way, did you know on your Mac that the firewall is off by default?
+01:12 That's right off by default, that's crazy, but it is, so just another thing to consider,
+01:18 layers and layers and layers, but assuming we're only listening
+01:21 on local loopback we're pretty safe like this,
+01:24 but we have been running without encryption and running without authentication,
+01:29 MongoDB gave us a little warning when we connected
+01:32 but you have to connect, you have to care, if you connect with code
+01:35 and not with a shell, there is no warning it just works,
+01:38 we're going to set up an entirely different thing
+01:41 we're going to have a set of web front ends, fake web front ends,
+01:44 we're not really going to write a website, but what would stand in for our website
+01:49 and we're going to have our production MongoDb server,
+01:51 and these things are going to talk to each other over
+01:55 at least the file computing data center connection,
+01:57 potentially farther than that, so we're going to have to open this thing up
+02:01 and that means we need to add things like encryption,
+02:04 we need to add authentication, firewall sorts of rules and things like that.
+02:07 That's what we're going to talk about in this chapter.
+02:10 This is a bit of a chore, right, this is not the default
+02:14 unfortunately this is not the falling into the pit of success type of thing,
+02:18 you have to work to get this set up correctly
+02:21 so let me just give you some very recent warnings
+02:24 this is not to tell you not to use MongoDB,
+02:27 I use MongoDB for my production stuff, I love MongoDB
+02:29 but you must use it carefully, it's like a sharp knife.
+02:33 What I am about to show you is not meant to dissuade you in any way
+02:36 but just to make sure you really have this burnt your mind
+02:39 that you have to be careful when you're deploying stuff to production with MongoDB.
+02:43 That said, check this out—  here are some recent headlines
+02:47 and you want your company and your data to be nowhere near them,
+02:51 MongoDB databases are being hacked for ransom using ransomware
+02:56 notice this is 2017, here's a little example, look at this,
+03:00 show dbs, please read, use please read, show collections,
+03:04 please read me do a little find on it and you get
+03:08 your database is been hacked and encrypted
+03:10 you have to send a bitcoin here to get it back
+03:13 and chances are they will probably just throw away your data
+03:15 and they'll take your bitcoin and yeah, good job,
+03:17 okay, so here's another one, how about this
+03:20 massive ransomware attack takes out 27 thousand MongoDB servers
+03:24 terabytes and terabytes of data, the petabytes of data we're lost to the world,
+03:28 so these are all not good things, right, you've lost your data
+03:31 here is one more, two million recordings of families
+03:34 imperiled by cloud connected toys crappy MongoDB
+03:38 you don't want that anywhere near your business,
+03:41 so this is a little bear thing here, that with a light on it
+03:43 it connects to the internet and it connects to a service
+03:47 and then the parent and the kid can like talk to each other
+03:50 over the internet through the bear,
+03:52 that was basically all that data in that exchange was done
+03:55 entirely on a wide open MongoDB database with no account at all,
+03:59 just hey here's the port, connect to it, go have fun.
+04:03 All right, so the problem here is that MongoDB lets you listen
+04:07 on the wide open internet without a usnername and password
+04:10 and without encryption and that's the default.
+04:13 What we're going to do it is we're going to add all those things
+04:16 but you just wanted to be really clear
+04:19 like this is not an optional step, we really need to do this
+04:22 unless you're running this, like say you're running a website
+04:24 and the database server is running the same machine as the web server
+04:28 and it just talks over a local host
+04:30 any other scenario use to be extremely careful
+04:32 and we're going to go through all the steps necessary to get this working just right.

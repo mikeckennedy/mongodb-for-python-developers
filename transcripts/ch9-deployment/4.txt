@@ -1,0 +1,150 @@
+00:01 It's time to install MongoDB on our cloud server.
+00:04 One thing I'd like to point out is you don't have to necessarily go down this path
+00:07 to run your own MongoDB server, you maybe don't want to deal with it,
+00:10 maybe you don't have enough experience with it things like that,
+00:13 so a couple of options just that I want to point out,
+00:16 but I definitely want to show you how to run your own MongoDB server,
+00:19 how to do it safely so that you can because in a lot of cases it really is the best.
+00:22 So MongoDB has this thing called MongoDB Atlas
+00:26 which is database as a service,
+00:28 and basically what you do, I haven't used this really,
+00:31 but I have looked at it, is you create a AWS account
+00:33 it was on web service, EC2 account,
+00:35 you give them access to make machines and manage those machines on your behalf
+00:40 and they can create a replica sets and things like that that are cure for you,
+00:44 this is like a service that will manage more or less
+00:48 your EC2 machines upon your behalf, so this is decent.
+00:52 Another one is you can go to something like mlab over here
+00:55 and you can check out the plans on pricing,
+00:58 they have a free, sandbox free half a gig,
+01:01 just cool when you do a shared one with light production work
+01:06 for up to eight gigs of data, but it isn't a replica set with fail over and things like that,
+01:12 so this is a pretty nice service, it's really expensive in my opinion
+01:15 but it is pretty much turnkey, push the button
+01:19 you get what you want, you get what you need.
+01:22 I found it to be decent, but also it seems like it's added a lot of latency
+01:28 to some of the apps that we moved off of our own servers on to mlab,
+01:32 so I guess it probably depends, one on how much you pay,
+01:36 and two, how close your machine is to their machine,
+01:39 but they do claim to do a lot for half a million MongoDB deployments,
+01:43 on the major cloud providers.
+01:46 I just want to put it that like you can go and just get MongoDb as a service.
+01:49 Now, if you're still with me, I'm assuming that you want to install
+01:53 understand how to create your own MongoDB servers,
+01:56 so let's go over here to download,
+01:59 and we're going to go through a few interesting steps,
+02:01 so I would like to do the Linux download, I know I'm on MacOS,
+02:05 but I'm configuring this over here, now notice, I could hit the tarball
+02:10 and this would do a thing, I could install this, I could run it,
+02:14 but it wouldn't give me the ability to say automatically upgrade my server.
+02:18 Right now it says instructions for installing with yum,
+02:23 but I want to do this on this x64 version of Linux of Ubuntu,
+02:30 16.04 that's the one I got, I think you can just take the same instructions
+02:36 and apply them for 17.04 as well.
+02:39 Now here's what we really want to go, we could click this,
+02:41 we could get the binary, but this is better,
+02:44 so we're going to come down here, and there's just going to be some copy paste action,
+02:49 now look, it says what we can do is
+02:52 you can just use aptitude to install this, so let's try that.
+02:56 Before we actually go over here, tell me, which one of these is a MongoDB server,
+03:03 I don't know, I don't remember either, so let's take just a moment
+03:06 and step back and give these names, and I want to give them
+03:09 the exact same name as they believe their machine names are,
+03:12 so this one, the web server, it refers to itself as a web server,
+03:17 this one its local machine name is this, themongoserver
+03:22 so let me open this one up, now we should probably
+03:25 enable floating ips for real production,
+03:28 but this is not real production this is me playing around
+03:32 so I'm not going to mess with that.
+03:35 We could also enable what are called cloud firewalls,
+03:38 but again, this is the Digital Ocean specific thing,
+03:41 you do this in EC2 differently, you do this in Azure differently and so on,
+03:43 so I didn't want to show you how to just use the Linux tools to do that
+03:46 but it may be better actually to do this,
+03:49 here you can see some of the monitoring kicking in
+03:52 so I'd like to be able to say ssh root@ themongoserver, right
+03:55 and sadly, it doesn't work, so let's tell this machine,
+04:00 let's do a sudo, and I'll run visual studio code again, it's /etc/host
+04:08 here you can see I have hacked a few things together already,
+04:12 and we're going to go and put this, the Mongo server in here
+04:16 and what is its ip address, of course like I said,
+04:19 give it a floating ip and use that one possibly
+04:22 but we're going to go like this, if you want to give it a real domain name
+04:27 feel free to go ahead and do so, but this will work for,
+04:30 there's probably no reason to give your MongoDB like a public dns name
+04:35 so I'm going to suggest that maybe you don't do that.
+04:38 Let's go here and get the web server,
+04:41
+04:50 okay, so I save that, now let's try that again,
+04:54 we've never connected to a machine called themongoserver with this key
+04:58 so it's fine, and now we're back,
+05:02 so now we can say connect to root@themongoserver,
+05:06 and at thewebserver, that's what I called it right, thewebserver.
+05:10 This will make things easier and you can see even on that machine,
+05:14 it believes it's called this, for some of the tricks we do later with tunneling ssl,
+05:18 it turns out that makes our life a little bit easier.
+05:22 Okay, so we're on the mongo server, that was our goal
+05:25 maybe a little bit long to get here but that was our goal.
+05:28 The next thing to do is we're going to go down this list that they gave us here,
+05:33 so we are going to do is ssh in here and play this,
+05:36 so it says what you can do is to install MongoDB
+05:42 is you can install this aptitude package
+05:45 and then you can actually install smaller pieces,
+05:47 like we could install say just the server, right
+05:50 or maybe just the sharding deamon things like that,
+05:53 but if you install this you kind of get all of it,
+05:55 and it's going to be amazing except for that it's not,
+05:58 it's not amazing it all, it's not there,
+06:00 because this comes from one of mongoDB's own app update servers,
+06:04 so we got to go down here and go through the steps,
+06:07 so the first thing we have to trust, trust MongoDB
+06:10 we're going to stall the software as root,
+06:13 I guess we're going to have to trust it anyway aren't we.
+06:16 Then all seem to come out alright,
+06:19 be careful here, I always screw this up,
+06:22 even though I clicked on install for 16.04, it gives me all the options here
+06:28 so don't do that, that's 12, 14, 16, that's done.
+06:35 Now the next thing to do is run apt update,
+06:39 I'm already in root, so I don't need sudo
+06:43 so we needed to do that basically to pull from that list we just added there,
+06:50 so now let's see what it's asking about, it's all good.
+06:58 Alright, so now we can go do that apt install mongodb.org,
+07:04 and what happens— magic is going to happen, that's what.
+07:09 Notice when I said this one, it's like a metapackage,
+07:12 it's really installing those four, it just said
+07:15 hey here's an empty package with these four dependencies.
+07:18 Alright, that was quite quick, and notice we have 3.4.5
+07:25 so that is quite a recent one here,
+07:28 and it's even created a mongodbuser for us
+07:31 that is the one I believe that runs the deamon process
+07:33 so it is not running his route, that's pretty awesome,
+07:36 it's another thing you'd have to do
+07:38 if you just downloaded the tarball and tried to set it up.
+07:40 Very cool, and now next time I come over here
+07:42 and I run apt update and then upgrade
+07:45 that could potentially install 3.4.6 or whatever is next.
+07:51 Do we have MongoDB— I could type Mongo and something happens
+07:54 except fail, no you cannot connect; why— because it's not running,
+07:59 it will run though if we just say service mongod start
+08:04 then we can ask status, and notice, it's running this process,
+08:13 it's running the server in quiet mode, especially important using this configuration file
+08:19 so we're going to be able to use that basically to configure or to adjust to the server
+08:24 all the changes we need to make to MongoDB
+08:26 we're just going to edit that file and it'll be golden,
+08:29 but for now, let's just try to see if we can connect it.
+08:31 Wow, we can, we get a few warnings
+08:34 like you really should not put this on the open internet, you really shouldn't do that
+08:38 and some other stuff that we might consider about changing our file system around
+08:43 so we can say things like show db's and it just has the local stuff
+08:49 but we're connected and it's all good.
+08:52 So, that's installing MongoDB on our cloud server.
+08:56 However, you want to be extremely careful about changing this
+09:04 we're not ready to open this up, not even close,
+09:07 we can see here's the log file if we want to go and get the log
+09:12 here's where the data is stored,
+09:15 you generally don't need to go in there and mess with the data
+09:18 you don't need to mess with the files directly,
+09:20 we'll use the tools or replication or something to back up and configure the data
+09:24 but that's where it lives and you can change where it is if you need to, right
+09:28 so those two things are interesting, we're going to go change this stuff
+09:31 but we need to make a few configuration changes before we go and do that.

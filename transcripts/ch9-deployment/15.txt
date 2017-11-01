@@ -1,0 +1,26 @@
+00:01 Let's review how we connected to our production server
+00:03 from Python and Mongoengine, here's how we connected before,
+00:07 we just said the alias is core and the name is dealership,
+00:12 and that was it, we just let everything else be the default
+00:15 and that worked fine when it was a wide open server on our local machine.
+00:18 It didn't work so well for production,
+00:23 so we saw that we actually added this function that
+00:25 there is a whole bunch of different things here
+00:28 so it takes the password, the port, the server, whether or not to use ssl,
+00:31 the username, as well as the alias and db
+00:34 and I kind of broke this into two different functions
+00:37 that you can use for multiple connections in this example,
+00:42 but you could jam it all into one like I did in the project.
+00:45 So I created this dictionary and we set additional things
+00:47 like the authentication source and mechanism
+00:49 and to tell it to ignore the ssl certificate,
+00:51 I put it in the dictionary so it's easy to print out
+00:54 like in my log here is I am connecting to the database server
+00:56 so you know which machine you're talking to,
+00:59 how you're talking to it, what user you're talking as, things like that.
+01:03 So if you want to just put all that data straight into register connection, fine,
+01:06 you could do that but I find this to be valuable for sort of historical purposes,
+01:10 so here's how we connected and in my real example I said
+01:14 we're going to use the old version if you don't pass in
+01:17 a user name of password, or other things,
+01:19 but if you do then I'll switch to this more advanced version here.
