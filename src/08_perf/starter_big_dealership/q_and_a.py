@@ -23,7 +23,7 @@ timed(
 )
 timed(
     'How many cars?',
-    lambda: Owner.objects().filter().count()
+    lambda: Car.objects().filter().count()
 )
 
 timed(
