@@ -10,7 +10,7 @@ def timed(msg, func):
     func()
 
     dt = datetime.now() - t0
-    print("{} Time: {:,.3f} ms".format(msg, dt.total_seconds() * 1000.0), flush=True)
+    print("{} Time: {:,.0f} ms".format(msg, dt.total_seconds() * 1000.0), flush=True)
 
 
 mongo_setup.init()
