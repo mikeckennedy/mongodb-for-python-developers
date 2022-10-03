@@ -21,4 +21,5 @@ def main():
     print("Each car has an average of {:.2f} service records.".format(service_histories / len(cars)))
 
 
-main()
+if __name__ == '__main__':
+    main()

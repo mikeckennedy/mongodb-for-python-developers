@@ -2,6 +2,9 @@
 
 [![](https://raw.githubusercontent.com/mikeckennedy/mongodb-for-python-for-developers/master/readme_resources/mongo-course-sm.jpg)](https://training.talkpython.fm/courses/explore_mongodb_for_python_developers_course/mongodb-for-python-for-developers-featuring-orm-odm-mongoengine)
 
+## Downloading tools
+
+See the [tools-downloads.md](./tools-downloads.md) file for locating the latest tools and apps for this course.
 
 ## Course Summary
 

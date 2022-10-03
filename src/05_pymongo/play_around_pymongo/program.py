@@ -5,12 +5,10 @@ client = pymongo.MongoClient(conn_str)
 
 db = client.the_small_bookstore
 
-# NOTE: In the video we use db.books.count(), it's been deprecated for more explicit
-# versions. See
-# https://api.mongodb.com/python/current/api/pymongo/collection.html#pymongo.collection.Collection.estimated_document_count
+# NOTE: In the video we use db.books.count(), it's been deprecated for more explicit versions. See
+# https://pymongo.readthedocs.io/en/stable/api/pymongo/collection.html#pymongo.collection.Collection.count_documents
 # for details
-
-if db.books.estimated_document_count() == 0:
+if db.books.count_documents({}) == 0:
     print("Inserting data")
     # insert some data...
     r = db.books.insert_one({'title': 'The third book', 'isbn': '73738584947384'})
@@ -24,7 +22,13 @@ else:
 # # print(book, type(book))
 # # book['favorited_by'] = []
 # book['favorited_by'].append(100)
+
+# Updated from recording, was:
 # db.books.update({'_id': book.get('_id')}, book)
+#
+# pymongo now requires update_one with the $set operator:
+# db.books.update_one({'_id': book.get('_id')}, {"$set": book})
+
 # book = db.books.find_one({'isbn': '73738584947384'})
 # print(book)
 
