@@ -4,7 +4,7 @@
 
 ## Downloading tools
 
-See the [tools-downloads.md](.blob/master/tools-download.md) file for locating the latest tools and apps for this course.
+See the [tools-downloads.md](blob/master/tools-download.md) file for locating the latest tools and apps for this course.
 
 ## Course Summary
 
