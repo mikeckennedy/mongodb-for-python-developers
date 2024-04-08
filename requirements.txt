@@ -4,11 +4,13 @@
 #
 #    pip-compile requirements.in
 #
+dnspython==2.6.1
+    # via pymongo
 faker==15.0.0
     # via -r requirements.in
 mongoengine==0.24.2
     # via -r requirements.in
-pymongo==4.2.0
+pymongo==4.6.3
     # via
     #   -r requirements.in
     #   mongoengine
